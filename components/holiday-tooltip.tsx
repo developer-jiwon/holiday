@@ -2,14 +2,10 @@
 
 import { useEffect, useRef } from "react"
 import { X } from "lucide-react"
+import { Holiday, PastHoliday, UpcomingHoliday } from "../lib/date-utils"
 
 interface HolidayTooltipProps {
-  holiday: {
-    name: string
-    date: string
-    flag: string
-    passed: boolean
-  }
+  holiday: Holiday & { flag: string }
   position: {
     x: number
     y: number
@@ -66,7 +62,9 @@ export function HolidayTooltip({ holiday, position, onClose }: HolidayTooltipPro
         <h3 className="font-medium text-[#8b6e5a]">{holiday.name}</h3>
         <p className="text-sm text-[#a38b7b]">{holiday.date}</p>
         <span className={`mt-1 text-xs ${holiday.passed ? "text-[#8b6e5a]" : "text-emerald-600"}`}>
-          {holiday.passed ? "Passed" : "Coming Up"}
+          {holiday.passed ? 
+            `Passed (${(holiday as PastHoliday).daysPassed} days ago)` : 
+            `Coming Up (in ${(holiday as UpcomingHoliday).daysUntil} days)`}
         </span>
       </div>
     </div>

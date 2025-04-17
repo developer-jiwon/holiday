@@ -1,35 +1,10 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { getHolidaysForYear, type Holiday, type UpcomingHoliday } from "../lib/date-utils"
 
-// Sample holiday data
-const holidays = [
-  { id: 1, name: "New Year's Day", date: "Jan 1", passed: true },
-  { id: 2, name: "Orthodox Christmas", date: "Jan 7", passed: true },
-  { id: 3, name: "Martin Luther King Jr. Day", date: "Jan 20", passed: true },
-  { id: 4, name: "Chinese New Year", date: "Jan 29", passed: true },
-  { id: 5, name: "Valentine's Day", date: "Feb 14", passed: true },
-  { id: 6, name: "Family Day", date: "Feb 19", passed: true },
-  { id: 7, name: "St. Patrick's Day", date: "Mar 17", passed: true },
-  { id: 8, name: "Good Friday", date: "Apr 18", passed: true },
-  { id: 9, name: "Easter Monday", date: "Apr 21", passed: true },
-  { id: 10, name: "Earth Day", date: "Apr 22", passed: true },
-  { id: 11, name: "Victoria Day", date: "May 20", daysUntil: 32, passed: false },
-  { id: 12, name: "Memorial Day", date: "May 26", daysUntil: 38, passed: false },
-  { id: 13, name: "Canada Day", date: "Jul 1", daysUntil: 74, passed: false },
-  { id: 14, name: "Independence Day", date: "Jul 4", daysUntil: 77, passed: false },
-  { id: 15, name: "Civic Holiday", date: "Aug 4", daysUntil: 108, passed: false },
-  { id: 16, name: "Labor Day", date: "Sep 1", daysUntil: 136, passed: false },
-  { id: 17, name: "National Day for Truth and Reconciliation", date: "Sep 30", daysUntil: 165, passed: false },
-  { id: 18, name: "Thanksgiving", date: "Oct 13", daysUntil: 178, passed: false },
-  { id: 19, name: "Halloween", date: "Oct 31", daysUntil: 196, passed: false },
-  { id: 20, name: "Remembrance Day", date: "Nov 11", daysUntil: 207, passed: false },
-  { id: 21, name: "US Thanksgiving", date: "Nov 27", daysUntil: 223, passed: false },
-  { id: 22, name: "Christmas Eve", date: "Dec 24", daysUntil: 250, passed: false },
-  { id: 23, name: "Christmas Day", date: "Dec 25", daysUntil: 251, passed: false },
-  { id: 24, name: "Boxing Day", date: "Dec 26", daysUntil: 252, passed: false },
-  { id: 25, name: "New Year's Eve", date: "Dec 31", daysUntil: 257, passed: false },
-]
+// Get holidays for 2025 with calculated dates
+const holidays = getHolidaysForYear(2025)
 
 export function HolidayJigsawPuzzle() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -71,6 +46,8 @@ export function HolidayJigsawPuzzle() {
       for (let col = 0; col < gridSize; col++) {
         const index = row * gridSize + col
         const holiday = holidays[index]
+        if (!holiday) continue // Skip if no holiday data for this index
+
         const x = col * pieceWidth
         const y = row * pieceHeight
 
@@ -103,65 +80,63 @@ export function HolidayJigsawPuzzle() {
     hasBottomTab: boolean,
     hasLeftTab: boolean,
     hasTopTab: boolean,
-    holiday: (typeof holidays)[0],
+    holiday: Holiday,
   ) => {
     ctx.save()
-
-    // Begin path for the piece
     ctx.beginPath()
 
     // Start at top-left corner
     ctx.moveTo(x, y)
 
-    // Top edge with tab
+    // Draw top edge with tab if needed
     if (hasTopTab) {
       ctx.lineTo(x + width * 0.3, y)
       ctx.bezierCurveTo(
         x + width * 0.3 - tabSize,
-        y - tabSize * 0.5,
-        x + width * 0.7 - tabSize,
-        y - tabSize * 0.5,
+        y - tabSize * 2,
+        x + width * 0.7 + tabSize,
+        y - tabSize * 2,
         x + width * 0.7,
         y,
       )
     }
     ctx.lineTo(x + width, y)
 
-    // Right edge with tab
+    // Draw right edge with tab if needed
     if (hasRightTab) {
       ctx.lineTo(x + width, y + height * 0.3)
       ctx.bezierCurveTo(
-        x + width + tabSize * 0.5,
+        x + width + tabSize * 2,
         y + height * 0.3 - tabSize,
-        x + width + tabSize * 0.5,
-        y + height * 0.7 - tabSize,
+        x + width + tabSize * 2,
+        y + height * 0.7 + tabSize,
         x + width,
         y + height * 0.7,
       )
     }
     ctx.lineTo(x + width, y + height)
 
-    // Bottom edge with tab
+    // Draw bottom edge with tab if needed
     if (hasBottomTab) {
       ctx.lineTo(x + width * 0.7, y + height)
       ctx.bezierCurveTo(
-        x + width * 0.7 - tabSize,
-        y + height + tabSize * 0.5,
+        x + width * 0.7 + tabSize,
+        y + height + tabSize * 2,
         x + width * 0.3 - tabSize,
-        y + height + tabSize * 0.5,
+        y + height + tabSize * 2,
         x + width * 0.3,
         y + height,
       )
     }
     ctx.lineTo(x, y + height)
 
-    // Left edge with tab
+    // Draw left edge with tab if needed
     if (hasLeftTab) {
       ctx.lineTo(x, y + height * 0.7)
       ctx.bezierCurveTo(
-        x - tabSize * 0.5,
-        y + height * 0.7 - tabSize,
-        x - tabSize * 0.5,
+        x - tabSize * 2,
+        y + height * 0.7 + tabSize,
+        x - tabSize * 2,
         y + height * 0.3 - tabSize,
         x,
         y + height * 0.3,
@@ -186,7 +161,7 @@ export function HolidayJigsawPuzzle() {
 
       // Add checkmark
       ctx.fillStyle = "rgba(255, 255, 255, 0.9)"
-      ctx.font = "bold 16px sans-serif"
+      ctx.font = "bold 16px Merriweather, serif"
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
       ctx.fillText("✓", x + width / 2, y + height / 2)
@@ -199,12 +174,15 @@ export function HolidayJigsawPuzzle() {
 
       // Add date or days until
       ctx.fillStyle = "#8b6e5a"
-      ctx.font = "12px sans-serif"
+      ctx.font = "12px Merriweather, serif"
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
 
       // Show either days until or date
-      const text = holiday.daysUntil ? `+${holiday.daysUntil}d` : holiday.date
+      const text = (holiday as UpcomingHoliday).daysUntil === 0 
+        ? "Today" 
+        : `+${(holiday as UpcomingHoliday).daysUntil}d`
+      
       ctx.fillText(text, x + width / 2, y + height / 2)
     }
 

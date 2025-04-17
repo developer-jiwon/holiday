@@ -1343,6 +1343,16 @@ eval("// This regex will have fast negatives meaning valid identifiers may not p
 
 /***/ }),
 
+/***/ "(rsc)/./node_modules/next/font/google/target.css?{\"path\":\"app/layout.tsx\",\"import\":\"Merriweather\",\"arguments\":[{\"weight\":[\"300\",\"400\",\"700\",\"900\"],\"subsets\":[\"latin\"],\"display\":\"swap\",\"variable\":\"--font-merriweather\"}],\"variableName\":\"merriweather\"}":
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/font/google/target.css?{"path":"app/layout.tsx","import":"Merriweather","arguments":[{"weight":["300","400","700","900"],"subsets":["latin"],"display":"swap","variable":"--font-merriweather"}],"variableName":"merriweather"} ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module) => {
+
+eval("// Exports\nmodule.exports = {\n\t\"style\": {\"fontFamily\":\"'Merriweather', 'Merriweather Fallback'\",\"fontStyle\":\"normal\"},\n\t\"className\": \"__className_c59aa5\",\n\t\"variable\": \"__variable_c59aa5\"\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9ub2RlX21vZHVsZXMvbmV4dC9mb250L2dvb2dsZS90YXJnZXQuY3NzP3tcInBhdGhcIjpcImFwcC9sYXlvdXQudHN4XCIsXCJpbXBvcnRcIjpcIk1lcnJpd2VhdGhlclwiLFwiYXJndW1lbnRzXCI6W3tcIndlaWdodFwiOltcIjMwMFwiLFwiNDAwXCIsXCI3MDBcIixcIjkwMFwiXSxcInN1YnNldHNcIjpbXCJsYXRpblwiXSxcImRpc3BsYXlcIjpcInN3YXBcIixcInZhcmlhYmxlXCI6XCItLWZvbnQtbWVycml3ZWF0aGVyXCJ9XSxcInZhcmlhYmxlTmFtZVwiOlwibWVycml3ZWF0aGVyXCJ9IiwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQSxXQUFXLDRFQUE0RTtBQUN2RjtBQUNBO0FBQ0EiLCJzb3VyY2VzIjpbIi9Vc2Vycy9qaXdvbmh3YW5nL0Rlc2t0b3AvMjAyNV9ERVYvaG9saWRheS9ub2RlX21vZHVsZXMvbmV4dC9mb250L2dvb2dsZS90YXJnZXQuY3NzP3tcInBhdGhcIjpcImFwcC9sYXlvdXQudHN4XCIsXCJpbXBvcnRcIjpcIk1lcnJpd2VhdGhlclwiLFwiYXJndW1lbnRzXCI6W3tcIndlaWdodFwiOltcIjMwMFwiLFwiNDAwXCIsXCI3MDBcIixcIjkwMFwiXSxcInN1YnNldHNcIjpbXCJsYXRpblwiXSxcImRpc3BsYXlcIjpcInN3YXBcIixcInZhcmlhYmxlXCI6XCItLWZvbnQtbWVycml3ZWF0aGVyXCJ9XSxcInZhcmlhYmxlTmFtZVwiOlwibWVycml3ZWF0aGVyXCJ9Il0sInNvdXJjZXNDb250ZW50IjpbIi8vIEV4cG9ydHNcbm1vZHVsZS5leHBvcnRzID0ge1xuXHRcInN0eWxlXCI6IHtcImZvbnRGYW1pbHlcIjpcIidNZXJyaXdlYXRoZXInLCAnTWVycml3ZWF0aGVyIEZhbGxiYWNrJ1wiLFwiZm9udFN0eWxlXCI6XCJub3JtYWxcIn0sXG5cdFwiY2xhc3NOYW1lXCI6IFwiX19jbGFzc05hbWVfYzU5YWE1XCIsXG5cdFwidmFyaWFibGVcIjogXCJfX3ZhcmlhYmxlX2M1OWFhNVwiXG59O1xuIl0sIm5hbWVzIjpbXSwiaWdub3JlTGlzdCI6WzBdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(rsc)/./node_modules/next/font/google/target.css?{\"path\":\"app/layout.tsx\",\"import\":\"Merriweather\",\"arguments\":[{\"weight\":[\"300\",\"400\",\"700\",\"900\"],\"subsets\":[\"latin\"],\"display\":\"swap\",\"variable\":\"--font-merriweather\"}],\"variableName\":\"merriweather\"}\n");
+
+/***/ }),
+
 /***/ "(ssr)/./node_modules/next/dist/client/app-build-id.js":
 /*!*******************************************************!*\
   !*** ./node_modules/next/dist/client/app-build-id.js ***!

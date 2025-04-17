@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ["var(--font-merriweather)", "serif"],
+      },
       colors: {
         beige: {
           50: "#f9f4ec",
