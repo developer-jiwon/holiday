@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, createContext, useContext } from "react"
 import { BackgroundIllustration } from "./background-illustration"
 import { getHolidaysForYear, getHolidaysByCountry, type Holiday, type UpcomingHoliday, type PastHoliday } from "../lib/date-utils"
 import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, Volume2, VolumeX } from "lucide-react"
@@ -10,12 +10,18 @@ type TooltipPosition = { x: number; y: number } | null
 
 // Countries available for selection
 const COUNTRIES = [
-  { id: 'global', name: 'Global', flag: '🌎' },
-  { id: 'canada', name: 'Canada', flag: '🇨🇦' },
   { id: 'us', name: 'United States', flag: '🇺🇸' },
   { id: 'uk', name: 'United Kingdom', flag: '🇬🇧' },
+  { id: 'canada', name: 'Canada', flag: '🇨🇦' },
   { id: 'australia', name: 'Australia', flag: '🇦🇺' },
+  { id: 'germany', name: 'Germany', flag: '🇩🇪' },
+  { id: 'france', name: 'France', flag: '🇫🇷' },
+  { id: 'spain', name: 'Spain', flag: '🇪🇸' },
+  { id: 'italy', name: 'Italy', flag: '🇮🇹' },
   { id: 'japan', name: 'Japan', flag: '🇯🇵' },
+  { id: 'china', name: 'China', flag: '🇨🇳' },
+  { id: 'taiwan', name: 'Taiwan', flag: '🇹🇼' },
+  { id: 'korea', name: 'South Korea', flag: '🇰🇷' },
 ]
 
 // Create the SparkleIcon component
@@ -311,36 +317,117 @@ function getHolidayIconName(name: string): string {
   if (nameLower.includes("patrick")) return "clover"
   if (nameLower.includes("independence day")) return "firework"
   if (nameLower.includes("thanksgiving")) return "turkey"
-  if (nameLower.includes("new year's day")) return "party"
+  if (nameLower.includes("new year")) return "party"
+  if (nameLower.includes("lunar new year") || nameLower.includes("chinese new year") || nameLower.includes("seollal")) return "chinese-new-year"
+  if (nameLower.includes("dragon boat")) return "chinese-new-year"
+  if (nameLower.includes("mid-autumn") || nameLower.includes("moon festival")) return "celebration"
+  if (nameLower.includes("qingming") || nameLower.includes("tomb sweeping")) return "memorial"
+  if (nameLower.includes("chuseok") || nameLower.includes("harvest")) return "turkey"
   if (nameLower.includes("earth day")) return "earth"
-  if (nameLower.includes("memorial day")) return "memorial"
-  if (nameLower.includes("labor day")) return "labor"
+  if (nameLower.includes("memorial day") || nameLower.includes("remembrance")) return "memorial"
+  if (nameLower.includes("labor day") || nameLower.includes("labour day")) return "labor"
   if (nameLower.includes("mother")) return "mothers"
   if (nameLower.includes("father")) return "fathers"
   if (nameLower.includes("flag day")) return "flag"
-  if (nameLower.includes("summer") || nameLower.includes("solstice")) return "summer"
-  if (nameLower.includes("veterans day")) return "veterans"
-  if (nameLower.includes("president")) return "president"
+  if (nameLower.includes("summer") || nameLower.includes("solstice") || nameLower.includes("equinox")) return "summer"
+  if (nameLower.includes("veterans day") || nameLower.includes("army day")) return "veterans"
+  if (nameLower.includes("president") || nameLower.includes("constitution") || nameLower.includes("foundation")) return "president"
   if (nameLower.includes("mlk") || nameLower.includes("martin luther")) return "mlk"
-  if (nameLower.includes("chinese new year")) return "chinese-new-year"
   if (nameLower.includes("pancake") || nameLower.includes("shrove")) return "pancake"
+  if (nameLower.includes("national day") || nameLower.includes("liberation") || nameLower.includes("founding")) return "flag"
+  if (nameLower.includes("children")) return "celebration"
+  if (nameLower.includes("buddha")) return "celebration"
+  if (nameLower.includes("indigenous") || nameLower.includes("naidoc")) return "earth"
+  if (nameLower.includes("king") || nameLower.includes("queen") || nameLower.includes("emperor")) return "celebration"
+  if (nameLower.includes("juneteenth")) return "celebration"
+  if (nameLower.includes("women")) return "mothers"
+  if (nameLower.includes("youth")) return "celebration"
+  if (nameLower.includes("victoria")) return "celebration"
+  if (nameLower.includes("anzac")) return "memorial"
+  if (nameLower.includes("melbourne")) return "celebration"
+  if (nameLower.includes("health") || nameLower.includes("sports")) return "celebration"
+  if (nameLower.includes("greenery") || nameLower.includes("mountain")) return "earth"
+  if (nameLower.includes("culture")) return "celebration"
+  if (nameLower.includes("respect")) return "celebration"
+  if (nameLower.includes("marine")) return "celebration"
+  if (nameLower.includes("peace")) return "celebration"
+  if (nameLower.includes("hangul")) return "celebration"
+  if (nameLower.includes("coming of age")) return "celebration"
+  if (nameLower.includes("retrocession")) return "flag"
+  if (nameLower.includes("civic") || nameLower.includes("bank holiday")) return "celebration"
+  if (nameLower.includes("cpc")) return "flag"
   
   // Default icon for any other holiday
   return "celebration"
 }
 
+// Sound context type
+type SoundContextType = {
+  soundEnabled: boolean;
+  toggleSound: () => void;
+};
+
+// Create sound context
+const SoundContext = createContext<SoundContextType>({
+  soundEnabled: true,
+  toggleSound: () => {},
+});
+
+// Sound provider component
+export function SoundProvider({ children }: { children: React.ReactNode }) {
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  
+  const toggleSound = () => {
+    setSoundEnabled(prev => !prev);
+  };
+  
+  return (
+    <SoundContext.Provider value={{ soundEnabled, toggleSound }}>
+      {children}
+    </SoundContext.Provider>
+  );
+}
+
+// Sound toggle component
+export function SoundToggle() {
+  const { soundEnabled, toggleSound } = useContext(SoundContext);
+  
+  return (
+    <button 
+      onClick={toggleSound}
+      className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-100 hover:bg-amber-200 transition-colors"
+      title={soundEnabled ? "Mute sounds" : "Enable sounds"}
+    >
+      {soundEnabled ? (
+        <Volume2 className="w-5 h-5 text-amber-800" />
+      ) : (
+        <VolumeX className="w-5 h-5 text-amber-800" />
+      )}
+    </button>
+  );
+}
+
+// Create the RefreshIcon component
+function RefreshIcon({ className = "" }: { className?: string }) {
+  return <RefreshCw className={className} size={18} />;
+}
+
 export function MobileHolidayPuzzle() {
-  const [currentYear, setCurrentYear] = useState<number>(2025)
-  const [hoveredTile, setHoveredTile] = useState<number | null>(null)
-  const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>(null)
-  const [selectedCountry, setSelectedCountry] = useState<string>('global')
-  const [animatingPiece, setAnimatingPiece] = useState<number | null>(null)
-  const [completedAnimation, setCompletedAnimation] = useState<number | null>(null)
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedCountry, setSelectedCountry] = useState<string>("us");
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [resetKey, setResetKey] = useState(0); // Add reset key for puzzle reset
+  
+  // Add missing state variables
+  const [hoveredTile, setHoveredTile] = useState<number | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>(null);
+  const [animatingPiece, setAnimatingPiece] = useState<number | null>(null);
+  const [completedAnimation, setCompletedAnimation] = useState<number | null>(null);
   
   // Get holidays for the current year and selected country
   const holidays = selectedCountry === 'global' 
-    ? getHolidaysForYear(currentYear)
-    : getHolidaysByCountry(selectedCountry, currentYear)
+    ? getHolidaysForYear(selectedYear)
+    : getHolidaysByCountry(selectedCountry, selectedYear)
 
   const handleTileMouseEnter = (id: number, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -397,166 +484,176 @@ export function MobileHolidayPuzzle() {
   }
   
   const goToPreviousYear = () => {
-    setCurrentYear(prev => prev - 1)
+    setSelectedYear(prev => prev - 1)
   }
   
   const goToNextYear = () => {
-    setCurrentYear(prev => prev + 1)
+    setSelectedYear(prev => prev + 1)
   }
   
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCountry(e.target.value)
   }
 
-  return (
-    <div className="relative overflow-hidden rounded-xl bg-[#f7f2ea] shadow-lg">
-      <div className="absolute inset-0 z-0 opacity-10">
-        <BackgroundIllustration />
-      </div>
+  // Add a reset function
+  const handleReset = () => {
+    setResetKey(prevKey => prevKey + 1);
+  };
 
-      <div className="relative z-10 h-full w-full p-3 sm:p-4">
-        <div className="flex flex-col items-center justify-center mb-3">
-          {/* Year Navigation with integrated country selector - mobile optimized */}
-          <div className="flex items-center justify-between mb-4 bg-white/90 rounded-lg px-3 sm:px-4 py-2 shadow-sm border border-[#c5b7a7] w-full max-w-sm">
-            <button 
-              onClick={goToPreviousYear}
-              className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
-              aria-label="Previous Year"
-            >
-              ←
-            </button>
-            
-            <div className="mx-1 sm:mx-2 text-center flex-1">
-              <h1 className="text-sm sm:text-base font-semibold text-[#776b5f] flex items-center justify-center">
-                <PuzzleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-1.5" />
-                <span className="truncate">{currentYear} Holiday Puzzle</span>
-              </h1>
-              <div className="flex flex-wrap items-center justify-center mt-1 sm:mt-1.5 gap-1">
-                <div className="relative group">
-                  <select 
-                    id="country-select"
-                    value={selectedCountry}
-                    onChange={handleCountryChange}
-                    className="appearance-none bg-transparent border-0 text-[#776b5f] text-[10px] sm:text-xs font-medium focus:outline-none pr-4 cursor-pointer truncate max-w-[100px] sm:max-w-none"
-                  >
-                    {COUNTRIES.map(country => (
-                      <option key={country.id} value={country.id}>
-                        {country.flag} {country.name}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-[#776b5f]">
-                    <svg className="h-3 w-3 sm:h-4 sm:w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
+  return (
+    <SoundProvider>
+      <div className="min-h-screen flex flex-col gap-4 overflow-auto pb-20">
+        <div className="relative overflow-visible rounded-xl bg-[#f7f2ea] shadow-lg">
+          <div className="absolute inset-0 z-0 opacity-10">
+            <BackgroundIllustration />
+          </div>
+
+          <div className="relative z-10 w-full p-3 sm:p-4">
+            <div className="flex flex-col items-center justify-center mb-3">
+              {/* Year Navigation with integrated country selector - mobile optimized */}
+              <div className="flex items-center justify-between mb-4 bg-white/90 rounded-lg px-3 sm:px-4 py-2 shadow-sm border border-[#c5b7a7] w-full max-w-sm">
+                <button 
+                  onClick={goToPreviousYear}
+                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
+                  aria-label="Previous Year"
+                >
+                  ←
+                </button>
+                
+                <div className="mx-1 sm:mx-2 text-center flex-1">
+                  <h1 className="text-sm sm:text-base font-semibold text-[#776b5f] flex items-center justify-center">
+                    <PuzzleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-1.5" />
+                    <span className="truncate">{selectedYear} Holiday Puzzle</span>
+                  </h1>
+                  <div className="flex flex-wrap items-center justify-center mt-1 sm:mt-1.5 gap-1">
+                    <div className="relative group">
+                      <select 
+                        id="country-select"
+                        value={selectedCountry}
+                        onChange={handleCountryChange}
+                        className="appearance-none bg-transparent border-0 text-[#776b5f] text-[10px] sm:text-xs font-medium focus:outline-none pr-4 cursor-pointer truncate max-w-[100px] sm:max-w-none"
+                      >
+                        {COUNTRIES.map(country => (
+                          <option key={country.id} value={country.id}>
+                            {country.flag} {country.name}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-[#776b5f]">
+                        <svg className="h-3 w-3 sm:h-4 sm:w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                    <span className="text-[#776b5f]/70 text-[10px] sm:text-xs">•</span>
+                    <span className="text-[10px] sm:text-xs text-[#776b5f]/70 whitespace-nowrap">
+                      {holidays.filter(h => h.passed).length}/{holidays.length} collected
+                    </span>
                   </div>
                 </div>
-                <span className="text-[#776b5f]/70 text-[10px] sm:text-xs">•</span>
-                <span className="text-[10px] sm:text-xs text-[#776b5f]/70 whitespace-nowrap">
-                  {holidays.filter(h => h.passed).length}/{holidays.length} collected
-                </span>
+                
+                <button 
+                  onClick={goToNextYear}
+                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
+                  aria-label="Next Year"
+                >
+                  →
+                </button>
               </div>
             </div>
-            
-            <button 
-              onClick={goToNextYear}
-              className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
-              aria-label="Next Year"
+
+            {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
+            <div 
+              className="relative mx-auto max-w-xl rounded-xl bg-[#e6dfd3] p-2 sm:p-3 md:p-5 shadow-md overflow-hidden border-2 border-[#c5b7a7]"
+              style={{ 
+                boxShadow: '0 5px 15px rgba(0,0,0,0.05), inset 0 0 20px rgba(0,0,0,0.02)',
+                backgroundImage: 'radial-gradient(circle at 70% 30%, #eae3d7 5%, transparent 5%), radial-gradient(circle at 30% 70%, #e0d8cc 3%, transparent 3%)',
+                backgroundSize: '60px 60px'
+              }}
             >
-              →
-            </button>
-          </div>
-        </div>
-
-        {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
-        <div 
-          className="relative mx-auto max-w-xl rounded-xl bg-[#e6dfd3] p-2 sm:p-3 md:p-5 shadow-md overflow-hidden border-2 border-[#c5b7a7]"
-          style={{ 
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05), inset 0 0 20px rgba(0,0,0,0.02)',
-            backgroundImage: 'radial-gradient(circle at 70% 30%, #eae3d7 5%, transparent 5%), radial-gradient(circle at 30% 70%, #e0d8cc 3%, transparent 3%)',
-            backgroundSize: '60px 60px'
-          }}
-        >
-          {/* Subtle wood grain texture */}
-          <div className="absolute inset-0 opacity-15" 
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%23a89888' fill-opacity='0.1' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
-              backgroundSize: '100% 100%'
-            }}>
-          </div>
-          
-          {/* Actual puzzle grid - this is a complete jigsaw puzzle with interlocking pieces */}
-          <div className="relative z-10">
-            <JigsawPuzzleGrid 
-              holidays={holidays}
-              onPieceClick={handleTileClick}
-              onPieceMouseEnter={handleTileMouseEnter}
-              onPieceMouseLeave={handleTileMouseLeave}
-              hoveredTile={hoveredTile}
-              animatingPiece={animatingPiece}
-              completedAnimation={completedAnimation}
-            />
-          </div>
-          
-          {/* Caption */}
-          <div className="mt-4 text-center">
-            <p className="text-xs text-[#8d7d6e]/80 font-medium">Click pieces to discover holidays</p>
-          </div>
-        </div>
-
-        {/* Holiday info tooltip - minimalist and responsive */}
-        {hoveredTile !== null && tooltipPosition && (
-          <div
-            className="fixed z-50 bg-white/95 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg shadow-sm border border-[#c5b7a7]/60 left-1/2 transform -translate-x-1/2"
-            style={{
-              top: `${tooltipPosition.y - 45}px`,
-              width: "auto",
-              minWidth: "140px",
-              maxWidth: "200px",
-              transform: "translate(-50%, -8px)",
-              transition: "transform 0.2s ease, opacity 0.2s ease",
-              backdropFilter: "blur(2px)",
-            }}
-          >
-            <div className="relative">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="font-medium text-sm text-[#776b5f]">
-                  {holidays.find(h => h.id === hoveredTile)?.name}
-                </h3>
-                <span className="text-[8px] px-1 py-0.5 rounded bg-[#e2d8c8]/50 text-[#776b5f] whitespace-nowrap">
-                  {holidays.find(h => h.id === hoveredTile)?.passed ? "passed" : "upcoming"}
-                </span>
+              {/* Subtle wood grain texture */}
+              <div className="absolute inset-0 opacity-15" 
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%23a89888' fill-opacity='0.1' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
+                  backgroundSize: '100% 100%'
+                }}>
               </div>
               
-              <div className="flex items-center justify-between mt-1 text-[11px] text-[#a89888]">
-                <span>{holidays.find(h => h.id === hoveredTile)?.date}</span>
-                
-                {/* Show days passed or days until - essential information */}
-                {(() => {
-                  const holiday = holidays.find(h => h.id === hoveredTile)
-                  if (!holiday) return null
-                  
-                  return holiday.passed ? (
-                    <span className="flex items-center text-[#776b5f]/80">
-                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#938578] mr-1"></span>
-                      {(holiday as PastHoliday).daysPassed}d ago
-                    </span>
-                  ) : (
-                    <span className="flex items-center text-[#a89888]">
-                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#c4b19f] mr-1"></span>
-                      in {(holiday as UpcomingHoliday).daysUntil}d
-                    </span>
-                  )
-                })()}
+              {/* Actual puzzle grid - this is a complete jigsaw puzzle with interlocking pieces */}
+              <div className="relative z-10">
+                <JigsawPuzzleGrid 
+                  holidays={holidays}
+                  onPieceClick={handleTileClick}
+                  onPieceMouseEnter={handleTileMouseEnter}
+                  onPieceMouseLeave={handleTileMouseLeave}
+                  hoveredTile={hoveredTile}
+                  animatingPiece={animatingPiece}
+                  completedAnimation={completedAnimation}
+                />
               </div>
-
-              {/* Simple arrow indicator */}
-              <div className="absolute -bottom-[6px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-white/95"></div>
+              
+              {/* Caption */}
+              <div className="mt-4 text-center">
+                <p className="text-xs text-[#8d7d6e]/80 font-medium">Click pieces to discover holidays</p>
+              </div>
             </div>
+
+
+            {/* Holiday info tooltip - minimalist and responsive */}
+            {hoveredTile !== null && tooltipPosition && (
+              <div
+                className="fixed z-50 bg-white/95 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg shadow-sm border border-[#c5b7a7]/60 left-1/2 transform -translate-x-1/2"
+                style={{
+                  top: `${tooltipPosition.y - 45}px`,
+                  width: "auto",
+                  minWidth: "140px",
+                  maxWidth: "200px",
+                  transform: "translate(-50%, -8px)",
+                  transition: "transform 0.2s ease, opacity 0.2s ease",
+                  backdropFilter: "blur(2px)",
+                }}
+              >
+                <div className="relative">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="font-medium text-sm text-[#776b5f]">
+                      {holidays.find(h => h.id === hoveredTile)?.name}
+                    </h3>
+                    <span className="text-[8px] px-1 py-0.5 rounded bg-[#e2d8c8]/50 text-[#776b5f] whitespace-nowrap">
+                      {holidays.find(h => h.id === hoveredTile)?.passed ? "passed" : "upcoming"}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between mt-1 text-[11px] text-[#a89888]">
+                    <span>{holidays.find(h => h.id === hoveredTile)?.date}</span>
+                    
+                    {/* Show days passed or days until - essential information */}
+                  {(() => {
+                    const holiday = holidays.find(h => h.id === hoveredTile)
+                    if (!holiday) return null
+                    
+                    return holiday.passed ? (
+                        <span className="flex items-center text-[#776b5f]/80">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#938578] mr-1"></span>
+                          {(holiday as PastHoliday).daysPassed}d ago
+                        </span>
+                      ) : (
+                        <span className="flex items-center text-[#a89888]">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#c4b19f] mr-1"></span>
+                          in {(holiday as UpcomingHoliday).daysUntil}d
+                        </span>
+                    )
+                  })()}
+                  </div>
+
+                  {/* Simple arrow indicator */}
+                  <div className="absolute -bottom-[6px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-white/95"></div>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </SoundProvider>
   )
 }
 
@@ -691,12 +788,12 @@ function JigsawPuzzleGrid({
         gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
         gridTemplateRows: `repeat(${gridRows}, 1fr)`,
         gap: '0px',
-        aspectRatio: `${gridCols}/${gridRows}`,
+        minHeight: `${gridRows * 100}px`, // Add minimum height based on rows
         backgroundColor: colorPalette.boardBg,
         borderRadius: '12px',
         boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
         padding: '5px',
-        overflow: 'hidden'
+        overflow: 'visible' // Changed from 'hidden' to show all content
       }}
     >
       {sortedHolidays.map((holiday, index) => {
@@ -968,7 +1065,7 @@ function generateNaturalJigsawPath(connectors: {
     path += `L 0,${tabEnd} `;
     // Natural slot curve with multiple control points
     path += `C 1,${tabEnd-cpOffset2} ${tabHeight-2},${tabCenter+cpOffset} ${tabHeight},${tabCenter} `;
-    path += `C ${tabHeight-2},${tabEnd-cpOffset} 1,${tabStart+cpOffset2} 0,${tabStart} `;
+    path += `C ${tabHeight-2},${tabEnd-cpOffset} 1,${tabEnd-cpOffset2} 0,${tabStart} `;
     // From slot end to top corner
     path += `L 0,0 `;
   } else {
