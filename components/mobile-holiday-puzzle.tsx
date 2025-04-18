@@ -345,7 +345,7 @@ export function MobileHolidayPuzzle() {
   const handleTileMouseEnter = (id: number, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect()
     setTooltipPosition({
-      x: window.innerWidth / 2, // Center horizontally on the screen
+      x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, // Handle SSR safely
       y: rect.top - 10,
     })
     setHoveredTile(id)
@@ -584,13 +584,58 @@ function JigsawPuzzleGrid({
   const [gridCols, setGridCols] = useState(3);
   const [gridRows, setGridRows] = useState(Math.ceil(holidays.length / 3));
   
+  // Store connector patterns in state to avoid hydration mismatch
+  const [pieceConnectors, setPieceConnectors] = useState<{[key: string]: {top: string, right: string, bottom: string, left: string}}>({});
+  
+  // Initialize grid and connectors only on client-side
   useEffect(() => {
     function handleResize() {
       // Use 2 columns for very small screens
-      const newCols = window.innerWidth < 360 ? 2 : 
-                     window.innerWidth < 640 ? 3 : 3;
+      const newCols = window.innerWidth < 360 ? 2 : window.innerWidth < 640 ? 3 : 3;
       setGridCols(newCols);
       setGridRows(Math.ceil(holidays.length / newCols));
+      
+      // Generate new connectors when grid dimensions change
+      generateConnectors(newCols, Math.ceil(holidays.length / newCols));
+    }
+    
+    // Generate connector patterns for each piece
+    function generateConnectors(cols: number, rows: number) {
+      const connectors: {[key: string]: {top: string, right: string, bottom: string, left: string}} = {};
+      
+      // Generate a pattern for the entire grid that ensures pieces interlock properly
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          // For top edge: if first row -> flat, else -> match the bottom of piece above (inverted)
+          const topType = row === 0 ? "flat" : 
+                        (connectors[`${row-1}-${col}`]?.bottom === "tab" ? "slot" : 
+                         connectors[`${row-1}-${col}`]?.bottom === "slot" ? "tab" : "flat");
+          
+          // For left edge: if first column -> flat, else -> match the right of piece to left (inverted)
+          const leftType = col === 0 ? "flat" : 
+                         (connectors[`${row}-${col-1}`]?.right === "tab" ? "slot" : 
+                          connectors[`${row}-${col-1}`]?.right === "slot" ? "tab" : "flat");
+          
+          // For bottom and right edges, randomly select type but ensure not all edges are flat
+          let bottomType, rightType;
+          
+          // Decide bottom type - if it's the last row, make it flat
+          bottomType = row === rows - 1 ? "flat" : Math.random() > 0.5 ? "tab" : "slot";
+          
+          // Decide right type - if it's the last column, make it flat
+          rightType = col === cols - 1 ? "flat" : Math.random() > 0.5 ? "tab" : "slot";
+          
+          // Store the connector pattern for this piece
+          connectors[`${row}-${col}`] = {
+            top: topType,
+            right: rightType,
+            bottom: bottomType,
+            left: leftType
+          };
+        }
+      }
+      
+      setPieceConnectors(connectors);
     }
     
     window.addEventListener('resize', handleResize);
@@ -638,42 +683,6 @@ function JigsawPuzzleGrid({
     }
   };
 
-  // Generate connector patterns for each piece - these determine how pieces connect
-  const pieceConnectors: {[key: string]: {top: string, right: string, bottom: string, left: string}} = {};
-  
-  // Generate a pattern for the entire grid that ensures pieces interlock properly
-  for (let row = 0; row < gridRows; row++) {
-    for (let col = 0; col < gridCols; col++) {
-      // For top edge: if first row -> flat, else -> match the bottom of piece above (inverted)
-      const topType = row === 0 ? "flat" : 
-                    (pieceConnectors[`${row-1}-${col}`]?.bottom === "tab" ? "slot" : 
-                     pieceConnectors[`${row-1}-${col}`]?.bottom === "slot" ? "tab" : "flat");
-      
-      // For left edge: if first column -> flat, else -> match the right of piece to left (inverted)
-      const leftType = col === 0 ? "flat" : 
-                     (pieceConnectors[`${row}-${col-1}`]?.right === "tab" ? "slot" : 
-                      pieceConnectors[`${row}-${col-1}`]?.right === "slot" ? "tab" : "flat");
-      
-      // For bottom and right edges, randomly select type but ensure not all edges are flat
-      // and neighboring pieces will interlock properly
-      let bottomType, rightType;
-      
-      // Decide bottom type - if it's the last row, make it flat
-      bottomType = row === gridRows - 1 ? "flat" : Math.random() > 0.5 ? "tab" : "slot";
-      
-      // Decide right type - if it's the last column, make it flat
-      rightType = col === gridCols - 1 ? "flat" : Math.random() > 0.5 ? "tab" : "slot";
-      
-      // Store the connector pattern for this piece
-      pieceConnectors[`${row}-${col}`] = {
-        top: topType,
-        right: rightType,
-        bottom: bottomType,
-        left: leftType
-      };
-    }
-  }
-
   return (
     <div 
       className="grid relative"
@@ -695,7 +704,7 @@ function JigsawPuzzleGrid({
         const col = index % gridCols;
         
         // Define jigsaw piece properties
-        const isHovered = hoveredTile === holiday.id || animatingPiece === holiday.id;
+        const isHovered = hoveredTile === holiday.id;
         const isCompleted = completedAnimation === holiday.id;
         const isPassed = holiday.passed;
         
