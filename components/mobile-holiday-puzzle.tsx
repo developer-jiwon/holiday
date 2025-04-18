@@ -336,7 +336,6 @@ export function MobileHolidayPuzzle() {
   const [selectedCountry, setSelectedCountry] = useState<string>('global')
   const [animatingPiece, setAnimatingPiece] = useState<number | null>(null)
   const [completedAnimation, setCompletedAnimation] = useState<number | null>(null)
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true)
   
   // Get holidays for the current year and selected country
   const holidays = selectedCountry === 'global' 
@@ -346,7 +345,7 @@ export function MobileHolidayPuzzle() {
   const handleTileMouseEnter = (id: number, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect()
     setTooltipPosition({
-      x: rect.left + rect.width / 2,
+      x: window.innerWidth / 2, // Center horizontally on the screen
       y: rect.top - 10,
     })
     setHoveredTile(id)
@@ -364,11 +363,6 @@ export function MobileHolidayPuzzle() {
   }
   
   const handleTileClick = (id: number) => {
-    // Play sound effect if enabled
-    if (soundEnabled) {
-      // Sound would be implemented here
-    }
-    
     // Set animation for the clicked piece
     setCompletedAnimation(id)
     
@@ -414,119 +408,79 @@ export function MobileHolidayPuzzle() {
     setSelectedCountry(e.target.value)
   }
 
-  // Reset puzzle to initial state
-  const resetPuzzle = () => {
-    setHoveredTile(null);
-    setTooltipPosition(null);
-    setAnimatingPiece(null);
-    setCompletedAnimation(null);
-    
-    if (soundEnabled) {
-      // Reset sound would be played here
-    }
-    
-    // Trigger a subtle animation on all pieces
-    const totalPieces = holidays.length;
-    for (let i = 0; i < totalPieces; i++) {
-      setTimeout(() => {
-        setAnimatingPiece(holidays[i].id);
-        setTimeout(() => setAnimatingPiece(null), 150);
-      }, i * 50);
-    }
-  }
-
-  // Toggle sound on/off
-  const toggleSound = () => {
-    setSoundEnabled(prev => !prev);
-  }
-
   return (
-    <div className="relative overflow-hidden rounded-xl bg-[#f7efdf] shadow-lg">
+    <div className="relative overflow-hidden rounded-xl bg-[#f7f2ea] shadow-lg">
       <div className="absolute inset-0 z-0 opacity-10">
         <BackgroundIllustration />
       </div>
 
-      <div className="relative z-10 h-full w-full p-4">
-        <div className="flex flex-col items-center justify-center mb-5">
-          {/* Year Navigation */}
-          <div className="flex items-center justify-center mb-4 bg-white/90 rounded-lg px-4 py-2 shadow-sm border border-[#d7c4ad]">
+      <div className="relative z-10 h-full w-full p-3 sm:p-4">
+        <div className="flex flex-col items-center justify-center mb-3">
+          {/* Year Navigation with integrated country selector - mobile optimized */}
+          <div className="flex items-center justify-between mb-4 bg-white/90 rounded-lg px-3 sm:px-4 py-2 shadow-sm border border-[#c5b7a7] w-full max-w-sm">
             <button 
               onClick={goToPreviousYear}
-              className="text-[#8b6e5a] hover:text-[#6f5848] transition-colors p-1 text-lg"
+              className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
               aria-label="Previous Year"
             >
               ←
             </button>
             
-            <div className="mx-4 text-center">
-              <h1 className="text-base font-semibold text-[#8b6e5a] flex items-center justify-center">
-                <PuzzleIcon className="w-5 h-5 mr-1.5" />
-                {currentYear} Holiday Puzzle
+            <div className="mx-1 sm:mx-2 text-center flex-1">
+              <h1 className="text-sm sm:text-base font-semibold text-[#776b5f] flex items-center justify-center">
+                <PuzzleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-1.5" />
+                <span className="truncate">{currentYear} Holiday Puzzle</span>
               </h1>
-              <p className="text-xs text-[#8b6e5a]/70 mt-1">
-                {holidays.filter(h => h.passed).length}/{holidays.length} holidays collected
-              </p>
+              <div className="flex flex-wrap items-center justify-center mt-1 sm:mt-1.5 gap-1">
+                <div className="relative group">
+                  <select 
+                    id="country-select"
+                    value={selectedCountry}
+                    onChange={handleCountryChange}
+                    className="appearance-none bg-transparent border-0 text-[#776b5f] text-[10px] sm:text-xs font-medium focus:outline-none pr-4 cursor-pointer truncate max-w-[100px] sm:max-w-none"
+                  >
+                    {COUNTRIES.map(country => (
+                      <option key={country.id} value={country.id}>
+                        {country.flag} {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-[#776b5f]">
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+                <span className="text-[#776b5f]/70 text-[10px] sm:text-xs">•</span>
+                <span className="text-[10px] sm:text-xs text-[#776b5f]/70 whitespace-nowrap">
+                  {holidays.filter(h => h.passed).length}/{holidays.length} collected
+                </span>
+              </div>
             </div>
             
             <button 
               onClick={goToNextYear}
-              className="text-[#8b6e5a] hover:text-[#6f5848] transition-colors p-1 text-lg"
+              className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
               aria-label="Next Year"
             >
               →
             </button>
           </div>
-          
-          {/* Controls */}
-          <div className="flex items-center gap-3 mb-4 w-full justify-center">
-            <select 
-              id="country-select"
-              value={selectedCountry}
-              onChange={handleCountryChange}
-              className="px-2 py-1 rounded-md border border-[#d7c4ad] bg-white text-[#8b6e5a] text-sm shadow-sm"
-            >
-              {COUNTRIES.map(country => (
-                <option key={country.id} value={country.id}>
-                  {country.flag} {country.name}
-                </option>
-              ))}
-            </select>
-            
-            <div className="flex gap-2">
-              <button
-                onClick={toggleSound}
-                className={`
-                  flex items-center justify-center p-1.5 rounded-md shadow-sm
-                  transition-all duration-200 
-                  ${soundEnabled 
-                    ? 'bg-[#8b6e5a] text-white hover:bg-[#7d624f]' 
-                    : 'bg-white border border-[#d7c4ad] text-[#8b6e5a] hover:bg-[#f8f3ec]'
-                  }
-                `}
-                aria-label={soundEnabled ? "Mute sound" : "Enable sound"}
-                title={soundEnabled ? "Mute sound" : "Enable sound"}
-              >
-                {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-              </button>
-              
-              <button
-                onClick={resetPuzzle}
-                className="flex items-center justify-center gap-1 p-1.5 rounded-md bg-white border border-[#d7c4ad] text-[#8b6e5a] shadow-sm hover:bg-[#f8f3ec] transition-colors"
-                aria-label="Reset puzzle"
-                title="Reset the puzzle"
-              >
-                <RefreshCw size={16} />
-              </button>
-            </div>
-          </div>
         </div>
 
-        {/* Puzzle board with a real wooden texture appearance */}
-        <div className="relative mx-auto max-w-xl rounded-lg bg-[#e2cfb4] p-5 shadow-md overflow-hidden border-2 border-[#c4b092]">
-          {/* Realistic wood grain texture */}
-          <div className="absolute inset-0 opacity-25" 
+        {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
+        <div 
+          className="relative mx-auto max-w-xl rounded-xl bg-[#e6dfd3] p-2 sm:p-3 md:p-5 shadow-md overflow-hidden border-2 border-[#c5b7a7]"
+          style={{ 
+            boxShadow: '0 5px 15px rgba(0,0,0,0.05), inset 0 0 20px rgba(0,0,0,0.02)',
+            backgroundImage: 'radial-gradient(circle at 70% 30%, #eae3d7 5%, transparent 5%), radial-gradient(circle at 30% 70%, #e0d8cc 3%, transparent 3%)',
+            backgroundSize: '60px 60px'
+          }}
+        >
+          {/* Subtle wood grain texture */}
+          <div className="absolute inset-0 opacity-15" 
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%238b6e5a' fill-opacity='0.15' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%23a89888' fill-opacity='0.1' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
               backgroundSize: '100% 100%'
             }}>
           </div>
@@ -546,54 +500,58 @@ export function MobileHolidayPuzzle() {
           
           {/* Caption */}
           <div className="mt-4 text-center">
-            <p className="text-xs text-[#8b6e5a]/80 font-medium">Click pieces to discover holidays</p>
+            <p className="text-xs text-[#8d7d6e]/80 font-medium">Click pieces to discover holidays</p>
           </div>
         </div>
 
-        {/* Holiday info tooltip */}
+        {/* Holiday info tooltip - minimalist and responsive */}
         {hoveredTile !== null && tooltipPosition && (
           <div
-            className="fixed z-50 bg-white/95 px-3 py-2 rounded-md shadow-lg border border-[#c4b092]"
+            className="fixed z-50 bg-white/95 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg shadow-sm border border-[#c5b7a7]/60 left-1/2 transform -translate-x-1/2"
             style={{
-              left: `${tooltipPosition.x - 100}px`,
-              top: `${tooltipPosition.y - 50}px`,
-              width: "200px",
-              transform: "translateY(-8px)",
+              top: `${tooltipPosition.y - 45}px`,
+              width: "auto",
+              minWidth: "140px",
+              maxWidth: "200px",
+              transform: "translate(-50%, -8px)",
               transition: "transform 0.2s ease, opacity 0.2s ease",
-              backdropFilter: "blur(2px)"
+              backdropFilter: "blur(2px)",
             }}
           >
             <div className="relative">
-              <h3 className="font-bold text-[#8b6e5a] border-b border-[#d7c4ad]/50 pb-1 mb-1">
-                {holidays.find(h => h.id === hoveredTile)?.name}
-              </h3>
-              <p className="text-sm text-[#a38b7b] flex justify-between">
-                <span>{holidays.find(h => h.id === hoveredTile)?.date}</span>
-                <span className="text-[10px] bg-[#f1e8dc] px-1.5 py-0.5 rounded-full text-[#8b6e5a] inline-flex items-center">
-                  {holidays.find(h => h.id === hoveredTile)?.passed ? "completed" : "upcoming"}
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="font-medium text-sm text-[#776b5f]">
+                  {holidays.find(h => h.id === hoveredTile)?.name}
+                </h3>
+                <span className="text-[8px] px-1 py-0.5 rounded bg-[#e2d8c8]/50 text-[#776b5f] whitespace-nowrap">
+                  {holidays.find(h => h.id === hoveredTile)?.passed ? "passed" : "upcoming"}
                 </span>
-              </p>
+              </div>
               
-              {/* Show days passed or days until */}
-              {(() => {
-                const holiday = holidays.find(h => h.id === hoveredTile)
-                if (!holiday) return null
+              <div className="flex items-center justify-between mt-1 text-[11px] text-[#a89888]">
+                <span>{holidays.find(h => h.id === hoveredTile)?.date}</span>
                 
-                return holiday.passed ? (
-                  <p className="text-xs text-[#8b6e5a] mt-1 flex items-center">
-                    <span className="inline-block w-2 h-2 rounded-full bg-[#8b6e5a] mr-1"></span>
-                    <span>{(holiday as PastHoliday).daysPassed} days ago</span>
-                  </p>
-                ) : (
-                  <p className="text-xs text-emerald-600 mt-1 flex items-center">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-600 mr-1"></span>
-                    <span>In {(holiday as UpcomingHoliday).daysUntil} days</span>
-                  </p>
-                )
-              })()}
+                {/* Show days passed or days until - essential information */}
+                {(() => {
+                  const holiday = holidays.find(h => h.id === hoveredTile)
+                  if (!holiday) return null
+                  
+                  return holiday.passed ? (
+                    <span className="flex items-center text-[#776b5f]/80">
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#938578] mr-1"></span>
+                      {(holiday as PastHoliday).daysPassed}d ago
+                    </span>
+                  ) : (
+                    <span className="flex items-center text-[#a89888]">
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#c4b19f] mr-1"></span>
+                      in {(holiday as UpcomingHoliday).daysUntil}d
+                    </span>
+                  )
+                })()}
+              </div>
 
-              {/* Arrow at the bottom */}
-              <div className="absolute -bottom-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[10px] border-transparent border-t-white/95"></div>
+              {/* Simple arrow indicator */}
+              <div className="absolute -bottom-[6px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-white/95"></div>
             </div>
           </div>
         )}
@@ -622,145 +580,92 @@ function JigsawPuzzleGrid({
   animatingPiece,
   completedAnimation
 }: JigsawPuzzleGridProps) {
-  // Standard holiday order based on position in calendar year
-  const standardHolidayOrder = [
-    "new year's day",      // 0,0
-    "valentine's day",     // 0,1
-    "st. patrick's day",   // 0,2
-    "earth day",           // 1,0
-    "labor day",           // 1,1
-    "memorial day",        // 1,2
-    "independence day",    // 2,0
-    "halloween",           // 2,1
-    "veterans day",        // 2,2
-    "thanksgiving",        // 3,0
-    "christmas eve",       // 3,1
-    "christmas day",       // 3,2
-    "new year's eve"       // 4,0
-  ];
-
-  // Calculate dimensions
-  const COLS = 3;
-  // Dynamically calculate rows needed for all pieces plus the New Year's Eve in the bottom
-  const needsExtraRow = standardHolidayOrder.some(h => h.includes("new year's eve"));
-  const minRows = needsExtraRow ? 5 : 4; // Minimum 4 rows, or 5 if New Year's Eve is present
+  // Calculate grid dimensions based on number of holidays and screen size
+  const [gridCols, setGridCols] = useState(3);
+  const [gridRows, setGridRows] = useState(Math.ceil(holidays.length / 3));
   
-  // Make sure we include essential holidays that might be missing from the API
-  const ensureAllHolidays = () => {
-    if (holidays.length === 0) return [];
-    
-    // Get existing holiday names
-    const existingHolidayNames = holidays.map(h => h.name.toLowerCase());
-    const missingHolidays: Holiday[] = [];
-    
-    // Check for essential holidays
-    const essentialHolidays = [
-      { name: "New Year's Day", date: "Jan 1", month: 1, day: 1 },
-      { name: "Valentine's Day", date: "Feb 14", month: 2, day: 14 },
-      { name: "St. Patrick's Day", date: "Mar 17", month: 3, day: 17 },
-      { name: "Earth Day", date: "Apr 22", month: 4, day: 22 },
-      { name: "Memorial Day", date: "May 26", month: 5, day: 26 },
-      { name: "Labor Day", date: "May 1", month: 5, day: 1 },
-      { name: "Independence Day", date: "Jul 4", month: 7, day: 4 },
-      { name: "Halloween", date: "Oct 31", month: 10, day: 31 },
-      { name: "Veterans Day", date: "Nov 11", month: 11, day: 11 },
-      { name: "Thanksgiving", date: "Nov 27", month: 11, day: 27 },
-      { name: "Christmas Eve", date: "Dec 24", month: 12, day: 24 },
-      { name: "Christmas Day", date: "Dec 25", month: 12, day: 25 },
-      { name: "New Year's Eve", date: "Dec 31", month: 12, day: 31 }
-    ];
-
-    for (let i = 0; i < essentialHolidays.length; i++) {
-      const holiday = essentialHolidays[i];
-      
-      // Check if this essential holiday exists in any form
-      const exists = existingHolidayNames.some(name => 
-        name.includes(holiday.name.toLowerCase()) ||
-        // Special cases for different naming patterns
-        (holiday.name === "Independence Day" && name.includes("independence")) ||
-        (holiday.name === "Halloween" && name.includes("halloween")) ||
-        (holiday.name === "Veterans Day" && name.includes("veterans")) ||
-        (holiday.name === "Thanksgiving" && name.includes("thanksgiving")) ||
-        (holiday.name === "Christmas Eve" && name.includes("christmas eve")) ||
-        (holiday.name === "Christmas Day" && name.includes("christmas") && !name.includes("eve")) ||
-        (holiday.name === "New Year's Eve" && name.includes("new year") && name.includes("eve")) ||
-        (holiday.name === "New Year's Day" && name.includes("new year") && !name.includes("eve"))
-      );
-      
-      if (!exists) {
-        const baseId = Math.max(...holidays.map(h => h.id), 0) + 1;
-        const now = new Date();
-        const holidayDate = new Date(now.getFullYear(), holiday.month - 1, holiday.day);
-        const isPassed = now > holidayDate;
-        
-        // Create a PastHoliday or UpcomingHoliday based on the current date
-        if (isPassed) {
-          // Calculate days passed
-          const daysPassed = Math.floor((now.getTime() - holidayDate.getTime()) / (1000 * 60 * 60 * 24));
-          missingHolidays.push({
-            id: baseId + missingHolidays.length,
-            name: holiday.name,
-            date: holiday.date,
-            passed: true,
-            daysPassed
-          } as PastHoliday);
-        } else {
-          // Calculate days until
-          const daysUntil = Math.floor((holidayDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-          missingHolidays.push({
-            id: baseId + missingHolidays.length,
-            name: holiday.name,
-            date: holiday.date,
-            passed: false,
-            daysUntil
-          } as UpcomingHoliday);
-        }
-      }
+  useEffect(() => {
+    function handleResize() {
+      // Use 2 columns for very small screens
+      const newCols = window.innerWidth < 360 ? 2 : 
+                     window.innerWidth < 640 ? 3 : 3;
+      setGridCols(newCols);
+      setGridRows(Math.ceil(holidays.length / newCols));
     }
     
-    // Create a combined array with all holidays
-    return [...holidays, ...missingHolidays];
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial calculation
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, [holidays.length]);
+  
+  // Arrange holidays in the grid by date order (month/day)
+  const sortedHolidays = [...holidays].sort((a, b) => {
+    // Extract month and day from date string (format: "Jan 1", "Dec 25", etc.)
+    const [aMonth, aDay] = a.date.split(' ');
+    const [bMonth, bDay] = b.date.split(' ');
+    
+    // Month to number mapping
+    const monthToNum: {[key: string]: number} = {
+      'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
+      'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
+    };
+    
+    // Compare months first
+    const monthDiff = (monthToNum[aMonth] || 0) - (monthToNum[bMonth] || 0);
+    if (monthDiff !== 0) return monthDiff;
+    
+    // If same month, compare days
+    return parseInt(aDay || '0') - parseInt(bDay || '0');
+  });
+
+  // Color palette for the puzzle pieces
+  const colorPalette = {
+    boardBg: "#e9e1d6",
+    completedPiece: {
+      primary: "#b9a18f",
+      secondary: "#a38d7b",
+      highlight: "#ccb5a3",
+      shadow: "#8a7767",
+      text: "#f5efe7"
+    },
+    upcomingPiece: {
+      primary: "#e0d5c5",
+      secondary: "#d4c9b9",
+      highlight: "#f5efe7",
+      shadow: "#bfb5a5",
+      text: "#7d6e5f"
+    }
   };
+
+  // Generate connector patterns for each piece - these determine how pieces connect
+  const pieceConnectors: {[key: string]: {top: string, right: string, bottom: string, left: string}} = {};
   
-  const allHolidays = ensureAllHolidays();
-  const totalPieces = allHolidays.length;
-  const ROWS = Math.max(Math.ceil(totalPieces / COLS), minRows);
-  
-  // Pre-compute edge types for the entire grid based on the exact image
-  const edgeTypes: {[key: string]: {top: string, right: string, bottom: string, left: string}} = {};
-  
-  // First row (0-based indexing) - brown pieces
-  edgeTypes["0-0"] = { top: "flat", right: "tab", bottom: "tab", left: "flat" };
-  edgeTypes["0-1"] = { top: "flat", right: "tab", bottom: "slot", left: "slot" }; 
-  edgeTypes["0-2"] = { top: "flat", right: "flat", bottom: "tab", left: "slot" };
-  
-  // Second row
-  edgeTypes["1-0"] = { top: "slot", right: "slot", bottom: "flat", left: "flat" };
-  edgeTypes["1-1"] = { top: "tab", right: "slot", bottom: "slot", left: "tab" };
-  edgeTypes["1-2"] = { top: "slot", right: "flat", bottom: "slot", left: "tab" };
-  
-  // Third row 
-  edgeTypes["2-0"] = { top: "flat", right: "tab", bottom: "tab", left: "flat" };
-  edgeTypes["2-1"] = { top: "tab", right: "tab", bottom: "slot", left: "slot" };
-  edgeTypes["2-2"] = { top: "tab", right: "flat", bottom: "tab", left: "slot" };
-  
-  // Fourth row - Thanksgiving, Christmas Eve, Christmas Day
-  edgeTypes["3-0"] = { top: "slot", right: "slot", bottom: "flat", left: "flat" };
-  edgeTypes["3-1"] = { top: "tab", right: "tab", bottom: "flat", left: "slot" };
-  edgeTypes["3-2"] = { top: "slot", right: "flat", bottom: "flat", left: "slot" };
-  
-  // Fifth row for New Year's Eve (if applicable)
-  edgeTypes["4-0"] = { top: "slot", right: "flat", bottom: "flat", left: "flat" };
-  
-  // Generate edge types for additional rows if needed
-  for (let row = 5; row < ROWS; row++) {
-    for (let col = 0; col < COLS; col++) {
-      const topType = row === 0 ? "flat" : (row % 2 === 0 ? "tab" : "slot");
-      const rightType = col === COLS - 1 ? "flat" : (col % 2 === 0 ? "tab" : "slot");
-      const bottomType = row === ROWS - 1 ? "flat" : (row % 2 === 0 ? "slot" : "tab");
-      const leftType = col === 0 ? "flat" : (col % 2 === 0 ? "slot" : "tab");
+  // Generate a pattern for the entire grid that ensures pieces interlock properly
+  for (let row = 0; row < gridRows; row++) {
+    for (let col = 0; col < gridCols; col++) {
+      // For top edge: if first row -> flat, else -> match the bottom of piece above (inverted)
+      const topType = row === 0 ? "flat" : 
+                    (pieceConnectors[`${row-1}-${col}`]?.bottom === "tab" ? "slot" : 
+                     pieceConnectors[`${row-1}-${col}`]?.bottom === "slot" ? "tab" : "flat");
       
-      edgeTypes[`${row}-${col}`] = {
+      // For left edge: if first column -> flat, else -> match the right of piece to left (inverted)
+      const leftType = col === 0 ? "flat" : 
+                     (pieceConnectors[`${row}-${col-1}`]?.right === "tab" ? "slot" : 
+                      pieceConnectors[`${row}-${col-1}`]?.right === "slot" ? "tab" : "flat");
+      
+      // For bottom and right edges, randomly select type but ensure not all edges are flat
+      // and neighboring pieces will interlock properly
+      let bottomType, rightType;
+      
+      // Decide bottom type - if it's the last row, make it flat
+      bottomType = row === gridRows - 1 ? "flat" : Math.random() > 0.5 ? "tab" : "slot";
+      
+      // Decide right type - if it's the last column, make it flat
+      rightType = col === gridCols - 1 ? "flat" : Math.random() > 0.5 ? "tab" : "slot";
+      
+      // Store the connector pattern for this piece
+      pieceConnectors[`${row}-${col}`] = {
         top: topType,
         right: rightType,
         bottom: bottomType,
@@ -768,109 +673,42 @@ function JigsawPuzzleGrid({
       };
     }
   }
-  
-  // Get color for specific pieces - first row is brown, others are light cream
-  const getPieceColor = (row: number, isPassed: boolean) => {
-    if (row === 0) {
-      // Top row is brown regardless of passed state
-      return "#a38b7b";
-    }
-    // Other rows depend on passed state
-    return isPassed ? "#a38b7b" : "#f7efdf";
-  };
-  
-  // Get text color for pieces
-  const getTextColor = (row: number, isPassed: boolean) => {
-    if (row === 0) {
-      // Text is white in the brown top row
-      return "text-white";
-    }
-    // For other rows
-    return isPassed ? "text-white" : "text-[#7d5f4d]";
-  };
-  
-  // Create the puzzle pieces to display
-  const pieces: Array<{holiday: Holiday, position: {row: number, col: number}}> = [];
-  
-  // First, map standard holidays to their fixed positions
-  for (let i = 0; i < standardHolidayOrder.length; i++) {
-    const searchTerm = standardHolidayOrder[i];
-    const row = Math.floor(i / COLS);
-    const col = i % COLS;
-    
-    // Skip positions that are supposed to be empty
-    if (row === 4 && col > 0) continue;
-    
-    // Find matching holiday from standard list
-    const matchingHoliday = allHolidays.find(h => 
-      h.name.toLowerCase().includes(searchTerm));
-    
-    if (matchingHoliday) {
-      pieces.push({
-        holiday: matchingHoliday,
-        position: {row, col}
-      });
-      
-      // Remove this holiday from the pool so it's not used again
-      const index = allHolidays.findIndex(h => h.id === matchingHoliday.id);
-      if (index !== -1) {
-        allHolidays.splice(index, 1);
-      }
-    }
-  }
-  
-  // Add any remaining holidays to additional rows
-  if (allHolidays.length > 0) {
-    let currentRow = 5; // Start after fixed rows
-    let currentCol = 0;
-    
-    for (const holiday of allHolidays) {
-      pieces.push({
-        holiday,
-        position: {row: currentRow, col: currentCol}
-      });
-      
-      // Move to next position
-      currentCol++;
-      if (currentCol >= COLS) {
-        currentCol = 0;
-        currentRow++;
-      }
-    }
-  }
-  
+
   return (
     <div 
-      className="grid relative border border-[#c4b092]/30 rounded-lg shadow-inner"
+      className="grid relative"
       style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-        gridTemplateRows: `repeat(${ROWS}, 1fr)`,
-        aspectRatio: `${COLS}/${ROWS}`,
-        backgroundSize: '50px 50px',
-        backgroundColor: '#e9dcc7',
-        backgroundImage: 'linear-gradient(rgba(139, 110, 90, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 110, 90, 0.05) 1px, transparent 1px)'
+        gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+        gridTemplateRows: `repeat(${gridRows}, 1fr)`,
+        gap: '0px',
+        aspectRatio: `${gridCols}/${gridRows}`,
+        backgroundColor: colorPalette.boardBg,
+        borderRadius: '12px',
+        boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
+        padding: '5px',
+        overflow: 'hidden'
       }}
     >
-      {pieces.map(({holiday, position}) => {
-        const {row, col} = position;
+      {sortedHolidays.map((holiday, index) => {
+        const row = Math.floor(index / gridCols);
+        const col = index % gridCols;
         
         // Define jigsaw piece properties
         const isHovered = hoveredTile === holiday.id || animatingPiece === holiday.id;
         const isCompleted = completedAnimation === holiday.id;
-        const isPassed = 'passed' in holiday ? holiday.passed : false;
+        const isPassed = holiday.passed;
+        
+        // Color selection based on holiday status
+        const colorSet = isPassed ? colorPalette.completedPiece : colorPalette.upcomingPiece;
+        
+        // Get connectors for this piece position
+        const connectors = pieceConnectors[`${row}-${col}`] || 
+                          { top: "flat", right: "flat", bottom: "flat", left: "flat" };
         
         // Format the holiday name for display
         const displayName = getDisplayName(holiday.name);
         const formattedDisplay = formatMultilineText(displayName);
-        
-        // Get the pre-computed connector types for this piece
-        const connectors = edgeTypes[`${row}-${col}`] || { top: "flat", right: "flat", bottom: "flat", left: "flat" };
-        
-        // Get the piece color based on row and state
-        const pieceColor = getPieceColor(row, isPassed);
-        const pieceTextColorClass = getTextColor(row, isPassed);
-        const pieceStrokeColor = row === 0 ? "#8b6e5a" : (isPassed ? "#8b6e5a" : "#c4b092");
         
         return (
           <div 
@@ -879,77 +717,126 @@ function JigsawPuzzleGrid({
             style={{
               gridColumn: col + 1,
               gridRow: row + 1,
-              margin: "-1px", // Fix for connecting pieces
+              margin: "-1px", // Negative margin helps pieces connect better
               zIndex: isHovered ? 20 : isCompleted ? 30 : 10,
             }}
           >
             <div
               className={`
-                absolute inset-0 aspect-square cursor-pointer 
-                transition-all duration-150 ${isHovered ? 'scale-[1.01]' : ''} 
-                ${isCompleted ? 'scale-[1.03]' : ''}
+                absolute inset-0 cursor-pointer 
+                transition-all duration-150
               `}
               onMouseEnter={(e) => onPieceMouseEnter(holiday.id, e)}
+              onTouchStart={(e) => {
+                // Handle touch events for mobile by converting to mouse events
+                const touch = e.touches[0];
+                const touchEvent = new MouseEvent('mouseenter', {
+                  bubbles: true,
+                  cancelable: true,
+                  view: window,
+                  clientX: touch.clientX,
+                  clientY: touch.clientY
+                });
+                onPieceMouseEnter(holiday.id, touchEvent as any);
+              }}
               onMouseLeave={onPieceMouseLeave}
+              onTouchEnd={onPieceMouseLeave}
               onClick={() => onPieceClick(holiday.id)}
               style={{
-                transform: isHovered ? 'scale(1.01)' : isCompleted ? 'scale(1.03)' : 'scale(1)',
+                transform: isHovered ? 'scale(1.02) translateY(-1px)' : 
+                           isCompleted ? 'scale(1.04) translateY(-2px)' : 'scale(1)',
+                transition: 'all 0.2s ease-out',
                 filter: isHovered ? 'brightness(1.05)' : 'none',
-                transition: 'transform 0.15s ease-out, filter 0.15s ease-out',
+                boxShadow: isHovered ? '0 2px 4px rgba(0,0,0,0.15)' : 
+                           isCompleted ? '0 3px 6px rgba(0,0,0,0.2)' : 'none',
               }}
             >
-              {/* Puzzle piece SVG */}
+              {/* Piece SVG with natural jigsaw connectors */}
               <svg 
                 className="absolute inset-0 w-full h-full"
                 viewBox="0 0 100 100" 
                 preserveAspectRatio="none"
               >
+                {/* Drop shadow for lifted pieces */}
+                <filter id={`piece-shadow-${holiday.id}`} x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur" />
+                  <feOffset in="blur" dx="1" dy="1" result="offsetBlur" />
+                  <feFlood floodColor="#000000" floodOpacity="0.2" result="shadowColor" />
+                  <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadowBlur" />
+                  <feBlend in="SourceGraphic" in2="shadowBlur" mode="normal" />
+                </filter>
+                
+                {/* Main path for the jigsaw piece */}
                 <path 
-                  d={generateJigsawPath(connectors as any)} 
-                  fill={pieceColor}
-                  stroke={pieceStrokeColor} 
-                  strokeWidth="0.8"
-                  strokeLinejoin="round"
-                  filter={isPassed && row !== 0 ? "" : "drop-shadow(0px 1px 1px rgba(0,0,0,0.05))"}
+                  d={generateNaturalJigsawPath(connectors)} 
+                  fill={isPassed ? 
+                    `url(#gradientPassed${holiday.id})` : 
+                    `url(#gradientUpcoming${holiday.id})`}
+                  stroke={isPassed ? colorSet.shadow : colorSet.shadow} 
+                  strokeWidth="0.5"
+                  filter={isHovered || isCompleted ? `url(#piece-shadow-${holiday.id})` : ''}
                 />
                 
-                {/* Edge highlights for 3D effect - only for certain pieces */}
-                {(row !== 0 || isPassed) && (
-                  <path 
-                    d={generateJigsawPath(connectors as any)} 
-                    fill="none"
-                    stroke="rgba(255,255,255,0.3)" 
-                    strokeWidth="0.4"
-                    strokeLinejoin="round"
-                    strokeDasharray="5 8"
-                    opacity="0.5"
-                  />
-                )}
+                {/* Gradients for depth and dimension */}
+                <defs>
+                  {/* Gradient for completed pieces */}
+                  <linearGradient id={`gradientPassed${holiday.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor={colorSet.highlight} />
+                    <stop offset="50%" stopColor={colorSet.primary} />
+                    <stop offset="100%" stopColor={colorSet.secondary} />
+                  </linearGradient>
+                  
+                  {/* Gradient for upcoming pieces */}
+                  <linearGradient id={`gradientUpcoming${holiday.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor={colorSet.highlight} />
+                    <stop offset="60%" stopColor={colorSet.primary} />
+                    <stop offset="100%" stopColor={colorSet.secondary} />
+                  </linearGradient>
+                </defs>
+                
+                {/* Light reflection on the top edge */}
+                <path 
+                  d={generateTopEdgeHighlight(connectors)}
+                  stroke="rgba(255,255,255,0.7)"
+                  strokeWidth="0.6"
+                  fill="none"
+                  opacity={isPassed ? "0.3" : "0.5"}
+                />
               </svg>
               
               {/* Content inside the puzzle piece */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-2 z-10">
+              <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-1 sm:p-1.5">
                 {/* Holiday icon */}
-                <div className={`w-5 h-5 mb-1 opacity-90 ${row !== 0 && !isPassed ? "drop-shadow-sm" : ""}`}>
+                <div className="w-3 h-3 sm:w-4 sm:h-4 mb-0.5 sm:mb-1">
                   <HolidayIcon 
                     iconName={getHolidayIconName(holiday.name)} 
-                    fill={row === 0 || isPassed ? "#ffffff" : "#8b6e5a"} 
+                    fill={isPassed ? colorPalette.completedPiece.text : colorPalette.upcomingPiece.text} 
                   />
                 </div>
                 
-                {/* Holiday name and date */}
+                {/* Holiday name */}
                 <div className="flex flex-col items-center justify-center">
-                  {formattedDisplay.map((line: string, i: number) => (
+                  {formattedDisplay.map((line, i) => (
                     <span
                       key={i}
-                      className={`text-xs sm:text-sm ${pieceTextColorClass} leading-tight ${
-                        i < formattedDisplay.length - 1 ? "mb-0.5" : ""
-                      } font-medium text-center`}
+                      className={`text-[8px] sm:text-[10px] leading-tight font-medium text-center ${
+                        isPassed ? "text-[#f5efe7]" : "text-[#7d6e5f]"
+                      }`}
+                      style={{ 
+                        textShadow: isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none",
+                        marginBottom: i < formattedDisplay.length - 1 ? "1px" : "0"
+                      }}
                     >
                       {line}
                     </span>
                   ))}
-                  <span className={`text-xs mt-1 ${row === 0 ? "text-white/80" : (isPassed ? "text-white/80" : "text-[#a38b7b]")} font-medium`}>
+                  
+                  {/* Holiday date */}
+                  <span 
+                    className={`text-[6px] sm:text-[8px] mt-0.5 sm:mt-1 font-medium ${
+                      isPassed ? "text-[#f5efe7]/90" : "text-[#7d6e5f]/80"
+                    }`}
+                  >
                     {holiday.date}
                   </span>
                 </div>
@@ -969,99 +856,164 @@ function JigsawPuzzleGrid({
   );
 }
 
-// Update jigsaw piece path generation to match the image exactly
-function generateJigsawPath(connectors: { 
-  top: "flat" | "tab" | "slot"; 
-  right: "flat" | "tab" | "slot"; 
-  bottom: "flat" | "tab" | "slot"; 
-  left: "flat" | "tab" | "slot"; 
+// Generate a natural-looking jigsaw path with organic curves
+function generateNaturalJigsawPath(connectors: { 
+  top: string; 
+  right: string; 
+  bottom: string; 
+  left: string; 
 }) {
   const { top, right, bottom, left } = connectors;
   
-  // Base parameters for the connector - more subtle than before
-  const tabWidth = 26; // Even more reduced to match image
-  const tabHeight = 10; // More subtle to match image
-  const tabCenter = 50; // Center position of tab/slot
+  // Parameters for natural connector shapes
+  const tabWidth = 25;  // Width of tab/slot
+  const tabHeight = 8;   // Height of tab/slot projection
+  const tabCenter = 50;  // Center position (0-100)
   const tabStart = tabCenter - tabWidth/2;
   const tabEnd = tabCenter + tabWidth/2;
   
-  // Start path at top-left corner
+  // Control points for Bezier curves - creates organic shapes
+  const cpOffset = 8;  // Offset for control points
+  const cpOffset2 = 5; // Secondary control point offset
+  
+  // Path string starts at top-left corner
   let path = "M 0,0 ";
   
   // TOP EDGE
   if (top === "tab") {
-    // Start to tab start
+    // From left corner to tab start
     path += `L ${tabStart},0 `;
-    // Tab curve out - more subtle curve to match image
-    path += `Q ${tabCenter},-${tabHeight} ${tabEnd},0 `;
-    // Tab end to end
+    // Natural tab curve with multiple control points
+    path += `C ${tabStart+cpOffset2},-1 ${tabCenter-cpOffset},-${tabHeight-2} ${tabCenter},-${tabHeight} `;
+    path += `C ${tabCenter+cpOffset},-${tabHeight-2} ${tabEnd-cpOffset2},-1 ${tabEnd},0 `;
+    // From tab end to right corner
     path += `L 100,0 `;
   } else if (top === "slot") {
-    // Start to slot start
+    // From left corner to slot start
     path += `L ${tabStart},0 `;
-    // Slot curve in - more subtle curve to match image
-    path += `Q ${tabCenter},${tabHeight} ${tabEnd},0 `;
-    // Slot end to end
+    // Natural slot curve with multiple control points
+    path += `C ${tabStart+cpOffset2},1 ${tabCenter-cpOffset},${tabHeight-2} ${tabCenter},${tabHeight} `;
+    path += `C ${tabCenter+cpOffset},${tabHeight-2} ${tabEnd-cpOffset2},1 ${tabEnd},0 `;
+    // From slot end to right corner
     path += `L 100,0 `;
   } else {
-    path += "L 100,0 ";
+    // Flat edge with slight organic curve
+    path += `C 25,-0.5 75,0.5 100,0 `;
   }
   
   // RIGHT EDGE
   if (right === "tab") {
-    // Top to tab start
+    // From top corner to tab start
     path += `L 100,${tabStart} `;
-    // Tab curve out - more subtle curve to match image
-    path += `Q ${100+tabHeight},${tabCenter} 100,${tabEnd} `;
-    // Tab end to bottom
+    // Natural tab curve with multiple control points
+    path += `C 101,${tabStart+cpOffset2} ${100+tabHeight-2},${tabCenter-cpOffset} ${100+tabHeight},${tabCenter} `;
+    path += `C ${100+tabHeight-2},${tabCenter+cpOffset} 101,${tabEnd-cpOffset2} 100,${tabEnd} `;
+    // From tab end to bottom corner
     path += `L 100,100 `;
   } else if (right === "slot") {
-    // Top to slot start
+    // From top corner to slot start
     path += `L 100,${tabStart} `;
-    // Slot curve in - more subtle curve to match image
-    path += `Q ${100-tabHeight},${tabCenter} 100,${tabEnd} `;
-    // Slot end to bottom
+    // Natural slot curve with multiple control points
+    path += `C 99,${tabStart+cpOffset2} ${100-tabHeight+2},${tabCenter-cpOffset} ${100-tabHeight},${tabCenter} `;
+    path += `C ${100-tabHeight+2},${tabEnd+cpOffset} 99,${tabEnd-cpOffset2} 100,${tabEnd} `;
+    // From slot end to bottom corner
     path += `L 100,100 `;
   } else {
-    path += "L 100,100 ";
+    // Flat edge with slight organic curve
+    path += `C 100.5,25 99.5,75 100,100 `;
   }
   
   // BOTTOM EDGE
   if (bottom === "tab") {
-    // Right to tab start
+    // From right corner to tab start
     path += `L ${tabEnd},100 `;
-    // Tab curve out - more subtle curve to match image
-    path += `Q ${tabCenter},${100+tabHeight} ${tabStart},100 `;
-    // Tab end to left
+    // Natural tab curve with multiple control points
+    path += `C ${tabEnd-cpOffset2},101 ${tabCenter+cpOffset},${100+tabHeight-2} ${tabCenter},${100+tabHeight} `;
+    path += `C ${tabCenter-cpOffset},${100+tabHeight-2} ${tabStart+cpOffset2},101 ${tabStart},100 `;
+    // From tab end to left corner
     path += `L 0,100 `;
   } else if (bottom === "slot") {
-    // Right to slot start
+    // From right corner to slot start
     path += `L ${tabEnd},100 `;
-    // Slot curve in - more subtle curve to match image
-    path += `Q ${tabCenter},${100-tabHeight} ${tabStart},100 `;
-    // Slot end to left
+    // Natural slot curve with multiple control points
+    path += `C ${tabEnd-cpOffset2},99 ${tabCenter+cpOffset},${100-tabHeight+2} ${tabCenter},${100-tabHeight} `;
+    path += `C ${tabCenter-cpOffset},${100-tabHeight+2} ${tabStart+cpOffset2},99 ${tabStart},100 `;
+    // From slot end to left corner
     path += `L 0,100 `;
   } else {
-    path += "L 0,100 ";
+    // Flat edge with slight organic curve
+    path += `C 75,100.5 25,99.5 0,100 `;
   }
   
   // LEFT EDGE
   if (left === "tab") {
-    // Bottom to tab start
+    // From bottom corner to tab start
     path += `L 0,${tabEnd} `;
-    // Tab curve out - more subtle curve to match image
-    path += `Q -${tabHeight},${tabCenter} 0,${tabStart} `;
-    // Tab end to top
+    // Natural tab curve with multiple control points
+    path += `C -1,${tabEnd-cpOffset2} -${tabHeight-2},${tabCenter+cpOffset} -${tabHeight},${tabCenter} `;
+    path += `C -${tabHeight-2},${tabEnd-cpOffset} -1,${tabStart+cpOffset2} 0,${tabStart} `;
+    // From tab end to top corner
     path += `L 0,0 `;
   } else if (left === "slot") {
-    // Bottom to slot start
+    // From bottom corner to slot start
     path += `L 0,${tabEnd} `;
-    // Slot curve in - more subtle curve to match image
-    path += `Q ${tabHeight},${tabCenter} 0,${tabStart} `;
-    // Slot end to top
+    // Natural slot curve with multiple control points
+    path += `C 1,${tabEnd-cpOffset2} ${tabHeight-2},${tabCenter+cpOffset} ${tabHeight},${tabCenter} `;
+    path += `C ${tabHeight-2},${tabEnd-cpOffset} 1,${tabStart+cpOffset2} 0,${tabStart} `;
+    // From slot end to top corner
     path += `L 0,0 `;
   } else {
-    path += "L 0,0 ";
+    // Flat edge with slight organic curve
+    path += `C -0.5,75 0.5,25 0,0 `;
+  }
+  
+  return path;
+}
+
+// Path for the highlight along top edge to give 3D effect
+function generateTopEdgeHighlight(connectors: { 
+  top: string; 
+  right: string; 
+  bottom: string; 
+  left: string; 
+}) {
+  const { top } = connectors;
+  
+  // Same parameters as in generateNaturalJigsawPath for consistency
+  const tabWidth = 25;
+  const tabHeight = 8;
+  const tabCenter = 50;
+  const tabStart = tabCenter - tabWidth/2;
+  const tabEnd = tabCenter + tabWidth/2;
+  const cpOffset = 8;
+  const cpOffset2 = 5;
+  
+  // Just create highlight for top edge and a bit of left/right edges
+  let path = "M 0,2 ";
+  
+  // TOP EDGE highlight
+  if (top === "tab") {
+    // Start with left edge hint
+    path += `L 2,2 `;
+    // From left to tab start
+    path += `L ${tabStart+2},2 `;
+    // Natural tab curve highlight with adjusted control points
+    path += `C ${tabStart+cpOffset2},0 ${tabCenter-cpOffset},-${tabHeight-1} ${tabCenter},-${tabHeight-1} `;
+    path += `C ${tabCenter+cpOffset},-${tabHeight-1} ${tabEnd-cpOffset2},0 ${tabEnd-2},2 `;
+    // From tab end to right
+    path += `L 98,2 `;
+    // End with right edge hint
+    path += `L 98,8`;
+  } else if (top === "slot") {
+    // Just draw a gentle curve along the top
+    path += `C 25,1 75,1 100,2 `;
+    // End with right edge hint
+    path += `L 98,8`;
+  } else {
+    // Flat edge with very subtle curve
+    path += `C 25,1 75,1 98,2 `;
+    // End with right edge hint
+    path += `L 98,8`;
   }
   
   return path;
