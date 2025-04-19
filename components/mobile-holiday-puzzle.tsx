@@ -613,7 +613,7 @@ export function MobileHolidayPuzzle() {
               
               <div className="text-center mt-3 mb-0.5">
                 <p 
-                  className={`text-[9px] font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""} ${theme.id === "theme-sunset" ? "sunset-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
+                  className={`text-[9px] font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
                   style={{ color: theme.colors.foreground }}
                 >
                   {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
@@ -927,8 +927,6 @@ function JigsawPuzzleGrid({
                         isPassed ? "text-important" : "text-important"
                       } ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
                       ${theme.id === "theme-retro" ? "pixel-text" : ""}
-                      ${theme.id === "theme-forest" ? "elegant-text" : ""}
-                      ${theme.id === "theme-sunset" ? "sunset-text" : ""}
                       ${theme.id === "theme-snow" ? "snow-text" : ""}
                       ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
                       style={{ 
@@ -937,8 +935,6 @@ function JigsawPuzzleGrid({
                           (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? "#ffffff" : theme.styles.upcomingPiece.text,
                         textShadow: (theme.id === "theme-galaxy") ? "0 1px 2px rgba(0,0,0,0.4)" : 
                                    (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" :
-                                   (theme.id === "theme-forest") ? "0 1px 1px rgba(29, 33, 24, 0.3)" :
-                                   (theme.id === "theme-sunset") ? "0 1px 1px rgba(242, 125, 116, 0.15)" :
                                    (theme.id === "theme-snow") ? "0 1px 2px rgba(83, 132, 172, 0.15)" :
                                    (theme.id === "theme-sakura") ? "0 1px 1px rgba(216, 142, 160, 0.15)" :
                                    isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none",
@@ -954,8 +950,6 @@ function JigsawPuzzleGrid({
                     className={`text-[6px] sm:text-[8px] mt-0.5 sm:mt-1 font-medium 
                       ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
                       ${theme.id === "theme-retro" ? "pixel-text" : ""}
-                      ${theme.id === "theme-forest" ? "elegant-text" : ""}
-                      ${theme.id === "theme-sunset" ? "sunset-text" : ""}
                       ${theme.id === "theme-snow" ? "snow-text" : ""}
                       ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
                     style={{ 
@@ -965,8 +959,6 @@ function JigsawPuzzleGrid({
                       opacity: (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? 1 : 0.9,
                       textShadow: (theme.id === "theme-galaxy") ? "0 1px 2px rgba(0,0,0,0.4)" : 
                                  (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" :
-                                 (theme.id === "theme-forest") ? "0 1px 1px rgba(29, 33, 24, 0.3)" :
-                                 (theme.id === "theme-sunset") ? "0 1px 1px rgba(242, 125, 116, 0.15)" :
                                  (theme.id === "theme-snow") ? "0 1px 2px rgba(83, 132, 172, 0.15)" :
                                  (theme.id === "theme-sakura") ? "0 1px 1px rgba(216, 142, 160, 0.15)" : "none"
                     }}
