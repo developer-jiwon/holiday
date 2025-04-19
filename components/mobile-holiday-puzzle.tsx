@@ -555,7 +555,7 @@ export function MobileHolidayPuzzle() {
     <SoundProvider>
       <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div 
-          className="relative overflow-visible rounded-xl shadow-lg max-w-[95vw] w-full"
+          className="relative overflow-visible rounded-xl shadow-lg max-w-[85vw] sm:max-w-md w-full"
           style={{ 
             backgroundColor: theme.colors.backgroundSecondary,
             borderRadius: theme.styles.borderRadius,
@@ -566,21 +566,13 @@ export function MobileHolidayPuzzle() {
             <BackgroundIllustration />
           </div>
 
-          <div className="relative z-10 w-full p-3 sm:p-5">
+          <div className="relative z-10 w-full p-3 sm:p-4">
             <div className="flex flex-col items-center justify-center mb-3">
-              {/* Year Navigation with integrated country selector - mobile optimized */}
-              <div 
-                className="flex items-center justify-between mb-4 rounded-lg px-4 sm:px-5 py-3 shadow-sm w-full max-w-lg"
-                style={{
-                  backgroundColor: `${theme.colors.backgroundHighlight}90`,
-                  borderWidth: '1px',
-                  borderColor: theme.colors.border,
-                }}
-              >
-                {/* Update the navigation buttons */}
+              {/* Title with integrated year navigation */}
+              <div className="flex items-center justify-center gap-2 mb-4 w-full">
                 <button
                   onClick={goToPreviousYear}
-                  className={`h-8 w-8 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro 
+                  className={`h-7 w-7 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro 
                     ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
                   style={{ 
                     backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
@@ -589,37 +581,24 @@ export function MobileHolidayPuzzle() {
                     transform: "translateZ(0)"
                   }}
                 >
-                  <ArrowLeft size={theme.id === "theme-retro" ? 16 : 18} />
+                  <ArrowLeft size={theme.id === "theme-retro" ? 14 : 16} />
                 </button>
                 
-                <div className="mx-1 sm:mx-2 text-center flex-1">
-                  <div className="flex flex-col items-center">
-                    <h1
-                      className="flex items-center gap-2 text-xl font-semibold mb-3"
-                      style={{
-                        color: theme.colors.foreground,
-                        fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
-                        textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
-                      }}
-                    >
-                      <PuzzleIcon className="w-6 h-6" />
-                      <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
-                    </h1>
-                  </div>
-                  <div className="flex flex-wrap items-center justify-center mt-1.5 sm:mt-2 gap-1.5">
-                    <span 
-                      className="text-xs sm:text-sm"
-                      style={{ color: `${theme.colors.foregroundSecondary}70` }}
-                    >
-                      {holidays.filter(h => h.passed).length}/{holidays.length} collected
-                    </span>
-                  </div>
-                </div>
+                <h1
+                  className="flex items-center justify-center gap-2 text-xl font-semibold"
+                  style={{
+                    color: theme.colors.foreground,
+                    fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
+                    textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
+                  }}
+                >
+                  <PuzzleIcon className="w-6 h-6" />
+                  <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
+                </h1>
                 
-                {/* Forward arrow */}
                 <button
                   onClick={goToNextYear}
-                  className={`h-8 w-8 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro
+                  className={`h-7 w-7 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro
                     ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
                   style={{ 
                     backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
@@ -628,20 +607,30 @@ export function MobileHolidayPuzzle() {
                     transform: "translateZ(0)"
                   }}
                 >
-                  <ArrowRight size={theme.id === "theme-retro" ? 16 : 18} />
+                  <ArrowRight size={theme.id === "theme-retro" ? 14 : 16} />
                 </button>
               </div>
+              
+              {/* Simple collection status text */}
+              <span 
+                className="text-xs mb-2"
+                style={{ color: `${theme.colors.foregroundSecondary}90` }}
+              >
+                {holidays.filter(h => h.passed).length}/{holidays.length} collected
+              </span>
             </div>
 
             {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
-            <div className="relative mx-auto max-w-2xl overflow-hidden">
+            <div className="relative mx-auto max-w-xs overflow-visible">
               {/* Country selector in bookmark format at the top of the puzzle */}
-              <div className="mb-[-1px] px-2 py-0.5 flex justify-center">
-                <CountrySelector onChange={handleCountryChange} />
+              <div className="mb-[-1px] w-full overflow-hidden">
+                <div className="border-b border-transparent pb-[1px]">
+                  <CountrySelector onChange={handleCountryChange} />
+                </div>
               </div>
               
               <div 
-                className="relative rounded-xl p-3 sm:p-4 md:p-5 shadow-md overflow-hidden border-2"
+                className={`relative rounded-xl p-2.5 sm:p-3.5 shadow-md overflow-hidden border-2 puzzle-container ${theme.id === 'lofi-beige' ? 'hover-lofi-beige' : ''}`}
                 style={{ 
                   backgroundColor: theme.colors.backgroundTertiary,
                   borderColor: theme.colors.border,
@@ -675,9 +664,9 @@ export function MobileHolidayPuzzle() {
                 </div>
                 
                 {/* Caption - always at the bottom */}
-                <div className="text-center mt-4 mb-1">
+                <div className="text-center mt-3 mb-0.5">
                   <p 
-                    className={`text-xs font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""} ${theme.id === "theme-sunset" ? "sunset-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
+                    className={`text-[9px] font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""} ${theme.id === "theme-sunset" ? "sunset-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
                     style={{ color: theme.colors.foreground }}
                   >
                     {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
@@ -908,12 +897,12 @@ function JigsawPuzzleGrid({
         gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
         gridTemplateRows: `repeat(${gridRows}, 1fr)`,
         gap: '0px',
-        minHeight: `${gridRows * 100}px`, // 행 높이 증가 (85px -> 100px)
+        minHeight: `${gridRows * 80}px`, // Reduce height from 100px to 80px per row
         aspectRatio: gridCols / gridRows > 1 ? `${gridCols} / ${gridRows}` : undefined,
         backgroundColor: colorPalette.boardBg,
-        borderRadius: '12px',
-        boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
-        padding: '4px', // 패딩 증가 (3px -> 4px)
+        borderRadius: '10px',
+        boxShadow: 'inset 0 0 15px rgba(0,0,0,0.05)',
+        padding: '3px', // Reduce padding from 4px to 3px
         overflow: 'visible'
       }}
     >
@@ -1032,9 +1021,9 @@ function JigsawPuzzleGrid({
               </svg>
               
               {/* Content inside the puzzle piece */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-1.5 sm:p-2">
+              <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-1 sm:p-1.5">
                 {/* Holiday icon */}
-                <div className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5">
+                <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 mb-0.5 sm:mb-1">
                   <HolidayIcon 
                     iconName={getHolidayIconName(holiday.name)} 
                     fill={isPassed ? colorPalette.completedPiece.text : colorPalette.upcomingPiece.text} 
@@ -1046,7 +1035,7 @@ function JigsawPuzzleGrid({
                   {formattedDisplay.map((line, i) => (
                     <span
                       key={i}
-                      className={`text-[10px] sm:text-xs leading-tight font-medium text-center ${
+                      className={`text-[8px] sm:text-[10px] leading-tight font-medium text-center ${
                         isPassed ? "text-important" : "text-important"
                       } ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
                       ${theme.id === "theme-retro" ? "pixel-text" : ""}
@@ -1065,7 +1054,7 @@ function JigsawPuzzleGrid({
                                    (theme.id === "theme-snow") ? "0 1px 2px rgba(83, 132, 172, 0.15)" :
                                    (theme.id === "theme-sakura") ? "0 1px 1px rgba(216, 142, 160, 0.15)" :
                                    isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none",
-                        marginBottom: i < formattedDisplay.length - 1 ? "1px" : "0"
+                        marginBottom: i < formattedDisplay.length - 1 ? "0.5px" : "0"
                       }}
                     >
                       {line}
@@ -1074,7 +1063,7 @@ function JigsawPuzzleGrid({
                   
                   {/* Holiday date */}
                   <span 
-                    className={`text-[8px] sm:text-[10px] mt-1 sm:mt-1.5 font-medium 
+                    className={`text-[6px] sm:text-[8px] mt-0.5 sm:mt-1 font-medium 
                       ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
                       ${theme.id === "theme-retro" ? "pixel-text" : ""}
                       ${theme.id === "theme-forest" ? "elegant-text" : ""}
