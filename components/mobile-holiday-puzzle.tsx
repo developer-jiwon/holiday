@@ -50,7 +50,7 @@ function PuzzleIcon({className = ""}) {
   );
 }
 
-// Create a component for sparkle animation
+// Create a component for sparkle animation (default lofi-beige theme)
 function SparkleAnimation() {
   const { theme } = useTheme();
   
@@ -78,6 +78,213 @@ function SparkleAnimation() {
       </div>
     </>
   );
+}
+
+// Galaxy Theme Animation - Stars and planets
+function GalaxyAnimation() {
+  return (
+    <>
+      {/* Center starburst */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-white opacity-0 animate-[ping_0.8s_ease-out_forwards]"></div>
+      </div>
+      
+      {/* Orbiting stars */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute w-3 h-3 opacity-0 animate-[fadeInOut_1.5s_ease_forwards]" 
+          style={{
+            top: '10%', 
+            left: '20%',
+            animationDelay: '0.1s',
+            transform: 'translateZ(0)'
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L13 5L16 6L13 7L12 10L11 7L8 6L11 5L12 2Z" fill="#FFFFFF" />
+          </svg>
+        </div>
+        
+        <div 
+          className="absolute w-2 h-2 opacity-0 animate-[fadeInOut_1.8s_ease_forwards]" 
+          style={{
+            top: '70%', 
+            left: '80%',
+            animationDelay: '0.2s',
+            transform: 'translateZ(0)'
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L13 5L16 6L13 7L12 10L11 7L8 6L11 5L12 2Z" fill="#9C94E4" />
+          </svg>
+        </div>
+        
+        <div 
+          className="absolute w-4 h-4 opacity-0 animate-[fadeInOut_1.2s_ease_forwards]" 
+          style={{
+            top: '50%', 
+            left: '75%',
+            animationDelay: '0.3s',
+            transform: 'translateZ(0)'
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="7" fill="#A78BFA" />
+            <circle cx="12" cy="12" r="3" fill="#C4B5FD" />
+          </svg>
+        </div>
+        
+        {/* Shooting star */}
+        <div 
+          className="absolute w-10 h-1 bg-white opacity-0"
+          style={{
+            top: '30%',
+            left: '-20%',
+            transform: 'rotate(-30deg) translateZ(0)',
+            animation: 'shootingStar 0.8s ease-out forwards',
+            animationDelay: '0.4s',
+            boxShadow: '0 0 10px 2px rgba(255, 255, 255, 0.8)'
+          }}
+        ></div>
+      </div>
+    </>
+  );
+}
+
+// Retro Theme Animation - Pixelated effects
+function RetroAnimation() {
+  return (
+    <>
+      {/* Pixelated blocks */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="grid grid-cols-3 grid-rows-3 gap-1 w-3/4 h-3/4">
+          {[...Array(9)].map((_, i) => (
+            <div 
+              key={i} 
+              className="opacity-0 bg-white"
+              style={{
+                animation: 'fadeInOut 0.8s ease-out forwards',
+                animationDelay: `${i * 0.05}s`
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Level up text */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 animate-[fadeInOut_1s_ease-in-out_forwards]">
+        <span className="text-xs font-pixel tracking-wider text-white" style={{ textShadow: '1px 1px 0 #000' }}>
+          + 1
+        </span>
+      </div>
+    </>
+  );
+}
+
+// Snow Theme Animation - Snowflakes
+function SnowAnimation() {
+  return (
+    <>
+      {/* Frost effect */}
+      <div 
+        className="absolute inset-0 opacity-0 rounded-md"
+        style={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(235,244,255,0.3) 40%, transparent 70%)',
+          animation: 'fadeInOut 1s ease-in-out forwards'
+        }}
+      ></div>
+      
+      {/* Snowflakes */}
+      {[...Array(8)].map((_, i) => {
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const size = Math.random() * 12 + 6;
+        const delay = Math.random() * 0.5;
+        
+        return (
+          <div 
+            key={i}
+            className="absolute opacity-0"
+            style={{
+              top: `${top}%`,
+              left: `${left}%`,
+              animation: `snowfall 1.5s ease-in-out forwards`,
+              animationDelay: `${delay}s`
+            }}
+          >
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill="rgba(255,255,255,0.9)" />
+              <path d="M12 12L13 16L17 17L13 18L12 22L11 18L7 17L11 16L12 12Z" fill="rgba(255,255,255,0.9)" />
+              <path d="M2 12L6 13L7 17L8 13L12 12L8 11L7 7L6 11L2 12Z" fill="rgba(255,255,255,0.9)" />
+              <path d="M22 12L18 13L17 17L16 13L12 12L16 11L17 7L18 11L22 12Z" fill="rgba(255,255,255,0.9)" />
+            </svg>
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+// Sakura Theme Animation - Cherry blossoms
+function SakuraAnimation() {
+  return (
+    <>
+      {/* Pink glow */}
+      <div 
+        className="absolute inset-0 opacity-0 rounded-md"
+        style={{
+          background: 'radial-gradient(circle, rgba(252,231,243,0.8) 0%, rgba(249,168,212,0.3) 40%, transparent 70%)',
+          animation: 'fadeInOut 1s ease-in-out forwards'
+        }}
+      ></div>
+      
+      {/* Cherry blossom petals */}
+      {[...Array(8)].map((_, i) => {
+        const top = Math.random() * 80 + 20;
+        const left = Math.random() * 80 + 10;
+        const size = Math.random() * 8 + 4;
+        const delay = Math.random() * 0.5;
+        const duration = Math.random() * 1 + 1.5;
+        
+        return (
+          <div 
+            key={i}
+            className="absolute opacity-0"
+            style={{
+              top: `${top}%`,
+              left: `${left}%`,
+              animation: `floatingPetal ${duration}s ease-in-out forwards`,
+              animationDelay: `${delay}s`
+            }}
+          >
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 4C14 4 16 6 16 8C16 10 14 12 12 12C10 12 8 10 8 8C8 6 10 4 12 4Z" fill="#FBCFE8" />
+              <path d="M16 8C18 8 20 10 20 12C20 14 18 16 16 16C14 16 12 14 12 12C12 10 14 8 16 8Z" fill="#FBCFE8" />
+              <path d="M12 12C14 12 16 14 16 16C16 18 14 20 12 20C10 20 8 18 8 16C8 14 10 12 12 12Z" fill="#FBCFE8" />
+              <path d="M8 8C10 8 12 10 12 12C12 14 10 16 8 16C6 16 4 14 4 12C4 10 6 8 8 8Z" fill="#FBCFE8" />
+              <circle cx="12" cy="12" r="2" fill="#F9A8D4" />
+            </svg>
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+// Function to get the appropriate animation component based on theme
+function ThemeAnimation({ themeId }: { themeId: string }) {
+  switch(themeId) {
+    case 'theme-galaxy':
+      return <GalaxyAnimation />;
+    case 'theme-retro':
+      return <RetroAnimation />;
+    case 'theme-snow':
+      return <SnowAnimation />;
+    case 'theme-sakura':
+      return <SakuraAnimation />;
+    default: // lofi-beige
+      return <SparkleAnimation />;
+  }
 }
 
 // Create specialized minimal holiday icons that have distinct designs for each holiday
@@ -494,6 +701,54 @@ export function MobileHolidayPuzzle() {
     setSelectedCountry(country);
   }
 
+  // Add mouse tracking for ambient light effect
+  useEffect(() => {
+    if (theme.id === 'lofi-beige') {
+      const handleMouseMove = (e: MouseEvent) => {
+        const pieces = document.querySelectorAll('.puzzle-piece');
+        pieces.forEach((piece) => {
+          const htmlElement = piece as HTMLElement;
+          const rect = htmlElement.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          // Set the custom properties for all pieces
+          // This ensures the effect is visible even when cursor moves quickly
+          htmlElement.style.setProperty('--x', `${x}px`);
+          htmlElement.style.setProperty('--y', `${y}px`);
+        });
+      };
+      
+      // Add a mouseover handler for each piece to ensure variables are set
+      const handlePieceMouseOver = (e: MouseEvent) => {
+        const piece = e.currentTarget as HTMLElement;
+        const rect = piece.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        piece.style.setProperty('--x', `${x}px`);
+        piece.style.setProperty('--y', `${y}px`);
+      };
+      
+      document.addEventListener('mousemove', handleMouseMove);
+      
+      // Add mouseover listeners to each piece
+      const pieces = document.querySelectorAll('.puzzle-piece');
+      pieces.forEach(piece => {
+        (piece as HTMLElement).addEventListener('mouseover', handlePieceMouseOver as EventListener);
+      });
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        
+        // Clean up mouseover listeners
+        pieces.forEach(piece => {
+          (piece as HTMLElement).removeEventListener('mouseover', handlePieceMouseOver as EventListener);
+        });
+      };
+    }
+  }, [theme]);
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <div 
@@ -572,7 +827,7 @@ export function MobileHolidayPuzzle() {
             </div>
             
             <div 
-              className={`relative rounded-xl p-2.5 sm:p-3.5 shadow-md overflow-hidden border-2 puzzle-container ${theme.id === 'lofi-beige' ? 'hover-lofi-beige' : ''}`}
+              className={`relative rounded-xl p-2.5 sm:p-3 shadow-md overflow-hidden border-2 puzzle-container ${theme.id === 'lofi-beige' ? 'hover-lofi-beige' : ''}`}
               style={{ 
                 backgroundColor: theme.colors.backgroundTertiary,
                 borderColor: theme.colors.border,
@@ -592,7 +847,7 @@ export function MobileHolidayPuzzle() {
                 }}>
               </div>
 
-              <div className="relative z-10">
+              <div className="relative z-10 mx-auto" style={{ maxWidth: '100%' }}>
                 <JigsawPuzzleGrid 
                   holidays={holidays}
                   onPieceClick={handleTileClick}
@@ -727,7 +982,7 @@ function JigsawPuzzleGrid({
                          (connectors[`${row}-${col-1}`]?.right === "tab" ? "slot" : 
                           connectors[`${row}-${col-1}`]?.right === "slot" ? "tab" : "flat");
           
-          // For bottom and right edges, randomly select type but ensure not all edges are flat
+          // For bottom and right edges - ensure not all edges are flat and maintain interlocking
           let bottomType, rightType;
           
           // Decide bottom type - if it's the last row, make it flat
@@ -735,6 +990,17 @@ function JigsawPuzzleGrid({
           
           // Decide right type - if it's the last column, make it flat
           rightType = col === cols - 1 ? "flat" : Math.random() > 0.5 ? "tab" : "slot";
+          
+          // If we ended up with all flat edges and it's not a border piece, force at least one non-flat edge
+          if (topType === "flat" && rightType === "flat" && bottomType === "flat" && leftType === "flat" &&
+              row !== 0 && col !== 0 && row !== rows - 1 && col !== cols - 1) {
+            // Randomly choose an edge to make non-flat
+            const edgeToChange = Math.floor(Math.random() * 4);
+            if (edgeToChange === 0 && row !== 0) bottomType = Math.random() > 0.5 ? "tab" : "slot";
+            else if (edgeToChange === 1 && col !== cols - 1) rightType = Math.random() > 0.5 ? "tab" : "slot";
+            else if (edgeToChange === 2 && row !== rows - 1) bottomType = Math.random() > 0.5 ? "tab" : "slot";
+            else if (edgeToChange === 3 && col !== 0) rightType = Math.random() > 0.5 ? "tab" : "slot";
+          }
           
           // Store the connector pattern for this piece
           connectors[`${row}-${col}`] = {
@@ -795,7 +1061,7 @@ function JigsawPuzzleGrid({
         backgroundColor: colorPalette.boardBg,
         borderRadius: '10px',
         boxShadow: 'inset 0 0 15px rgba(0,0,0,0.05)',
-        padding: '3px', // Reduce padding from 4px to 3px
+        padding: '2px', // Reduce padding for tighter fit
         overflow: 'visible'
       }}
     >
@@ -826,13 +1092,13 @@ function JigsawPuzzleGrid({
             style={{
               gridColumn: col + 1,
               gridRow: row + 1,
-              margin: "-1px", // Negative margin helps pieces connect better
+              margin: "0px", // No negative margin for cleaner appearance
               zIndex: isHovered ? 20 : isCompleted ? 30 : 10,
             }}
           >
             <div
               className={`
-                absolute inset-0 cursor-pointer 
+                puzzle-piece absolute inset-0 cursor-pointer 
                 transition-all duration-150
               `}
               onMouseEnter={(e) => onPieceMouseEnter(holiday.id, e)}
@@ -852,12 +1118,12 @@ function JigsawPuzzleGrid({
               onTouchEnd={onPieceMouseLeave}
               onClick={() => onPieceClick(holiday.id)}
               style={{
-                transform: isHovered ? 'scale(1.03) translateY(-2px)' : 
-                           isCompleted ? 'scale(1.05) translateY(-3px)' : 'scale(1)',
-                transition: 'all 0.4s cubic-bezier(0.19, 1, 0.22, 1)',
-                filter: isHovered ? 'brightness(1.05)' : 'none',
-                boxShadow: isHovered ? '0 3px 5px rgba(0,0,0,0.15)' : 
-                           isCompleted ? '0 4px 8px rgba(0,0,0,0.2)' : 'none',
+                transform: isHovered ? 'scale(1.02) translateY(-1px)' : 
+                          isCompleted ? 'scale(1.04) translateY(-2px)' : 'scale(1)',
+                transition: 'all 0.3s cubic-bezier(0.19, 1, 0.22, 1)',
+                filter: isHovered ? 'brightness(1.03)' : 'none',
+                boxShadow: isHovered ? '0 2px 4px rgba(0,0,0,0.12)' : 
+                          isCompleted ? '0 3px 6px rgba(0,0,0,0.15)' : 'none',
               }}
             >
               {/* Piece SVG with natural jigsaw connectors */}
@@ -868,9 +1134,9 @@ function JigsawPuzzleGrid({
               >
                 {/* Drop shadow for lifted pieces */}
                 <filter id={`piece-shadow-${holiday.id}`} x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur" />
-                  <feOffset in="blur" dx="1" dy="1" result="offsetBlur" />
-                  <feFlood floodColor="#000000" floodOpacity="0.2" result="shadowColor" />
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
+                  <feOffset in="blur" dx="0.5" dy="0.5" result="offsetBlur" />
+                  <feFlood floodColor="#000000" floodOpacity="0.15" result="shadowColor" />
                   <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadowBlur" />
                   <feBlend in="SourceGraphic" in2="shadowBlur" mode="normal" />
                 </filter>
@@ -882,7 +1148,7 @@ function JigsawPuzzleGrid({
                     `url(#gradientPassed${holiday.id})` : 
                     `url(#gradientUpcoming${holiday.id})`}
                   stroke={isPassed ? colorSet.shadow : colorSet.shadow} 
-                  strokeWidth="0.5"
+                  strokeWidth="0.3"
                   filter={isHovered || isCompleted ? `url(#piece-shadow-${holiday.id})` : ''}
                 />
                 
@@ -891,14 +1157,14 @@ function JigsawPuzzleGrid({
                   {/* Gradient for completed pieces */}
                   <linearGradient id={`gradientPassed${holiday.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor={colorSet.highlight} />
-                    <stop offset="50%" stopColor={colorSet.primary} />
+                    <stop offset="60%" stopColor={colorSet.primary} />
                     <stop offset="100%" stopColor={colorSet.secondary} />
                   </linearGradient>
                   
                   {/* Gradient for upcoming pieces */}
                   <linearGradient id={`gradientUpcoming${holiday.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor={colorSet.highlight} />
-                    <stop offset="60%" stopColor={colorSet.primary} />
+                    <stop offset="70%" stopColor={colorSet.primary} />
                     <stop offset="100%" stopColor={colorSet.secondary} />
                   </linearGradient>
                 </defs>
@@ -906,10 +1172,10 @@ function JigsawPuzzleGrid({
                 {/* Light reflection on the top edge */}
                 <path 
                   d={generateTopEdgeHighlight(connectors)}
-                  stroke="rgba(255,255,255,0.7)"
-                  strokeWidth="0.6"
+                  stroke="rgba(255,255,255,0.6)"
+                  strokeWidth="0.4"
                   fill="none"
-                  opacity={isPassed ? "0.3" : "0.5"}
+                  opacity={isPassed ? "0.25" : "0.4"}
                 />
               </svg>
               
@@ -928,7 +1194,7 @@ function JigsawPuzzleGrid({
                   {formattedDisplay.map((line, i) => (
                     <span
                       key={i}
-                      className={`text-[8px] sm:text-[10px] leading-tight font-medium text-center ${
+                      className={`text-[8px] sm:text-[9px] leading-tight font-medium text-center ${
                         isPassed ? "text-important" : "text-important"
                       } ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
                       ${theme.id === "theme-retro" ? "pixel-text" : ""}
@@ -952,7 +1218,7 @@ function JigsawPuzzleGrid({
                   
                   {/* Holiday date */}
                   <span 
-                    className={`text-[6px] sm:text-[8px] mt-0.5 sm:mt-1 font-medium 
+                    className={`text-[6px] sm:text-[7px] mt-0.5 sm:mt-1 font-medium 
                       ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
                       ${theme.id === "theme-retro" ? "pixel-text" : ""}
                       ${theme.id === "theme-snow" ? "snow-text" : ""}
@@ -961,7 +1227,7 @@ function JigsawPuzzleGrid({
                       color: isPassed ? 
                         (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? theme.colors.foregroundHighlight || "#ffffff" : theme.styles.completedPiece.text : 
                         (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? "#ffffff" : theme.styles.upcomingPiece.text,
-                      opacity: (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? 1 : 0.9,
+                      opacity: (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? 1 : 0.85,
                       textShadow: (theme.id === "theme-galaxy") ? "0 1px 2px rgba(0,0,0,0.4)" : 
                                  (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" :
                                  (theme.id === "theme-snow") ? "0 1px 2px rgba(83, 132, 172, 0.15)" :
@@ -976,7 +1242,7 @@ function JigsawPuzzleGrid({
               {/* Animation effects */}
               {isCompleted && (
                 <div className="absolute inset-0 z-30 pointer-events-none">
-                  <SparkleAnimation />
+                  <ThemeAnimation themeId={theme.id} />
                 </div>
               )}
             </div>
@@ -987,7 +1253,7 @@ function JigsawPuzzleGrid({
   );
 }
 
-// Generate a natural-looking jigsaw path with organic curves
+// Generate a natural-looking jigsaw path with classic puzzle piece shape
 function generateNaturalJigsawPath(connectors: { 
   top: string; 
   right: string; 
@@ -996,108 +1262,97 @@ function generateNaturalJigsawPath(connectors: {
 }) {
   const { top, right, bottom, left } = connectors;
   
-  // Parameters for natural connector shapes
-  const tabWidth = 25;  // Width of tab/slot
-  const tabHeight = 8;   // Height of tab/slot projection
-  const tabCenter = 50;  // Center position (0-100)
+  // Standard puzzle piece parameters
+  const tabWidth = 30;     // Width of tab/slot
+  const tabHeight = 15;    // Height of tab/slot projection
+  const tabCenter = 50;    // Center position (0-100)
   const tabStart = tabCenter - tabWidth/2;
   const tabEnd = tabCenter + tabWidth/2;
   
-  // Control points for Bezier curves - creates organic shapes
-  const cpOffset = 8;  // Offset for control points
-  const cpOffset2 = 5; // Secondary control point offset
-  
-  // Path string starts at top-left corner
+  // Path string starts at top-left corner (0,0)
   let path = "M 0,0 ";
   
   // TOP EDGE
   if (top === "tab") {
-    // From left corner to tab start
+    // Start to tab beginning
     path += `L ${tabStart},0 `;
-    // Natural tab curve with multiple control points
-    path += `C ${tabStart+cpOffset2},-1 ${tabCenter-cpOffset},-${tabHeight-2} ${tabCenter},-${tabHeight} `;
-    path += `C ${tabCenter+cpOffset},-${tabHeight-2} ${tabEnd-cpOffset2},-1 ${tabEnd},0 `;
-    // From tab end to right corner
+    // Simple tab curve with 3 points
+    path += `Q ${tabCenter},${-tabHeight} ${tabEnd},0 `;
+    // Tab end to corner
     path += `L 100,0 `;
   } else if (top === "slot") {
-    // From left corner to slot start
+    // Start to slot beginning
     path += `L ${tabStart},0 `;
-    // Natural slot curve with multiple control points
-    path += `C ${tabStart+cpOffset2},1 ${tabCenter-cpOffset},${tabHeight-2} ${tabCenter},${tabHeight} `;
-    path += `C ${tabCenter+cpOffset},${tabHeight-2} ${tabEnd-cpOffset2},1 ${tabEnd},0 `;
-    // From slot end to right corner
+    // Simple slot curve with 3 points
+    path += `Q ${tabCenter},${tabHeight} ${tabEnd},0 `;
+    // Slot end to corner
     path += `L 100,0 `;
   } else {
-    // Flat edge with slight organic curve
-    path += `C 25,-0.5 75,0.5 100,0 `;
+    // Flat edge
+    path += `L 100,0 `;
   }
   
   // RIGHT EDGE
   if (right === "tab") {
-    // From top corner to tab start
+    // Corner to tab beginning
     path += `L 100,${tabStart} `;
-    // Natural tab curve with multiple control points
-    path += `C 101,${tabStart+cpOffset2} ${100+tabHeight-2},${tabCenter-cpOffset} ${100+tabHeight},${tabCenter} `;
-    path += `C ${100+tabHeight-2},${tabCenter+cpOffset} 101,${tabEnd-cpOffset2} 100,${tabEnd} `;
-    // From tab end to bottom corner
+    // Simple tab curve with 3 points
+    path += `Q ${100+tabHeight},${tabCenter} 100,${tabEnd} `;
+    // Tab end to corner
     path += `L 100,100 `;
   } else if (right === "slot") {
-    // From top corner to slot start
+    // Corner to slot beginning
     path += `L 100,${tabStart} `;
-    // Natural slot curve with multiple control points
-    path += `C 99,${tabStart+cpOffset2} ${100-tabHeight+2},${tabCenter-cpOffset} ${100-tabHeight},${tabCenter} `;
-    path += `C ${100-tabHeight+2},${tabEnd+cpOffset} 99,${tabEnd-cpOffset2} 100,${tabEnd} `;
-    // From slot end to bottom corner
+    // Simple slot curve with 3 points
+    path += `Q ${100-tabHeight},${tabCenter} 100,${tabEnd} `;
+    // Slot end to corner
     path += `L 100,100 `;
   } else {
-    // Flat edge with slight organic curve
-    path += `C 100.5,25 99.5,75 100,100 `;
+    // Flat edge
+    path += `L 100,100 `;
   }
   
   // BOTTOM EDGE
   if (bottom === "tab") {
-    // From right corner to tab start
+    // Corner to tab beginning
     path += `L ${tabEnd},100 `;
-    // Natural tab curve with multiple control points
-    path += `C ${tabEnd-cpOffset2},101 ${tabCenter+cpOffset},${100+tabHeight-2} ${tabCenter},${100+tabHeight} `;
-    path += `C ${tabCenter-cpOffset},${100+tabHeight-2} ${tabStart+cpOffset2},101 ${tabStart},100 `;
-    // From tab end to left corner
+    // Simple tab curve with 3 points
+    path += `Q ${tabCenter},${100+tabHeight} ${tabStart},100 `;
+    // Tab end to corner
     path += `L 0,100 `;
   } else if (bottom === "slot") {
-    // From right corner to slot start
+    // Corner to slot beginning
     path += `L ${tabEnd},100 `;
-    // Natural slot curve with multiple control points
-    path += `C ${tabEnd-cpOffset2},99 ${tabCenter+cpOffset},${100-tabHeight+2} ${tabCenter},${100-tabHeight} `;
-    path += `C ${tabCenter-cpOffset},${100-tabHeight+2} ${tabStart+cpOffset2},99 ${tabStart},100 `;
-    // From slot end to left corner
+    // Simple slot curve with 3 points
+    path += `Q ${tabCenter},${100-tabHeight} ${tabStart},100 `;
+    // Slot end to corner
     path += `L 0,100 `;
   } else {
-    // Flat edge with slight organic curve
-    path += `C 75,100.5 25,99.5 0,100 `;
+    // Flat edge
+    path += `L 0,100 `;
   }
   
   // LEFT EDGE
   if (left === "tab") {
-    // From bottom corner to tab start
+    // Corner to tab beginning
     path += `L 0,${tabEnd} `;
-    // Natural tab curve with multiple control points
-    path += `C -1,${tabEnd-cpOffset2} -${tabHeight-2},${tabCenter+cpOffset} -${tabHeight},${tabCenter} `;
-    path += `C -${tabHeight-2},${tabEnd-cpOffset} -1,${tabStart+cpOffset2} 0,${tabStart} `;
-    // From tab end to top corner
+    // Simple tab curve with 3 points
+    path += `Q ${-tabHeight},${tabCenter} 0,${tabStart} `;
+    // Tab end to starting point
     path += `L 0,0 `;
   } else if (left === "slot") {
-    // From bottom corner to slot start
+    // Corner to slot beginning
     path += `L 0,${tabEnd} `;
-    // Natural slot curve with multiple control points
-    path += `C 1,${tabEnd-cpOffset2} ${tabHeight-2},${tabCenter+cpOffset} ${tabHeight},${tabCenter} `;
-    path += `C ${tabHeight-2},${tabEnd-cpOffset} 1,${tabEnd-cpOffset2} 0,${tabStart} `;
-    // From slot end to top corner
+    // Simple slot curve with 3 points
+    path += `Q ${tabHeight},${tabCenter} 0,${tabStart} `;
+    // Slot end to starting point
     path += `L 0,0 `;
   } else {
-    // Flat edge with slight organic curve
-    path += `C -0.5,75 0.5,25 0,0 `;
+    // Flat edge
+    path += `L 0,0 `;
   }
   
+  path += "Z";  // Close the path
   return path;
 }
 
@@ -1110,41 +1365,34 @@ function generateTopEdgeHighlight(connectors: {
 }) {
   const { top } = connectors;
   
-  // Same parameters as in generateNaturalJigsawPath for consistency
-  const tabWidth = 25;
-  const tabHeight = 8;
+  // Match parameters from the main path function
+  const tabWidth = 30;
+  const tabHeight = 15;
   const tabCenter = 50;
   const tabStart = tabCenter - tabWidth/2;
   const tabEnd = tabCenter + tabWidth/2;
-  const cpOffset = 8;
-  const cpOffset2 = 5;
   
-  // Just create highlight for top edge and a bit of left/right edges
-  let path = "M 0,2 ";
+  // Create simple highlight for top edge
+  let path = "";
   
   // TOP EDGE highlight
   if (top === "tab") {
-    // Start with left edge hint
-    path += `L 2,2 `;
-    // From left to tab start
-    path += `L ${tabStart+2},2 `;
-    // Natural tab curve highlight with adjusted control points
-    path += `C ${tabStart+cpOffset2},0 ${tabCenter-cpOffset},-${tabHeight-1} ${tabCenter},-${tabHeight-1} `;
-    path += `C ${tabCenter+cpOffset},-${tabHeight-1} ${tabEnd-cpOffset2},0 ${tabEnd-2},2 `;
+    // From left to tab start with offset
+    path += `M 2,2 L ${tabStart+2},2 `;
+    // Simple curve following tab shape with offset
+    path += `Q ${tabCenter},${-tabHeight+4} ${tabEnd-2},2 `;
     // From tab end to right
-    path += `L 98,2 `;
-    // End with right edge hint
-    path += `L 98,8`;
+    path += `L 98,2`;
   } else if (top === "slot") {
-    // Just draw a gentle curve along the top
-    path += `C 25,1 75,1 100,2 `;
-    // End with right edge hint
-    path += `L 98,8`;
+    // From left to slot start with offset
+    path += `M 2,2 L ${tabStart+2},2 `;
+    // Simple curve following slot shape with offset
+    path += `Q ${tabCenter},${tabHeight-4} ${tabEnd-2},2 `;
+    // From slot end to right
+    path += `L 98,2`;
   } else {
-    // Flat edge with very subtle curve
-    path += `C 25,1 75,1 98,2 `;
-    // End with right edge hint
-    path += `L 98,8`;
+    // Straight highlight for flat edge
+    path += `M 2,2 L 98,2`;
   }
   
   return path;
@@ -1254,4 +1502,3 @@ function getDisplayName(name: string): string {
   
   return name;
 }
-

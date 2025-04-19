@@ -809,3 +809,36 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Animation keyframes for theme animations */
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes snowfall {
+  0% { opacity: 0; transform: translateY(-10px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes floatingPetal {
+  0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+  25% { opacity: 1; transform: translateY(-5px) rotate(15deg); }
+  75% { opacity: 1; transform: translateY(-10px) rotate(-15deg); }
+  100% { opacity: 0; transform: translateY(-15px) rotate(0deg); }
+}
+
+@keyframes shootingStar {
+  0% { opacity: 0; transform: translateX(0) rotate(-30deg); }
+  20% { opacity: 1; transform: translateX(30px) rotate(-30deg); }
+  100% { opacity: 0; transform: translateX(200%) rotate(-30deg); }
+}
+
+/* Add font class for retro theme */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
