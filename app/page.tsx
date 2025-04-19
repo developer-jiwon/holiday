@@ -14,6 +14,7 @@ export default function PuzzleScreen() {
     document.body.classList.remove('theme-retro');
     document.body.classList.remove('theme-forest');
     document.body.classList.remove('theme-sunset');
+    document.body.classList.remove('theme-snow');
     
     // Apply theme-specific effects to body
     if (theme.id === 'theme-galaxy') {
@@ -24,6 +25,8 @@ export default function PuzzleScreen() {
       document.body.classList.add('theme-forest');
     } else if (theme.id === 'theme-sunset') {
       document.body.classList.add('theme-sunset');
+    } else if (theme.id === 'theme-snow') {
+      document.body.classList.add('theme-snow');
     }
     
     // Clean up on unmount
@@ -32,6 +35,7 @@ export default function PuzzleScreen() {
       document.body.classList.remove('theme-retro');
       document.body.classList.remove('theme-forest');
       document.body.classList.remove('theme-sunset');
+      document.body.classList.remove('theme-snow');
     };
   }, [theme.id]);
   
@@ -52,6 +56,9 @@ export default function PuzzleScreen() {
       )}
       {theme.id === 'theme-sunset' && (
         <div className="sunset-background" />
+      )}
+      {theme.id === 'theme-snow' && (
+        <div className="snow-background" />
       )}
       
       <div className="mx-auto w-full max-w-lg relative z-10">

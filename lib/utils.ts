@@ -320,6 +320,60 @@ export const availableThemes: Theme[] = [
       textClass: "sunset-text",
     }
   },
+  {
+    id: "theme-snow",
+    name: "Snow",
+    description: "Serene ice blue and silver white tones with a crisp, minimal lofi aesthetic",
+    colors: {
+      background: "#f0f5f9",
+      backgroundSecondary: "#e7eef5",
+      backgroundTertiary: "#dce7f0",
+      backgroundHighlight: "#ffffff",
+      foreground: "#364f6b",
+      foregroundSecondary: "#5a7896",
+      foregroundTertiary: "#8ba5c0",
+      foregroundHighlight: "#243748",
+      primary: "#70a3c4",
+      primaryHover: "#8ab6d2",
+      primaryActive: "#5a8eaf",
+      secondary: "#c1d5e8",
+      secondaryHover: "#d0e0ee",
+      accent: "#a0c2dd",
+      border: "#d0e0ee",
+      borderHover: "#b2cce2",
+      shadow: "rgba(83, 132, 172, 0.1)",
+      shadowStrong: "rgba(83, 132, 172, 0.2)",
+    },
+    styles: {
+      fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif",
+      borderRadius: "8px",
+      boxShadow: "0 8px 24px rgba(83, 132, 172, 0.08)",
+      innerShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.5)",
+      backgroundTexture: "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, rgba(240, 245, 249, 0) 60%)",
+      completedPiece: {
+        primary: "#70a3c4",
+        secondary: "#5c93b8",
+        highlight: "#88b4d0",
+        shadow: "#4a7ea1",
+        text: "#ffffff",
+      },
+      upcomingPiece: {
+        primary: "#dce7f0",
+        secondary: "#cfdce8",
+        highlight: "#e9f1f7",
+        shadow: "#b7c8da",
+        text: "#5a7896",
+      },
+      hover: {
+        transform: "scale(1.02)",
+        transition: "all 0.5s ease-out",
+      }
+    },
+    animations: {
+      hoverClass: "hover-snow",
+      textClass: "snow-text",
+    }
+  },
   // Additional themes will be added here
 ];
 
