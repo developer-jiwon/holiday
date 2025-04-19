@@ -593,10 +593,10 @@ export function MobileHolidayPuzzle() {
                 </button>
                 
                 <div className="mx-1 sm:mx-2 text-center flex-1">
-                  <div className="flex items-center justify-center">
-                    <h1 
-                      className={`text-xl font-bold flex items-center justify-center gap-2 text-important ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
-                      style={{ 
+                  <div className="flex flex-col items-center">
+                    <h1
+                      className="flex items-center gap-2 text-xl font-semibold mb-3"
+                      style={{
                         color: theme.colors.foreground,
                         fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
                         textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
@@ -605,9 +605,6 @@ export function MobileHolidayPuzzle() {
                       <PuzzleIcon className="w-6 h-6" />
                       <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
                     </h1>
-                    <div className="ml-2">
-                      <CountrySelector onChange={handleCountryChange} />
-                    </div>
                   </div>
                   <div className="flex flex-wrap items-center justify-center mt-1.5 sm:mt-2 gap-1.5">
                     <span 
@@ -637,48 +634,55 @@ export function MobileHolidayPuzzle() {
             </div>
 
             {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
-            <div 
-              className="relative mx-auto max-w-2xl rounded-xl p-3 sm:p-4 md:p-5 shadow-md overflow-hidden border-2"
-              style={{ 
-                backgroundColor: theme.colors.backgroundTertiary,
-                borderColor: theme.colors.border,
-                boxShadow: theme.styles.boxShadow,
-                backgroundImage: theme.styles.backgroundTexture,
-                backgroundSize: theme.id === "theme-retro" ? '8px 8px' : '60px 60px',
-                borderRadius: theme.id === "theme-retro" ? '0' : theme.styles.borderRadius,
-                border: theme.id === "theme-retro" ? `2px solid ${theme.colors.border}` : `2px solid ${theme.colors.border}`,
-                imageRendering: theme.id === "theme-retro" ? 'pixelated' : 'auto'
-              }}
-            >
-              {/* Subtle wood grain texture */}
-              <div className="absolute inset-0 opacity-15" 
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%23a89888' fill-opacity='0.1' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
-                  backgroundSize: '100% 100%'
-                }}>
+            <div className="relative mx-auto max-w-2xl overflow-hidden">
+              {/* Country selector in bookmark format at the top of the puzzle */}
+              <div className="mb-[-1px] px-2 py-0.5 flex justify-center">
+                <CountrySelector onChange={handleCountryChange} />
               </div>
               
-              {/* Actual puzzle grid - this is a complete jigsaw puzzle with interlocking pieces */}
-              <div className="relative z-10">
-                <JigsawPuzzleGrid 
-                  holidays={holidays}
-                  onPieceClick={handleTileClick}
-                  onPieceMouseEnter={handleTileMouseEnter}
-                  onPieceMouseLeave={handleTileMouseLeave}
-                  hoveredTile={hoveredTile}
-                  animatingPiece={animatingPiece}
-                  completedAnimation={completedAnimation}
-                />
-              </div>
-              
-              {/* Caption - always at the bottom */}
-              <div className="text-center mt-4 mb-1">
-                <p 
-                  className={`text-xs font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""} ${theme.id === "theme-sunset" ? "sunset-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
-                  style={{ color: theme.colors.foreground }}
-                >
-                  {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
-                </p>
+              <div 
+                className="relative rounded-xl p-3 sm:p-4 md:p-5 shadow-md overflow-hidden border-2"
+                style={{ 
+                  backgroundColor: theme.colors.backgroundTertiary,
+                  borderColor: theme.colors.border,
+                  boxShadow: theme.styles.boxShadow,
+                  backgroundImage: theme.styles.backgroundTexture,
+                  backgroundSize: theme.id === "theme-retro" ? '8px 8px' : '60px 60px',
+                  borderRadius: theme.id === "theme-retro" ? '0' : theme.styles.borderRadius,
+                  border: theme.id === "theme-retro" ? `2px solid ${theme.colors.border}` : `2px solid ${theme.colors.border}`,
+                  imageRendering: theme.id === "theme-retro" ? 'pixelated' : 'auto'
+                }}
+              >
+                {/* Subtle wood grain texture */}
+                <div className="absolute inset-0 opacity-15" 
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%23a89888' fill-opacity='0.1' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
+                    backgroundSize: '100% 100%'
+                  }}>
+                </div>
+
+                {/* Actual puzzle grid - this is a complete jigsaw puzzle with interlocking pieces */}
+                <div className="relative z-10">
+                  <JigsawPuzzleGrid 
+                    holidays={holidays}
+                    onPieceClick={handleTileClick}
+                    onPieceMouseEnter={handleTileMouseEnter}
+                    onPieceMouseLeave={handleTileMouseLeave}
+                    hoveredTile={hoveredTile}
+                    animatingPiece={animatingPiece}
+                    completedAnimation={completedAnimation}
+                  />
+                </div>
+                
+                {/* Caption - always at the bottom */}
+                <div className="text-center mt-4 mb-1">
+                  <p 
+                    className={`text-xs font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""} ${theme.id === "theme-sunset" ? "sunset-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
+                    style={{ color: theme.colors.foreground }}
+                  >
+                    {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
+                  </p>
+                </div>
               </div>
             </div>
 

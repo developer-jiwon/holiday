@@ -1,9 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronDown } from "lucide-react"
-
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useTheme } from "@/hooks/use-theme"
 
 type Country = {
@@ -28,57 +25,51 @@ interface CountrySelectorProps {
 }
 
 export function CountrySelector({ onChange }: CountrySelectorProps) {
-  const [selectedCountry, setSelectedCountry] = React.useState<Country>(countries[0])
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
   const { theme } = useTheme();
-
-  const handleCountryChange = (country: Country) => {
-    setSelectedCountry(country);
-    onChange(country.code);
+  
+  const handleSelectCountry = (index: number) => {
+    setSelectedIndex(index);
+    onChange(countries[index].code);
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button 
-          className="flex items-center justify-between p-2 text-sm rounded-md"
-          style={{ 
-            backgroundColor: `${theme.colors.backgroundHighlight}80`,
-            color: theme.colors.foreground,
-            border: `1px solid ${theme.colors.border}80`
-          }}
-        >
-          <div className="flex items-center gap-1.5">
-            <span>{selectedCountry.flag}</span>
-            <span className="text-xs">{selectedCountry.code.toUpperCase()}</span>
-          </div>
-          <ChevronDown className="h-3 w-3 ml-1 opacity-70" />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        align="center" 
-        className="min-w-[120px] p-1" 
-        style={{ 
-          backgroundColor: theme.colors.backgroundHighlight,
-          border: `1px solid ${theme.colors.border}80`
-        }}
-      >
-        {countries.map((country) => (
-          <DropdownMenuItem
-            key={country.code}
-            className="flex cursor-pointer items-center gap-1.5 px-2 py-1.5 text-xs rounded-sm"
-            onClick={() => handleCountryChange(country)}
-            style={{ 
-              color: theme.colors.foreground
-            }}
-          >
-            <span>{country.flag}</span>
-            <span>{country.name}</span>
-            {selectedCountry.code === country.code && 
-              <Check className="ml-auto h-3 w-3" style={{ color: theme.colors.primary }} />
-            }
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
+    <div className="flex overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
+      <div className="flex items-center gap-1.5 mx-auto">
+        {countries.map((country, index) => {
+          const isSelected = index === selectedIndex;
+          
+          return (
+            <button 
+              key={country.code}
+              onClick={() => handleSelectCountry(index)}
+              className="flex items-center justify-center rounded-t-lg transition-all relative"
+              style={{ 
+                backgroundColor: isSelected 
+                  ? theme.colors.backgroundHighlight 
+                  : `${theme.colors.background}90`,
+                color: theme.colors.foreground,
+                borderTop: `1px solid ${isSelected ? theme.colors.border : 'transparent'}`,
+                borderLeft: `1px solid ${isSelected ? theme.colors.border : 'transparent'}`,
+                borderRight: `1px solid ${isSelected ? theme.colors.border : 'transparent'}`,
+                borderBottom: isSelected 
+                  ? `2px solid ${theme.colors.primary}` 
+                  : 'none',
+                marginBottom: isSelected ? '-1px' : '0',
+                zIndex: isSelected ? 2 : 1,
+                opacity: isSelected ? 1 : 0.7,
+                transform: isSelected ? 'translateY(-2px)' : 'none',
+                width: '36px',
+                height: '36px',
+                padding: '0',
+              }}
+              title={country.name}
+            >
+              <span className="text-xl">{country.flag}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
