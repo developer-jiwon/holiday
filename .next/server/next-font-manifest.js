@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/jiwonhwang/Desktop/holiday/app/layout\":[\"static/media/1f3fe8c6df3d47c1-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/jiwonhwang/Desktop/holiday/app/layout\":[\"static/media/327f060f68a632a5-s.p.woff2\",\"static/media/1f3fe8c6df3d47c1-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"

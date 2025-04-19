@@ -1,9 +1,29 @@
+"use client"
+
 import { MobileHolidayPuzzle } from "@/components/mobile-holiday-puzzle"
+import { useTheme } from "@/hooks/use-theme"
+import { useEffect } from "react"
 
 export default function PuzzleScreen() {
+  const { theme } = useTheme()
+  
+  // Add theme-specific class to body element
+  useEffect(() => {
+    // Remove all theme classes first
+    document.body.classList.remove('theme-galaxy', 'theme-lofi-beige');
+    // Add current theme class
+    document.body.classList.add(`theme-${theme.id}`);
+  }, [theme.id]);
+  
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-[#f5e9d9] px-4">
-      <div className="mx-auto w-full max-w-lg">
+    <main 
+      className="flex min-h-screen w-full items-center justify-center px-4 relative overflow-hidden"
+      style={{ backgroundColor: theme.colors.background }}
+    >
+      {/* Stars background for galaxy theme */}
+      <div className="galaxy-stars" />
+      
+      <div className="mx-auto w-full max-w-lg relative z-10">
         <MobileHolidayPuzzle />
       </div>
     </main>

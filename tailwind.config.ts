@@ -21,6 +21,7 @@ const config = {
     extend: {
       fontFamily: {
         serif: ["var(--font-merriweather)", "serif"],
+        'light-serif': ["var(--font-cormorant)", "serif"],
       },
       colors: {
         beige: {
@@ -34,6 +35,30 @@ const config = {
           700: "#8b6e5a",
           800: "#7d6351",
           900: "#6f5848",
+        },
+        indigo: {
+          50: "#e2e2fc",
+          100: "#c8c8f9",
+          200: "#9d9df0",
+          300: "#7575e7",
+          400: "#5959db",
+          500: "#4d4585",
+          600: "#3a336b",
+          700: "#2d2754",
+          800: "#201d3d",
+          900: "#1a1a2e",
+        },
+        purple: {
+          50: "#f2e9ff",
+          100: "#e2d1ff",
+          200: "#c8b8db",
+          300: "#9d84b7",
+          400: "#8a6fc7",
+          500: "#7f5a9f",
+          600: "#614685",
+          700: "#503973",
+          800: "#3e2e5c",
+          900: "#2a2354",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

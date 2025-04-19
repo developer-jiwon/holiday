@@ -1,12 +1,20 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Merriweather } from 'next/font/google'
+import { Merriweather, Cormorant } from 'next/font/google'
+import { ThemeProvider } from '@/hooks/use-theme'
 
 const merriweather = Merriweather({ 
   weight: ['300', '400', '700', '900'],
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-merriweather',
+})
+
+const cormorant = Cormorant({
+  weight: ['300', '400', '500', '600'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-cormorant',
 })
 
 export const metadata: Metadata = {
@@ -22,7 +30,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${merriweather.variable} font-serif`}>{children}</body>
+      <body className={`${merriweather.variable} ${cormorant.variable} font-serif`}>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

@@ -5,6 +5,7 @@ import { BackgroundIllustration } from "./background-illustration"
 import { getHolidaysForYear, getHolidaysByCountry, type Holiday, type UpcomingHoliday, type PastHoliday } from "../lib/date-utils"
 import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, Volume2, VolumeX } from "lucide-react"
 import { HolidayPuzzleBoard } from "./holiday-puzzle-board"
+import { useTheme } from "@/hooks/use-theme"
 
 type TooltipPosition = { x: number; y: number } | null
 
@@ -26,45 +27,51 @@ const COUNTRIES = [
 
 // Create the SparkleIcon component
 function SparkleIcon() {
+  const { theme } = useTheme();
+  
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill="#8b6e5a" />
+      <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill={theme.colors.foreground} />
     </svg>
   );
 }
 
 // Create the puzzle icon component for the title
 function PuzzleIcon({className = ""}) {
+  const { theme } = useTheme();
+  
   return (
     <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M4 7h3a1 1 0 0 0 1-1V5a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-1a2 2 0 0 0-4 0v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a2 2 0 0 0 0-4H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z" 
-        fill="#8b6e5a" />
+        fill={theme.colors.foreground} />
     </svg>
   );
 }
 
 // Create a component for sparkle animation
 function SparkleAnimation() {
+  const { theme } = useTheme();
+  
   return (
     <>
       <div className="absolute top-0 left-1/4 animate-ping">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill="#ffffff" />
+          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill={theme.colors.backgroundHighlight} />
         </svg>
       </div>
       <div className="absolute top-1/4 right-0 animate-ping" style={{ animationDelay: "0.2s" }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill="#ffffff" />
+          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill={theme.colors.backgroundHighlight} />
         </svg>
       </div>
       <div className="absolute bottom-0 right-1/4 animate-ping" style={{ animationDelay: "0.4s" }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill="#ffffff" />
+          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill={theme.colors.backgroundHighlight} />
         </svg>
       </div>
       <div className="absolute bottom-1/4 left-0 animate-ping" style={{ animationDelay: "0.6s" }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill="#ffffff" />
+          <path d="M12 2L13 6L17 7L13 8L12 12L11 8L7 7L11 6L12 2Z" fill={theme.colors.backgroundHighlight} />
         </svg>
       </div>
     </>
@@ -424,6 +431,9 @@ export function MobileHolidayPuzzle() {
   const [animatingPiece, setAnimatingPiece] = useState<number | null>(null);
   const [completedAnimation, setCompletedAnimation] = useState<number | null>(null);
   
+  // Get theme from context
+  const { theme } = useTheme();
+  
   // Get holidays for the current year and selected country
   const holidays = selectedCountry === 'global' 
     ? getHolidaysForYear(selectedYear)
@@ -503,7 +513,14 @@ export function MobileHolidayPuzzle() {
   return (
     <SoundProvider>
       <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <div className="relative overflow-visible rounded-xl bg-[#f7f2ea] shadow-lg max-w-[95vw] w-full">
+        <div 
+          className="relative overflow-visible rounded-xl shadow-lg max-w-[95vw] w-full"
+          style={{ 
+            backgroundColor: theme.colors.backgroundSecondary,
+            borderRadius: theme.styles.borderRadius,
+            boxShadow: theme.styles.boxShadow,
+          }}
+        >
           <div className="absolute inset-0 z-0 opacity-10">
             <BackgroundIllustration />
           </div>
@@ -511,17 +528,30 @@ export function MobileHolidayPuzzle() {
           <div className="relative z-10 w-full p-3 sm:p-5">
             <div className="flex flex-col items-center justify-center mb-3">
               {/* Year Navigation with integrated country selector - mobile optimized */}
-              <div className="flex items-center justify-between mb-4 bg-white/90 rounded-lg px-4 sm:px-5 py-3 shadow-sm border border-[#c5b7a7] w-full max-w-lg">
+              <div 
+                className="flex items-center justify-between mb-4 rounded-lg px-4 sm:px-5 py-3 shadow-sm w-full max-w-lg"
+                style={{
+                  backgroundColor: `${theme.colors.backgroundHighlight}90`,
+                  borderWidth: '1px',
+                  borderColor: theme.colors.border,
+                }}
+              >
                 <button 
                   onClick={goToPreviousYear}
-                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-lg sm:text-xl"
+                  className="transition-colors p-1 text-lg sm:text-xl hover:opacity-80"
+                  style={{
+                    color: theme.colors.foreground,
+                  }}
                   aria-label="Previous Year"
                 >
                   ←
                 </button>
                 
                 <div className="mx-1 sm:mx-2 text-center flex-1">
-                  <h1 className="text-base sm:text-lg font-semibold text-[#776b5f] flex items-center justify-center">
+                  <h1 
+                    className="text-base sm:text-lg font-semibold flex items-center justify-center"
+                    style={{ color: theme.colors.foreground }}
+                  >
                     <PuzzleIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-1.5 sm:mr-2" />
                     <span className="truncate">{selectedYear} Holiday Puzzle</span>
                   </h1>
@@ -531,7 +561,8 @@ export function MobileHolidayPuzzle() {
                         id="country-select"
                         value={selectedCountry}
                         onChange={handleCountryChange}
-                        className="appearance-none bg-transparent border-0 text-[#776b5f] text-xs sm:text-sm font-medium focus:outline-none pr-5 cursor-pointer truncate max-w-[120px] sm:max-w-none"
+                        className="appearance-none bg-transparent border-0 text-xs sm:text-sm font-medium focus:outline-none pr-5 cursor-pointer truncate max-w-[120px] sm:max-w-none"
+                        style={{ color: theme.colors.foreground }}
                       >
                         {COUNTRIES.map(country => (
                           <option key={country.id} value={country.id}>
@@ -539,14 +570,25 @@ export function MobileHolidayPuzzle() {
                           </option>
                         ))}
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-[#776b5f]">
-                        <svg className="h-4 w-4 sm:h-5 sm:w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
+                        <svg 
+                          className="h-4 w-4 sm:h-5 sm:w-5 fill-current" 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 20 20"
+                          style={{ color: theme.colors.foreground }}
+                        >
                           <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
                       </div>
                     </div>
-                    <span className="text-[#776b5f]/70 text-xs sm:text-sm">•</span>
-                    <span className="text-xs sm:text-sm text-[#776b5f]/70 whitespace-nowrap">
+                    <span 
+                      className="text-xs sm:text-sm"
+                      style={{ color: `${theme.colors.foregroundSecondary}70` }}
+                    >•</span>
+                    <span 
+                      className="text-xs sm:text-sm whitespace-nowrap"
+                      style={{ color: `${theme.colors.foregroundSecondary}70` }}
+                    >
                       {holidays.filter(h => h.passed).length}/{holidays.length} collected
                     </span>
                   </div>
@@ -554,7 +596,10 @@ export function MobileHolidayPuzzle() {
                 
                 <button 
                   onClick={goToNextYear}
-                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-lg sm:text-xl"
+                  className="transition-colors p-1 text-lg sm:text-xl hover:opacity-80"
+                  style={{
+                    color: theme.colors.foreground,
+                  }}
                   aria-label="Next Year"
                 >
                   →
@@ -564,10 +609,12 @@ export function MobileHolidayPuzzle() {
 
             {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
             <div 
-              className="relative mx-auto max-w-2xl rounded-xl bg-[#e6dfd3] p-3 sm:p-4 md:p-5 shadow-md overflow-hidden border-2 border-[#c5b7a7]"
+              className="relative mx-auto max-w-2xl rounded-xl p-3 sm:p-4 md:p-5 shadow-md overflow-hidden border-2"
               style={{ 
-                boxShadow: '0 5px 15px rgba(0,0,0,0.05), inset 0 0 20px rgba(0,0,0,0.02)',
-                backgroundImage: 'radial-gradient(circle at 70% 30%, #eae3d7 5%, transparent 5%), radial-gradient(circle at 30% 70%, #e0d8cc 3%, transparent 3%)',
+                backgroundColor: theme.colors.backgroundTertiary,
+                borderColor: theme.colors.border,
+                boxShadow: theme.styles.boxShadow,
+                backgroundImage: theme.styles.backgroundTexture,
                 backgroundSize: '60px 60px'
               }}
             >
@@ -594,7 +641,12 @@ export function MobileHolidayPuzzle() {
               
               {/* Caption - inline with footer */}
               <div className="text-center my-2.5">
-                <p className="text-xs text-[#8d7d6e]/80 font-medium">Click pieces to discover holidays</p>
+                <p 
+                  className="text-xs font-medium text-important"
+                  style={{ color: theme.colors.foreground }}
+                >
+                  Click pieces to discover holidays
+                </p>
               </div>
             </div>
 
@@ -602,51 +654,92 @@ export function MobileHolidayPuzzle() {
             {/* Holiday info tooltip - minimalist and responsive */}
             {hoveredTile !== null && tooltipPosition && (
               <div
-                className="fixed z-50 bg-white/95 px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm border border-[#c5b7a7]/60 left-1/2 transform -translate-x-1/2"
+                className="fixed z-50 px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm border left-1/2 transform -translate-x-1/2"
                 style={{
+                  backgroundColor: theme.id === "theme-galaxy" ? `rgba(240, 240, 255, 0.95)` : `${theme.colors.backgroundHighlight}95`,
+                  borderColor: theme.id === "theme-galaxy" ? `${theme.colors.primary}40` : `${theme.colors.border}60`,
                   top: `${tooltipPosition.y - 45}px`,
                   width: "auto",
                   minWidth: "180px",
                   maxWidth: "280px",
                   transform: "translate(-50%, -8px)",
                   transition: "transform 0.2s ease, opacity 0.2s ease",
-                  backdropFilter: "blur(2px)",
+                  backdropFilter: "blur(4px)",
+                  boxShadow: theme.id === "theme-galaxy" ? "0 4px 16px rgba(120, 100, 255, 0.3)" : "0 4px 15px rgba(0,0,0,0.1)",
                 }}
               >
                 <div className="relative">
+                  {/* Hover tooltip content (status label, date, and days info) */}
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-medium text-sm sm:text-base text-[#776b5f]">
+                    <h3 
+                      className="font-medium text-sm sm:text-base"
+                      style={{ 
+                        color: theme.id === "theme-galaxy" ? "#151c3b" : theme.colors.foreground,
+                        textShadow: "none"
+                      }}
+                    >
                       {holidays.find(h => h.id === hoveredTile)?.name}
                     </h3>
-                    <span className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-[#e2d8c8]/50 text-[#776b5f] whitespace-nowrap">
+                    <span 
+                      className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded whitespace-nowrap"
+                      style={{ 
+                        backgroundColor: theme.id === "theme-galaxy" ? 
+                          (holidays.find(h => h.id === hoveredTile)?.passed ? "#9d93e2" : "#7d74c6") : 
+                          `${theme.colors.backgroundTertiary}50`,
+                        color: "#ffffff",
+                        textShadow: theme.id === "theme-galaxy" ? "0 1px 1px rgba(0,0,0,0.2)" : "none"
+                      }}
+                    >
                       {holidays.find(h => h.id === hoveredTile)?.passed ? "passed" : "upcoming"}
                     </span>
                   </div>
                   
-                  <div className="flex items-center justify-between mt-1.5 sm:mt-2 text-xs sm:text-sm text-[#a89888]">
-                    <span>{holidays.find(h => h.id === hoveredTile)?.date}</span>
+                  <div className="flex items-center justify-between mt-1.5 sm:mt-2 text-xs sm:text-sm">
+                    <span style={{ 
+                      color: theme.id === "theme-galaxy" ? "#252a52" : theme.colors.foregroundSecondary,
+                      fontWeight: "500"
+                    }}>
+                      {holidays.find(h => h.id === hoveredTile)?.date}
+                    </span>
                     
-                    {/* Show days passed or days until - essential information */}
-                  {(() => {
-                    const holiday = holidays.find(h => h.id === hoveredTile)
-                    if (!holiday) return null
-                    
-                    return holiday.passed ? (
-                        <span className="flex items-center text-[#776b5f]/80">
-                          <span className="inline-block w-2 h-2 rounded-full bg-[#938578] mr-1.5"></span>
-                          {(holiday as PastHoliday).daysPassed}d ago
-                        </span>
-                      ) : (
-                        <span className="flex items-center text-[#a89888]">
-                          <span className="inline-block w-2 h-2 rounded-full bg-[#c4b19f] mr-1.5"></span>
-                          in {(holiday as UpcomingHoliday).daysUntil}d
-                        </span>
-                    )
-                  })()}
+                    {/* Show days passed or days until */}
+                    {(() => {
+                      const holiday = holidays.find(h => h.id === hoveredTile)
+                      if (!holiday) return null
+                      
+                      return holiday.passed ? (
+                          <span className="flex items-center" style={{ 
+                            color: theme.id === "theme-galaxy" ? "#4f5387" : `${theme.colors.foreground}80` 
+                          }}>
+                            <span 
+                              className="inline-block w-2 h-2 rounded-full mr-1.5"
+                              style={{ 
+                                backgroundColor: theme.id === "theme-galaxy" ? "#9d93e2" : theme.colors.foregroundSecondary 
+                              }}
+                            ></span>
+                            {(holiday as PastHoliday).daysPassed}d ago
+                          </span>
+                        ) : (
+                          <span className="flex items-center" style={{ 
+                            color: theme.id === "theme-galaxy" ? "#4f5387" : theme.colors.foregroundSecondary
+                          }}>
+                            <span 
+                              className="inline-block w-2 h-2 rounded-full mr-1.5"
+                              style={{ 
+                                backgroundColor: theme.id === "theme-galaxy" ? "#7d74c6" : "#c4b19f" 
+                              }}
+                            ></span>
+                            in {(holiday as UpcomingHoliday).daysUntil}d
+                          </span>
+                      )
+                    })()}
                   </div>
 
                   {/* Simple arrow indicator */}
-                  <div className="absolute -bottom-[8px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-white/95"></div>
+                  <div className="absolute -bottom-[8px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent" 
+                       style={{ 
+                         borderTopColor: theme.id === "theme-galaxy" ? "rgba(240, 240, 255, 0.95)" : `${theme.colors.backgroundHighlight}95`
+                       }}></div>
                 </div>
               </div>
             )}
@@ -683,6 +776,9 @@ function JigsawPuzzleGrid({
   
   // Store connector patterns in state to avoid hydration mismatch
   const [pieceConnectors, setPieceConnectors] = useState<{[key: string]: {top: string, right: string, bottom: string, left: string}}>({});
+  
+  // Get theme from context
+  const { theme } = useTheme();
   
   // Initialize grid and connectors only on client-side
   useEffect(() => {
@@ -761,23 +857,11 @@ function JigsawPuzzleGrid({
     return parseInt(aDay || '0') - parseInt(bDay || '0');
   });
 
-  // Color palette for the puzzle pieces
+  // Color palette for the puzzle pieces - now using theme values
   const colorPalette = {
-    boardBg: "#e9e1d6",
-    completedPiece: {
-      primary: "#b9a18f",
-      secondary: "#a38d7b",
-      highlight: "#ccb5a3",
-      shadow: "#8a7767",
-      text: "#f5efe7"
-    },
-    upcomingPiece: {
-      primary: "#e0d5c5",
-      secondary: "#d4c9b9",
-      highlight: "#f5efe7",
-      shadow: "#bfb5a5",
-      text: "#7d6e5f"
-    }
+    boardBg: theme.colors.backgroundTertiary,
+    completedPiece: theme.styles.completedPiece,
+    upcomingPiece: theme.styles.upcomingPiece
   };
 
   return (
@@ -927,10 +1011,13 @@ function JigsawPuzzleGrid({
                     <span
                       key={i}
                       className={`text-[10px] sm:text-xs leading-tight font-medium text-center ${
-                        isPassed ? "text-[#f5efe7]" : "text-[#7d6e5f]"
-                      }`}
+                        isPassed ? "text-important" : "text-important"
+                      } ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}`}
                       style={{ 
-                        textShadow: isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none",
+                        color: isPassed ? 
+                          theme.colors.foregroundHighlight || "#ffffff" : 
+                          (theme.id === "theme-galaxy" ? "#ffffff" : theme.styles.upcomingPiece.text),
+                        textShadow: (theme.id === "theme-galaxy" ? "0 1px 2px rgba(0,0,0,0.4)" : isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none"),
                         marginBottom: i < formattedDisplay.length - 1 ? "1px" : "0"
                       }}
                     >
@@ -940,9 +1027,14 @@ function JigsawPuzzleGrid({
                   
                   {/* Holiday date */}
                   <span 
-                    className={`text-[8px] sm:text-[10px] mt-1 sm:mt-1.5 font-medium ${
-                      isPassed ? "text-[#f5efe7]/90" : "text-[#7d6e5f]/80"
-                    }`}
+                    className={`text-[8px] sm:text-[10px] mt-1 sm:mt-1.5 font-medium ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}`}
+                    style={{ 
+                      color: isPassed ? 
+                        (theme.id === "theme-galaxy" ? theme.colors.foregroundHighlight || "#ffffff" : theme.styles.completedPiece.text) : 
+                        (theme.id === "theme-galaxy" ? "#ffffff" : theme.styles.upcomingPiece.text),
+                      opacity: theme.id === "theme-galaxy" ? 1 : 0.9,
+                      textShadow: theme.id === "theme-galaxy" ? "0 1px 2px rgba(0,0,0,0.4)" : "none"
+                    }}
                   >
                     {holiday.date}
                   </span>
