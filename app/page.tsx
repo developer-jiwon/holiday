@@ -9,10 +9,30 @@ export default function PuzzleScreen() {
   
   // Add theme-specific class to body element
   useEffect(() => {
-    // Remove all theme classes first
-    document.body.classList.remove('theme-galaxy', 'theme-lofi-beige', 'theme-retro', 'theme-forest');
-    // Add current theme class
-    document.body.classList.add(`theme-${theme.id}`);
+    // Reset specific background effects when theme changes
+    document.body.classList.remove('theme-galaxy-bg');
+    document.body.classList.remove('theme-retro');
+    document.body.classList.remove('theme-forest');
+    document.body.classList.remove('theme-sunset');
+    
+    // Apply theme-specific effects to body
+    if (theme.id === 'theme-galaxy') {
+      document.body.classList.add('theme-galaxy-bg');
+    } else if (theme.id === 'theme-retro') {
+      document.body.classList.add('theme-retro');
+    } else if (theme.id === 'theme-forest') {
+      document.body.classList.add('theme-forest');
+    } else if (theme.id === 'theme-sunset') {
+      document.body.classList.add('theme-sunset');
+    }
+    
+    // Clean up on unmount
+    return () => {
+      document.body.classList.remove('theme-galaxy-bg');
+      document.body.classList.remove('theme-retro');
+      document.body.classList.remove('theme-forest');
+      document.body.classList.remove('theme-sunset');
+    };
   }, [theme.id]);
   
   return (
@@ -20,14 +40,19 @@ export default function PuzzleScreen() {
       className="flex min-h-screen w-full items-center justify-center px-4 relative overflow-hidden"
       style={{ backgroundColor: theme.colors.background }}
     >
-      {/* Stars background for galaxy theme */}
-      <div className="galaxy-stars" />
-      
-      {/* Scanlines effect for retro theme */}
-      <div className="retro-scanlines" />
-      
-      {/* Background effect for forest theme */}
-      <div className="forest-background" />
+      {/* Theme-specific background effects */}
+      {theme.id === 'theme-galaxy' && (
+        <div className="stars-background" />
+      )}
+      {theme.id === 'theme-retro' && (
+        <div className="grid-background" />
+      )}
+      {theme.id === 'theme-forest' && (
+        <div className="forest-background" />
+      )}
+      {theme.id === 'theme-sunset' && (
+        <div className="sunset-background" />
+      )}
       
       <div className="mx-auto w-full max-w-lg relative z-10">
         <MobileHolidayPuzzle />

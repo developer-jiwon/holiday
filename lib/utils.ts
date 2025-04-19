@@ -52,6 +52,14 @@ export interface Theme {
       text: string;
     };
     fontFamily?: string;
+    hover?: {
+      transform: string;
+      transition: string;
+    };
+  };
+  animations?: {
+    hoverClass: string;
+    textClass: string;
   };
 }
 
@@ -258,6 +266,60 @@ export const availableThemes: Theme[] = [
   galaxyTheme,
   retroTheme,
   forestTheme,
+  {
+    id: "theme-sunset",
+    name: "Sunset",
+    description: "Warm sunset orange and dusky pink tones with a lofi pantone aesthetic",
+    colors: {
+      background: "#fff5f2",
+      backgroundSecondary: "#ffede8",
+      backgroundTertiary: "#ffdfd6",
+      backgroundHighlight: "#ffe8e1",
+      foreground: "#33272a",
+      foregroundSecondary: "#644a51",
+      foregroundTertiary: "#856970",
+      foregroundHighlight: "#33272a",
+      primary: "#ff9a76",
+      primaryHover: "#ffb294",
+      primaryActive: "#ff8667",
+      secondary: "#f27d74",
+      secondaryHover: "#f4908a",
+      accent: "#e3665e",
+      border: "#ffcdc0",
+      borderHover: "#ffbba8",
+      shadow: "rgba(255, 154, 118, 0.15)",
+      shadowStrong: "rgba(242, 125, 116, 0.25)",
+    },
+    styles: {
+      fontFamily: "'Nunito', 'SF Pro Rounded', system-ui, sans-serif",
+      borderRadius: "16px",
+      boxShadow: "0 4px 12px rgba(255, 154, 118, 0.2)",
+      innerShadow: "inset 0 0 20px rgba(255, 154, 118, 0.05)",
+      backgroundTexture: "linear-gradient(135deg, rgba(255,190,175,0.05) 0%, rgba(255,208,190,0.08) 100%)",
+      completedPiece: {
+        primary: "#ff9a76",
+        secondary: "#ff8667",
+        highlight: "#ffb19a",
+        shadow: "#db7459",
+        text: "#33272a",
+      },
+      upcomingPiece: {
+        primary: "#f9bbaa",
+        secondary: "#f7a899",
+        highlight: "#ffd0c4",
+        shadow: "#e6948a",
+        text: "#644a51",
+      },
+      hover: {
+        transform: "scale(1.03)",
+        transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+      }
+    },
+    animations: {
+      hoverClass: "hover-sunset",
+      textClass: "sunset-text",
+    }
+  },
   // Additional themes will be added here
 ];
 
