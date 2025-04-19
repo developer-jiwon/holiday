@@ -25,43 +25,39 @@ export default function PuzzleScreen() {
   }, [theme]);
   
   return (
-    <body
-      className="min-h-screen bg-background font-sans antialiased"
+    <main 
+      className="min-h-screen bg-background font-sans antialiased flex w-full items-center justify-center px-4 relative overflow-hidden"
+      style={{ backgroundColor: theme.colors.background }}
     >
-      <main 
-        className="flex min-h-screen w-full items-center justify-center px-4 relative overflow-hidden"
-        style={{ backgroundColor: theme.colors.background }}
-      >
-        {/* Theme-specific background effects */}
-        {theme.id === 'theme-galaxy' && (
-          <div className="stars-background" />
-        )}
-        {theme.id === 'theme-retro' && (
-          <div className="grid-background" />
-        )}
-        {theme.id === 'theme-snow' && (
-          <div className="snow-background" />
-        )}
-        {theme.id === 'theme-sakura' && (
-          <>
-            <div className="sakura-background" />
-            <div className="sakura-petals">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className={`petal petal-${i + 1}`}></div>
-              ))}
-            </div>
-          </>
-        )}
-        {theme.id === 'lofi-beige' && (
-          <div className="lofi-sunlight-effect absolute inset-0 pointer-events-none z-0">
-            <div className="moving-sunlight"></div>
+      {/* Theme-specific background effects */}
+      {theme.id === 'theme-galaxy' && (
+        <div className="stars-background" />
+      )}
+      {theme.id === 'theme-retro' && (
+        <div className="grid-background" />
+      )}
+      {theme.id === 'theme-snow' && (
+        <div className="snow-background" />
+      )}
+      {theme.id === 'theme-sakura' && (
+        <>
+          <div className="sakura-background" />
+          <div className="sakura-petals">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className={`petal petal-${i + 1}`}></div>
+            ))}
           </div>
-        )}
-        
-        <div className="mx-auto w-full max-w-lg relative z-10">
-          <MobileHolidayPuzzle />
+        </>
+      )}
+      {theme.id === 'lofi-beige' && (
+        <div className="lofi-sunlight-effect absolute inset-0 pointer-events-none z-0">
+          <div className="moving-sunlight"></div>
         </div>
-      </main>
-    </body>
+      )}
+      
+      <div className="mx-auto w-full max-w-lg relative z-10">
+        <MobileHolidayPuzzle />
+      </div>
+    </main>
   )
 }
