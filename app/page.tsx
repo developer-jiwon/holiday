@@ -15,6 +15,7 @@ export default function PuzzleScreen() {
     document.body.classList.remove('theme-forest');
     document.body.classList.remove('theme-sunset');
     document.body.classList.remove('theme-snow');
+    document.body.classList.remove('theme-sakura');
     
     // Apply theme-specific effects to body
     if (theme.id === 'theme-galaxy') {
@@ -27,6 +28,8 @@ export default function PuzzleScreen() {
       document.body.classList.add('theme-sunset');
     } else if (theme.id === 'theme-snow') {
       document.body.classList.add('theme-snow');
+    } else if (theme.id === 'theme-sakura') {
+      document.body.classList.add('theme-sakura');
     }
     
     // Clean up on unmount
@@ -36,6 +39,7 @@ export default function PuzzleScreen() {
       document.body.classList.remove('theme-forest');
       document.body.classList.remove('theme-sunset');
       document.body.classList.remove('theme-snow');
+      document.body.classList.remove('theme-sakura');
     };
   }, [theme.id]);
   
@@ -59,6 +63,16 @@ export default function PuzzleScreen() {
       )}
       {theme.id === 'theme-snow' && (
         <div className="snow-background" />
+      )}
+      {theme.id === 'theme-sakura' && (
+        <>
+          <div className="sakura-background" />
+          <div className="sakura-petals">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className={`petal petal-${i + 1}`}></div>
+            ))}
+          </div>
+        </>
       )}
       
       <div className="mx-auto w-full max-w-lg relative z-10">

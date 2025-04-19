@@ -374,6 +374,60 @@ export const availableThemes: Theme[] = [
       textClass: "snow-text",
     }
   },
+  {
+    id: "theme-sakura",
+    name: "Sakura",
+    description: "Delicate cherry blossom pink and soft gray tones with a dreamy spring aesthetic",
+    colors: {
+      background: "#fbf1f3",
+      backgroundSecondary: "#f7e8ec",
+      backgroundTertiary: "#f0dfe6",
+      backgroundHighlight: "#ffffff",
+      foreground: "#595560",
+      foregroundSecondary: "#807986",
+      foregroundTertiary: "#a8a2ad",
+      foregroundHighlight: "#4b4852",
+      primary: "#e792a8",
+      primaryHover: "#eca6b8",
+      primaryActive: "#d8809c",
+      secondary: "#b8a6bb",
+      secondaryHover: "#c7b9ca",
+      accent: "#ebc0cd",
+      border: "#f0dfe6",
+      borderHover: "#e5d0db",
+      shadow: "rgba(231, 146, 168, 0.08)",
+      shadowStrong: "rgba(231, 146, 168, 0.15)",
+    },
+    styles: {
+      fontFamily: "'DM Sans', 'SF Pro Rounded', system-ui, sans-serif",
+      borderRadius: "12px",
+      boxShadow: "0 6px 20px rgba(231, 146, 168, 0.06)",
+      innerShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.8)",
+      backgroundTexture: "radial-gradient(circle at 70% 20%, rgba(231, 146, 168, 0.04) 0%, rgba(231, 146, 168, 0) 50%), radial-gradient(circle at 30% 80%, rgba(184, 166, 187, 0.04) 0%, rgba(184, 166, 187, 0) 50%)",
+      completedPiece: {
+        primary: "#e792a8",
+        secondary: "#d47e95",
+        highlight: "#f2aebf",
+        shadow: "#b76980",
+        text: "#ffffff",
+      },
+      upcomingPiece: {
+        primary: "#f0dfe6",
+        secondary: "#e5d2db",
+        highlight: "#f9eef2",
+        shadow: "#d5c2cc",
+        text: "#807986",
+      },
+      hover: {
+        transform: "scale(1.02)",
+        transition: "all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)",
+      }
+    },
+    animations: {
+      hoverClass: "hover-sakura",
+      textClass: "sakura-text",
+    }
+  },
   // Additional themes will be added here
 ];
 

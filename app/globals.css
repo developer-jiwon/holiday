@@ -341,6 +341,324 @@
     z-index: 0;
     opacity: 0.5;
   }
+
+  /* Sakura Theme Styles */
+  .theme-sakura {
+    background-color: #f9f0f2;
+    background-image: linear-gradient(to bottom, #f9f0f2 0%, #f5e8ec 100%);
+  }
+
+  .sakura-text {
+    font-family: 'DM Sans', 'SF Pro Rounded', system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .hover-sakura {
+    position: relative;
+    transition: all 0.4s ease-out;
+    backface-visibility: hidden;
+    overflow: hidden;
+  }
+
+  .hover-sakura:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(231, 146, 168, 0.1);
+  }
+
+  .hover-sakura::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(231, 146, 168, 0), rgba(231, 146, 168, 0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  .hover-sakura:hover::before {
+    opacity: 1;
+  }
+
+  .hover-sakura::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(249, 218, 228, 0.4);
+    border-radius: 150% 0 150% 0;
+    top: -40px;
+    left: -40px;
+    transform: rotate(45deg) scale(0);
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hover-sakura:hover::after {
+    transform: rotate(45deg) scale(1);
+    opacity: 0.7;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+  }
+
+  .sakura-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 15% 20%, rgba(216, 142, 160, 0.03) 0%, rgba(216, 142, 160, 0) 40%),
+      radial-gradient(circle at 85% 80%, rgba(179, 166, 184, 0.04) 0%, rgba(179, 166, 184, 0) 40%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.8;
+  }
+
+  /* Sakura falling petals animation */
+  .theme-sakura .sakura-background::before,
+  .theme-sakura .sakura-background::after {
+    content: "";
+    position: fixed;
+    top: -10%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at center, rgba(216, 142, 160, 0.4) 0%, rgba(216, 142, 160, 0) 70%),
+      radial-gradient(circle at center, rgba(216, 142, 160, 0.3) 0%, rgba(216, 142, 160, 0) 70%),
+      radial-gradient(circle at center, rgba(216, 142, 160, 0.2) 0%, rgba(216, 142, 160, 0) 70%);
+    background-size: 12px 12px, 20px 20px, 16px 16px;
+    background-position: 0 0, 10px 10px, 20px 20px;
+    transform: translateY(0);
+    animation: sakuraFall 20s linear infinite;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .theme-sakura .sakura-background::after {
+    background-size: 15px 15px, 24px 24px, 18px 18px;
+    animation-duration: 25s;
+    animation-delay: -10s;
+    opacity: 0.15;
+  }
+
+  @keyframes sakuraFall {
+    0% {
+      background-position: 0% -10%, 10% -5%, 20% -8%;
+      opacity: 0.1;
+    }
+    20% {
+      opacity: 0.15;
+    }
+    50% {
+      background-position: 3% 40%, 12% 45%, 16% 42%;
+      opacity: 0.2;
+    }
+    80% {
+      opacity: 0.15;
+    }
+    100% {
+      background-position: -2% 100%, 8% 100%, 12% 100%;
+      opacity: 0.1;
+    }
+  }
+
+  /* Sakura hover effect enhanced with floating animation */
+  .theme-sakura .hover-sakura {
+    animation: sakuraFloat 5s ease-in-out infinite;
+  }
+
+  @keyframes sakuraFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* Sakura theme enhanced title styling */
+  .theme-sakura h1,
+  .theme-sakura h2,
+  .theme-sakura h3,
+  .theme-sakura .text-important {
+    color: #e792a8;
+    text-shadow: 0 1px 3px rgba(231, 146, 168, 0.2);
+  }
+
+  /* Sakura petals animation */
+  .sakura-petals {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .petal {
+    position: absolute;
+    background-color: #f9dae4;
+    border-radius: 150% 0 150% 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 2px rgba(231, 146, 168, 0.3));
+    animation-name: sakuraDrift, sakuraRotate, sakuraFade;
+    animation-timing-function: ease-in-out, linear, ease-in-out;
+    animation-iteration-count: infinite;
+    z-index: 1;
+  }
+
+  .petal::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(231, 146, 168, 0.1), rgba(231, 146, 168, 0.2) 70%, rgba(231, 146, 168, 0.5));
+    border-radius: 150% 0 150% 0;
+    opacity: 0.6;
+  }
+
+  .petal-1 {
+    width: 12px;
+    height: 12px;
+    left: 10%;
+    animation-duration: 10s, 5s, 10s;
+    animation-delay: 0s, 0s, 0s;
+  }
+
+  .petal-2 {
+    width: 14px;
+    height: 14px;
+    left: 20%;
+    animation-duration: 12s, 6s, 12s;
+    animation-delay: 1s, 1s, 1s;
+  }
+
+  .petal-3 {
+    width: 10px;
+    height: 10px;
+    left: 30%;
+    animation-duration: 9s, 7s, 9s;
+    animation-delay: 2s, 2s, 2s;
+  }
+
+  .petal-4 {
+    width: 16px;
+    height: 16px;
+    left: 40%;
+    animation-duration: 14s, 8s, 14s;
+    animation-delay: 0.5s, 0.5s, 0.5s;
+  }
+
+  .petal-5 {
+    width: 13px;
+    height: 13px;
+    left: 50%;
+    animation-duration: 11s, 6.5s, 11s;
+    animation-delay: 1.5s, 1.5s, 1.5s;
+  }
+
+  .petal-6 {
+    width: 15px;
+    height: 15px;
+    left: 60%;
+    animation-duration: 13s, 7.5s, 13s;
+    animation-delay: 2.5s, 2.5s, 2.5s;
+  }
+
+  .petal-7 {
+    width: 11px;
+    height: 11px;
+    left: 70%;
+    animation-duration: 10.5s, 5.5s, 10.5s;
+    animation-delay: 0.8s, 0.8s, 0.8s;
+  }
+
+  .petal-8 {
+    width: 14px;
+    height: 14px;
+    left: 80%;
+    animation-duration: 12.5s, 6.2s, 12.5s;
+    animation-delay: 1.8s, 1.8s, 1.8s;
+  }
+
+  .petal-9 {
+    width: 10px;
+    height: 10px;
+    left: 90%;
+    animation-duration: 9.5s, 4.8s, 9.5s;
+    animation-delay: 2.2s, 2.2s, 2.2s;
+  }
+
+  .petal-10 {
+    width: 15px;
+    height: 15px;
+    left: 25%;
+    animation-duration: 13.5s, 6.8s, 13.5s;
+    animation-delay: 3s, 3s, 3s;
+  }
+
+  .petal-11 {
+    width: 12px;
+    height: 12px;
+    left: 55%;
+    animation-duration: 11s, 5s, 11s;
+    animation-delay: 3.5s, 3.5s, 3.5s;
+  }
+
+  .petal-12 {
+    width: 13px;
+    height: 13px;
+    left: 75%;
+    animation-duration: 12s, 6.5s, 12s;
+    animation-delay: 4s, 4s, 4s;
+  }
+
+  @keyframes sakuraDrift {
+    0% {
+      top: -5%;
+      transform: translateX(0) rotate(45deg);
+    }
+    100% {
+      top: 100%;
+      transform: translateX(100px) rotate(45deg);
+    }
+  }
+
+  @keyframes sakuraRotate {
+    0% {
+      transform: rotate(45deg);
+    }
+    100% {
+      transform: rotate(405deg);
+    }
+  }
+
+  @keyframes sakuraFade {
+    0%, 100% {
+      opacity: 0;
+    }
+    10%, 90% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
 }
 
 @layer base {
