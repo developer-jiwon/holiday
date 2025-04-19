@@ -972,7 +972,7 @@ function JigsawPuzzleGrid({
               style={{
                 transform: isHovered ? 'scale(1.03) translateY(-2px)' : 
                            isCompleted ? 'scale(1.05) translateY(-3px)' : 'scale(1)',
-                transition: 'all 0.2s ease-out',
+                transition: 'all 0.4s cubic-bezier(0.19, 1, 0.22, 1)',
                 filter: isHovered ? 'brightness(1.05)' : 'none',
                 boxShadow: isHovered ? '0 3px 5px rgba(0,0,0,0.15)' : 
                            isCompleted ? '0 4px 8px rgba(0,0,0,0.2)' : 'none',

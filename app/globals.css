@@ -10,7 +10,7 @@
   /* Modern dropdown styling */
   .theme-dropdown-hover {
     position: relative;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
   
   .theme-dropdown-hover:hover {
@@ -24,7 +24,7 @@
     transform-origin: center;
     transform: translateZ(0);
     will-change: transform;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   
   .country-flag:hover {
@@ -56,13 +56,14 @@
   
   /* Forest theme hover effect with soft zoom */
   .theme-forest .hover-forest {
-    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.6s cubic-bezier(0.19, 1, 0.22, 1);
     position: relative;
     overflow: hidden;
   }
   
   .theme-forest .hover-forest:hover {
     transform: scale(1.03);
+    box-shadow: 0 4px 20px rgba(44, 51, 37, 0.15);
   }
   
   /* Forest theme elegant serif text */
@@ -102,7 +103,7 @@
   }
   
   .hover-glow-violet {
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
   
   .hover-glow-violet:hover {
@@ -112,7 +113,7 @@
   
   /* Retro hover animation with quick scale and border flicker */
   .theme-retro .hover-retro {
-    transition: transform 0.1s steps(2);
+    transition: transform 0.15s steps(3);
     position: relative;
     image-rendering: pixelated;
   }
@@ -284,6 +285,12 @@
   .hover-sunset {
     position: relative;
     overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  
+  .hover-sunset:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 154, 118, 0.15);
   }
   
   .hover-sunset::before {
@@ -302,7 +309,7 @@
       rgba(255, 255, 255, 0) 100%
     );
     transform: rotate(45deg) translateY(-100%) translateX(-100%);
-    transition: all 0.65s ease-out;
+    transition: all 0.85s cubic-bezier(0.19, 1, 0.22, 1);
   }
   
   .hover-sunset:hover::before {
@@ -349,10 +356,11 @@
 
   .hover-snow {
     position: relative;
-    transition: all 0.5s ease-out;
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   .hover-snow:hover {
+    transform: translateY(-3px);
     box-shadow: 0 0 16px rgba(112, 163, 196, 0.3);
   }
 
@@ -365,7 +373,7 @@
     bottom: 0;
     border-radius: inherit;
     box-shadow: 0 0 0px rgba(255, 255, 255, 0);
-    transition: all 0.5s ease-out;
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
     opacity: 0;
     z-index: -1;
   }
@@ -403,14 +411,14 @@
 
   .hover-sakura {
     position: relative;
-    transition: all 0.4s ease-out;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     backface-visibility: hidden;
     overflow: hidden;
   }
 
   .hover-sakura:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 20px rgba(231, 146, 168, 0.1);
+    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 146, 168, 0.15);
   }
 
   .hover-sakura::before {
@@ -422,7 +430,7 @@
     bottom: 0;
     background: linear-gradient(45deg, rgba(231, 146, 168, 0), rgba(231, 146, 168, 0.1));
     opacity: 0;
-    transition: opacity 0.4s ease-out;
+    transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     border-radius: inherit;
     z-index: -1;
   }
@@ -441,7 +449,7 @@
     top: -40px;
     left: -40px;
     transform: rotate(45deg) scale(0);
-    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
     opacity: 0;
     z-index: 1;
     pointer-events: none;
@@ -520,7 +528,7 @@
 
   /* Sakura hover effect enhanced with floating animation */
   .theme-sakura .hover-sakura {
-    animation: sakuraFloat 5s ease-in-out infinite;
+    animation: sakuraFloat 6s ease-in-out infinite;
   }
 
   @keyframes sakuraFloat {
@@ -705,6 +713,19 @@
     50% {
       opacity: 0.9;
     }
+  }
+
+  /* Theme lofi-beige hover effect */
+  .theme-lofi-beige .puzzle-container {
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), 
+                box-shadow 0.6s cubic-bezier(0.19, 1, 0.22, 1),
+                border-color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  .theme-lofi-beige .puzzle-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(169, 140, 104, 0.15);
+    border-color: #b0a090;
   }
 }
 
