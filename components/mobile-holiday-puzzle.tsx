@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect, createContext, useContext } from "react"
 import { BackgroundIllustration } from "./background-illustration"
 import { getHolidaysForYear, getHolidaysByCountry, type Holiday, type UpcomingHoliday, type PastHoliday } from "../lib/date-utils"
-import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, Volume2, VolumeX, ArrowLeft, ArrowRight } from "lucide-react"
+import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react"
 import { HolidayPuzzleBoard } from "./holiday-puzzle-board"
 import { useTheme } from "@/hooks/use-theme"
 import { CountrySelector } from "./country-selector"
-import useSound from "use-sound"
+import { cn } from "@/lib/utils"
 
 type TooltipPosition = { x: number; y: number } | null
 
@@ -370,55 +370,11 @@ function getHolidayIconName(name: string): string {
   return "celebration"
 }
 
-// Sound context type
-type SoundContextType = {
-  soundEnabled: boolean;
-  toggleSound: () => void;
-};
-
-// Create sound context
-const SoundContext = createContext<SoundContextType>({
-  soundEnabled: true,
-  toggleSound: () => {},
-});
-
-// Sound provider component
-export function SoundProvider({ children }: { children: React.ReactNode }) {
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  
-  const toggleSound = () => {
-    setSoundEnabled(prev => !prev);
-  };
-  
-  return (
-    <SoundContext.Provider value={{ soundEnabled, toggleSound }}>
-      {children}
-    </SoundContext.Provider>
-  );
-}
-
-// Sound toggle component
-export function SoundToggle() {
-  const { soundEnabled, toggleSound } = useContext(SoundContext);
-  
-  return (
-    <button 
-      onClick={toggleSound}
-      className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-100 hover:bg-amber-200 transition-colors"
-      title={soundEnabled ? "Mute sounds" : "Enable sounds"}
-    >
-      {soundEnabled ? (
-        <Volume2 className="w-5 h-5 text-amber-800" />
-      ) : (
-        <VolumeX className="w-5 h-5 text-amber-800" />
-      )}
-    </button>
-  );
-}
-
 // Create the RefreshIcon component
 function RefreshIcon({ className = "" }: { className?: string }) {
-  return <RefreshCw className={className} size={18} />;
+  return (
+    <RefreshCw className={className} />
+  );
 }
 
 // Add a getFlagEmoji function
@@ -469,12 +425,6 @@ export function MobileHolidayPuzzle() {
   const [animatingPiece, setAnimatingPiece] = useState<number | null>(null);
   const [revealedPieces, setRevealedPieces] = useState<number[]>([]);
   const [resetKey, setResetKey] = useState<number>(0);
-  const { soundEnabled } = useContext(SoundContext);
-  
-  // Sound effects
-  const [playHover] = useSound("/sounds/hover.mp3", { volume: 0.5 });
-  const [playClick] = useSound("/sounds/click.mp3", { volume: 0.5 });
-  const [playSuccess] = useSound("/sounds/success.mp3", { volume: 0.5 });
   
   useEffect(() => {
     setHolidays(getHolidaysByCountry(selectedCountry, selectedYear));
@@ -552,226 +502,164 @@ export function MobileHolidayPuzzle() {
   };
 
   return (
-    <SoundProvider>
-      <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <div 
-          className="relative overflow-visible rounded-xl shadow-lg max-w-[85vw] sm:max-w-md w-full"
-          style={{ 
-            backgroundColor: theme.colors.backgroundSecondary,
-            borderRadius: theme.styles.borderRadius,
-            boxShadow: theme.styles.boxShadow,
-          }}
-        >
-          <div className="absolute inset-0 z-0 opacity-10">
-            <BackgroundIllustration />
-          </div>
+    <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      <div 
+        className="relative overflow-visible rounded-xl shadow-lg max-w-[85vw] sm:max-w-md w-full"
+        style={{ 
+          backgroundColor: theme.colors.backgroundSecondary,
+          borderRadius: theme.styles.borderRadius,
+          boxShadow: theme.styles.boxShadow,
+        }}
+      >
+        <div className="absolute inset-0 z-0 opacity-10">
+          <BackgroundIllustration />
+        </div>
 
-          <div className="relative z-10 w-full p-3 sm:p-4">
-            <div className="flex flex-col items-center justify-center mb-3">
-              {/* Title with integrated year navigation */}
-              <div className="flex items-center justify-center gap-2 mb-4 w-full">
-                <button
-                  onClick={goToPreviousYear}
-                  className={`h-7 w-7 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro 
-                    ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
-                  style={{ 
-                    backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
-                    color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
-                    boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none",
-                    transform: "translateZ(0)"
-                  }}
-                >
-                  <ArrowLeft size={theme.id === "theme-retro" ? 14 : 16} />
-                </button>
-                
-                <h1
-                  className="flex items-center justify-center gap-2 text-xl font-semibold"
-                  style={{
-                    color: theme.colors.foreground,
-                    fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
-                    textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
-                  }}
-                >
-                  <PuzzleIcon className="w-6 h-6" />
-                  <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
-                </h1>
-                
-                <button
-                  onClick={goToNextYear}
-                  className={`h-7 w-7 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro
-                    ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
-                  style={{ 
-                    backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
-                    color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
-                    boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none",
-                    transform: "translateZ(0)"
-                  }}
-                >
-                  <ArrowRight size={theme.id === "theme-retro" ? 14 : 16} />
-                </button>
-              </div>
-              
-              {/* Simple collection status text */}
-              <span 
-                className="text-xs mb-2"
-                style={{ color: `${theme.colors.foregroundSecondary}90` }}
-              >
-                {holidays.filter(h => h.passed).length}/{holidays.length} collected
-              </span>
-            </div>
-
-            {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
-            <div className="relative mx-auto max-w-xs overflow-visible">
-              {/* Country selector in bookmark format at the top of the puzzle */}
-              <div className="mb-[-1px] w-full overflow-hidden">
-                <div className="border-b border-transparent pb-[1px]">
-                  <CountrySelector onChange={handleCountryChange} />
-                </div>
-              </div>
-              
-              <div 
-                className={`relative rounded-xl p-2.5 sm:p-3.5 shadow-md overflow-hidden border-2 puzzle-container ${theme.id === 'lofi-beige' ? 'hover-lofi-beige' : ''}`}
+        <div className="relative z-10 w-full p-3 sm:p-4">
+          <div className="flex flex-col items-center justify-center mb-3">
+            {/* Title with integrated year navigation */}
+            <div className="flex items-center justify-center gap-2 mb-4 w-full">
+              <button
+                onClick={goToPreviousYear}
+                className={`h-7 w-7 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro 
+                  ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
                 style={{ 
-                  backgroundColor: theme.colors.backgroundTertiary,
-                  borderColor: theme.colors.border,
-                  boxShadow: theme.styles.boxShadow,
-                  backgroundImage: theme.styles.backgroundTexture,
-                  backgroundSize: theme.id === "theme-retro" ? '8px 8px' : '60px 60px',
-                  borderRadius: theme.id === "theme-retro" ? '0' : theme.styles.borderRadius,
-                  border: theme.id === "theme-retro" ? `2px solid ${theme.colors.border}` : `2px solid ${theme.colors.border}`,
-                  imageRendering: theme.id === "theme-retro" ? 'pixelated' : 'auto'
+                  backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
+                  color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
+                  boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none",
+                  transform: "translateZ(0)"
                 }}
               >
-                {/* Subtle wood grain texture */}
-                <div className="absolute inset-0 opacity-15" 
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%23a89888' fill-opacity='0.1' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
-                    backgroundSize: '100% 100%'
-                  }}>
-                </div>
+                <ArrowLeft size={theme.id === "theme-retro" ? 14 : 16} />
+              </button>
+              
+              <h1
+                className="flex items-center justify-center gap-2 text-xl font-semibold"
+                style={{
+                  color: theme.colors.foreground,
+                  fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
+                  textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
+                }}
+              >
+                <PuzzleIcon className="w-6 h-6" />
+                <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
+              </h1>
+              
+              <button
+                onClick={goToNextYear}
+                className={`h-7 w-7 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro
+                  ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
+                style={{ 
+                  backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
+                  color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
+                  boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none",
+                  transform: "translateZ(0)"
+                }}
+              >
+                <ArrowRight size={theme.id === "theme-retro" ? 14 : 16} />
+              </button>
+            </div>
+            
+            {/* Simple collection status text */}
+            <span 
+              className="text-xs mb-2"
+              style={{ color: `${theme.colors.foregroundSecondary}90` }}
+            >
+              {holidays.filter(h => h.passed).length}/{holidays.length} collected
+            </span>
+          </div>
 
-                {/* Actual puzzle grid - this is a complete jigsaw puzzle with interlocking pieces */}
-                <div className="relative z-10">
-                  <JigsawPuzzleGrid 
-                    holidays={holidays}
-                    onPieceClick={handleTileClick}
-                    onPieceMouseEnter={handleTileMouseEnter}
-                    onPieceMouseLeave={handleTileMouseLeave}
-                    hoveredTile={hoveredTile}
-                    animatingPiece={animatingPiece}
-                    completedAnimation={completedAnimation}
-                  />
-                </div>
-                
-                {/* Caption - always at the bottom */}
-                <div className="text-center mt-3 mb-0.5">
-                  <p 
-                    className={`text-[9px] font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""} ${theme.id === "theme-sunset" ? "sunset-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
-                    style={{ color: theme.colors.foreground }}
-                  >
-                    {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
-                  </p>
-                </div>
+          {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
+          <div className="relative mx-auto max-w-xs overflow-visible">
+            {/* Country selector in bookmark format at the top of the puzzle */}
+            <div className="mb-[-1px] w-full overflow-hidden">
+              <div className="border-b border-transparent pb-[1px]">
+                <CountrySelector onChange={handleCountryChange} />
               </div>
             </div>
-
-
-            {/* Holiday info tooltip - minimalist and responsive */}
-            {hoveredTile !== null && tooltipPosition && (
-              <div
-                className="fixed z-50 px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm border left-1/2 transform -translate-x-1/2"
+            
+            <div 
+              className={`relative rounded-xl p-2.5 sm:p-3.5 shadow-md overflow-hidden border-2 puzzle-container ${theme.id === 'lofi-beige' ? 'hover-lofi-beige' : ''}`}
+              style={{ 
+                backgroundColor: theme.colors.backgroundTertiary,
+                borderColor: theme.colors.border,
+                boxShadow: theme.styles.boxShadow,
+                backgroundImage: theme.styles.backgroundTexture,
+                backgroundSize: theme.id === "theme-retro" ? '8px 8px' : '60px 60px',
+                borderRadius: theme.id === "theme-retro" ? '0' : theme.styles.borderRadius,
+                border: theme.id === "theme-retro" ? `2px solid ${theme.colors.border}` : `2px solid ${theme.colors.border}`,
+                imageRendering: theme.id === "theme-retro" ? 'pixelated' : 'auto'
+              }}
+            >
+              {/* Rest of the content */}
+              <div className="absolute inset-0 opacity-15" 
                 style={{
-                  backgroundColor: theme.id === "theme-galaxy" ? `rgba(240, 240, 255, 0.95)` : `${theme.colors.backgroundHighlight}95`,
-                  borderColor: theme.id === "theme-galaxy" ? `${theme.colors.primary}40` : `${theme.colors.border}60`,
-                  top: `${tooltipPosition.y - 45}px`,
-                  width: "auto",
-                  minWidth: "180px",
-                  maxWidth: "280px",
-                  transform: "translate(-50%, -8px)",
-                  transition: "transform 0.2s ease, opacity 0.2s ease",
-                  backdropFilter: "blur(4px)",
-                  boxShadow: theme.id === "theme-galaxy" ? "0 4px 16px rgba(120, 100, 255, 0.3)" : "0 4px 15px rgba(0,0,0,0.1)",
-                }}
-              >
-                <div className="relative">
-                  {/* Hover tooltip content (status label, date, and days info) */}
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 
-                      className="font-medium text-sm sm:text-base"
-                      style={{ 
-                        color: theme.id === "theme-galaxy" ? "#151c3b" : theme.colors.foreground,
-                        textShadow: "none"
-                      }}
-                    >
-                      {holidays.find(h => h.id === hoveredTile)?.name}
-                    </h3>
-                    <span 
-                      className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded whitespace-nowrap"
-                      style={{ 
-                        backgroundColor: theme.id === "theme-galaxy" ? 
-                          (holidays.find(h => h.id === hoveredTile)?.passed ? "#9d93e2" : "#7d74c6") : 
-                          `${theme.colors.backgroundTertiary}50`,
-                        color: "#ffffff",
-                        textShadow: theme.id === "theme-galaxy" ? "0 1px 1px rgba(0,0,0,0.2)" : "none"
-                      }}
-                    >
-                      {holidays.find(h => h.id === hoveredTile)?.passed ? "passed" : "upcoming"}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between mt-1.5 sm:mt-2 text-xs sm:text-sm">
-                    <span style={{ 
-                      color: theme.id === "theme-galaxy" ? "#252a52" : theme.colors.foregroundSecondary,
-                      fontWeight: "500"
-                    }}>
-                      {holidays.find(h => h.id === hoveredTile)?.date}
-                    </span>
-                    
-                    {/* Show days passed or days until */}
-                    {(() => {
-                      const holiday = holidays.find(h => h.id === hoveredTile)
-                      if (!holiday) return null
-                      
-                      return holiday.passed ? (
-                          <span className="flex items-center" style={{ 
-                            color: theme.id === "theme-galaxy" ? "#4f5387" : `${theme.colors.foreground}80` 
-                          }}>
-                            <span 
-                              className="inline-block w-2 h-2 rounded-full mr-1.5"
-                              style={{ 
-                                backgroundColor: theme.id === "theme-galaxy" ? "#9d93e2" : theme.colors.foregroundSecondary 
-                              }}
-                            ></span>
-                            {(holiday as PastHoliday).daysPassed}d ago
-                          </span>
-                        ) : (
-                          <span className="flex items-center" style={{ 
-                            color: theme.id === "theme-galaxy" ? "#4f5387" : theme.colors.foregroundSecondary
-                          }}>
-                            <span 
-                              className="inline-block w-2 h-2 rounded-full mr-1.5"
-                              style={{ 
-                                backgroundColor: theme.id === "theme-galaxy" ? "#7d74c6" : "#c4b19f" 
-                              }}
-                            ></span>
-                            in {(holiday as UpcomingHoliday).daysUntil}d
-                          </span>
-                      )
-                    })()}
-                  </div>
-
-                  {/* Simple arrow indicator */}
-                  <div className="absolute -bottom-[8px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent" 
-                       style={{ 
-                         borderTopColor: theme.id === "theme-galaxy" ? "rgba(240, 240, 255, 0.95)" : `${theme.colors.backgroundHighlight}95`
-                       }}></div>
-                </div>
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath fill='%23a89888' fill-opacity='0.1' d='M0,0 L0,200 L200,200 L200,0 L0,0 Z M15,15 C15,15 45,25 65,55 C85,85 85,115 105,115 C125,115 135,95 165,95 C195,95 185,155 185,185 L15,185 L15,15 Z'/%3E%3C/svg%3E")`,
+                  backgroundSize: '100% 100%'
+                }}>
               </div>
-            )}
+
+              <div className="relative z-10">
+                <JigsawPuzzleGrid 
+                  holidays={holidays}
+                  onPieceClick={handleTileClick}
+                  onPieceMouseEnter={handleTileMouseEnter}
+                  onPieceMouseLeave={handleTileMouseLeave}
+                  hoveredTile={hoveredTile}
+                  animatingPiece={animatingPiece}
+                  completedAnimation={completedAnimation}
+                />
+              </div>
+              
+              <div className="text-center mt-3 mb-0.5">
+                <p 
+                  className={`text-[9px] font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""} ${theme.id === "theme-sunset" ? "sunset-text" : ""} ${theme.id === "theme-snow" ? "snow-text" : ""} ${theme.id === "theme-sakura" ? "sakura-text" : ""}`}
+                  style={{ color: theme.colors.foreground }}
+                >
+                  {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
+                </p>
+              </div>
+            </div>
           </div>
+          
+          <div className="flex items-center justify-between pt-3 pb-1 px-3">
+            <div></div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleReset}
+                className="text-sm flex items-center gap-1 px-2 py-1 rounded-md transition-colors"
+                style={{
+                  backgroundColor: `${theme.colors.backgroundTertiary}80`,
+                  color: theme.colors.foregroundSecondary
+                }}
+                title="Reset puzzle progress"
+              >
+                <RefreshIcon className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Reset</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Holiday info tooltip */}
+          {hoveredTile !== null && tooltipPosition && (
+            <div
+              className="absolute z-50 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 text-xs w-48 max-w-xs whitespace-nowrap overflow-hidden"
+              style={{
+                left: tooltipPosition.x,
+                top: tooltipPosition.y,
+                background: theme.colors.backgroundSecondary,
+                color: theme.colors.foreground,
+                boxShadow: theme.styles.boxShadow,
+                borderRadius: theme.styles.borderRadius,
+                border: `1px solid ${theme.colors.border}`,
+              }}
+            >
+              {/* Tooltip content */}
+            </div>
+          )}
         </div>
       </div>
-    </SoundProvider>
+    </div>
   )
 }
 
