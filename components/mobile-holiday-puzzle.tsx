@@ -648,16 +648,6 @@ export function MobileHolidayPuzzle() {
                 imageRendering: theme.id === "theme-retro" ? 'pixelated' : 'auto'
               }}
             >
-              {/* Puzzle board caption text */}
-              <div className="text-center my-2.5">
-                <p 
-                  className={`text-xs font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
-                  style={{ color: theme.colors.foreground }}
-                >
-                  {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
-                </p>
-              </div>
-              
               {/* Subtle wood grain texture */}
               <div className="absolute inset-0 opacity-15" 
                 style={{
@@ -677,6 +667,16 @@ export function MobileHolidayPuzzle() {
                   animatingPiece={animatingPiece}
                   completedAnimation={completedAnimation}
                 />
+              </div>
+              
+              {/* Caption - always at the bottom */}
+              <div className="text-center mt-4 mb-1">
+                <p 
+                  className={`text-xs font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""} ${theme.id === "theme-forest" ? "elegant-text" : ""}`}
+                  style={{ color: theme.colors.foreground }}
+                >
+                  {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
+                </p>
               </div>
             </div>
 
@@ -1043,13 +1043,15 @@ function JigsawPuzzleGrid({
                       className={`text-[10px] sm:text-xs leading-tight font-medium text-center ${
                         isPassed ? "text-important" : "text-important"
                       } ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
-                      ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
+                      ${theme.id === "theme-retro" ? "pixel-text" : ""}
+                      ${theme.id === "theme-forest" ? "elegant-text" : ""}`}
                       style={{ 
                         color: isPassed ? 
                           theme.colors.foregroundHighlight || "#ffffff" : 
                           (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? "#ffffff" : theme.styles.upcomingPiece.text,
                         textShadow: (theme.id === "theme-galaxy") ? "0 1px 2px rgba(0,0,0,0.4)" : 
                                    (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" :
+                                   (theme.id === "theme-forest") ? "0 1px 1px rgba(29, 33, 24, 0.3)" :
                                    isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none",
                         marginBottom: i < formattedDisplay.length - 1 ? "1px" : "0"
                       }}
@@ -1062,14 +1064,16 @@ function JigsawPuzzleGrid({
                   <span 
                     className={`text-[8px] sm:text-[10px] mt-1 sm:mt-1.5 font-medium 
                       ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
-                      ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
+                      ${theme.id === "theme-retro" ? "pixel-text" : ""}
+                      ${theme.id === "theme-forest" ? "elegant-text" : ""}`}
                     style={{ 
                       color: isPassed ? 
                         (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? theme.colors.foregroundHighlight || "#ffffff" : theme.styles.completedPiece.text : 
                         (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? "#ffffff" : theme.styles.upcomingPiece.text,
                       opacity: (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? 1 : 0.9,
                       textShadow: (theme.id === "theme-galaxy") ? "0 1px 2px rgba(0,0,0,0.4)" : 
-                                 (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" : "none"
+                                 (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" :
+                                 (theme.id === "theme-forest") ? "0 1px 1px rgba(29, 33, 24, 0.3)" : "none"
                     }}
                   >
                     {holiday.date}

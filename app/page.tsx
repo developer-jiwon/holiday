@@ -10,7 +10,7 @@ export default function PuzzleScreen() {
   // Add theme-specific class to body element
   useEffect(() => {
     // Remove all theme classes first
-    document.body.classList.remove('theme-galaxy', 'theme-lofi-beige', 'theme-retro');
+    document.body.classList.remove('theme-galaxy', 'theme-lofi-beige', 'theme-retro', 'theme-forest');
     // Add current theme class
     document.body.classList.add(`theme-${theme.id}`);
   }, [theme.id]);
@@ -25,6 +25,9 @@ export default function PuzzleScreen() {
       
       {/* Scanlines effect for retro theme */}
       <div className="retro-scanlines" />
+      
+      {/* Background effect for forest theme */}
+      <div className="forest-background" />
       
       <div className="mx-auto w-full max-w-lg relative z-10">
         <MobileHolidayPuzzle />

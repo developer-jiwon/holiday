@@ -202,11 +202,62 @@ export const retroTheme: Theme = {
   },
 };
 
+// Forest theme with olive green and moss brown tones
+export const forestTheme: Theme = {
+  id: "theme-forest",
+  name: "Forest Lofi",
+  description: "Organic olive green and moss brown tones with an elegant, earthy aesthetic",
+  colors: {
+    background: "#2c3325",
+    backgroundSecondary: "#3c432e",
+    backgroundTertiary: "#454e35",
+    backgroundHighlight: "#f5f3e8",
+    foreground: "#f2efe2",
+    foregroundSecondary: "#e5e2d5",
+    foregroundTertiary: "#cac5b5",
+    foregroundHighlight: "#ffffff",
+    primary: "#7c9158",
+    primaryHover: "#8fa569",
+    primaryActive: "#a1b77c",
+    secondary: "#a98c68",
+    secondaryHover: "#b69a76",
+    accent: "#d6c097",
+    border: "#5e6945",
+    borderHover: "#717d53",
+    shadow: "rgba(29, 33, 24, 0.2)",
+    shadowStrong: "rgba(29, 33, 24, 0.35)",
+  },
+  styles: {
+    borderRadius: "0.5rem",
+    boxShadow: "0 8px 20px rgba(29, 33, 24, 0.15)",
+    innerShadow: "inset 0 0 0 1px rgba(124, 145, 88, 0.1)",
+    backgroundTexture: "radial-gradient(circle at 80% 30%, rgba(156, 175, 120, 0.08) 1%, transparent 1%), radial-gradient(circle at 20% 70%, rgba(156, 175, 120, 0.08) 1%, transparent 1%)",
+    backgroundImage: "linear-gradient(to bottom, rgba(44, 51, 37, 0) 0%, rgba(44, 51, 37, 1) 100%), url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z\" fill=\"%237c9158\" fill-opacity=\"0.03\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')",
+    cardGradient: "linear-gradient(135deg, rgba(69, 78, 53, 0.3) 0%, rgba(60, 67, 46, 0.3) 100%)",
+    fontFamily: "light-serif",
+    completedPiece: {
+      primary: "#7c9158",
+      secondary: "#637541",
+      highlight: "#8fa569",
+      shadow: "#4e5a33",
+      text: "#f2efe2",
+    },
+    upcomingPiece: {
+      primary: "#3c432e",
+      secondary: "#2c3325",
+      highlight: "#454e35",
+      shadow: "#232919",
+      text: "#e5e2d5",
+    },
+  },
+};
+
 // Array to store all available themes
 export const availableThemes: Theme[] = [
   defaultTheme,
   galaxyTheme,
   retroTheme,
+  forestTheme,
   // Additional themes will be added here
 ];
 
