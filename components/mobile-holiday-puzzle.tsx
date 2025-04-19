@@ -325,7 +325,7 @@ function getHolidayIconName(name: string): string {
   if (nameLower.includes("chuseok") || nameLower.includes("harvest")) return "turkey"
   if (nameLower.includes("earth day")) return "earth"
   if (nameLower.includes("memorial day") || nameLower.includes("remembrance")) return "memorial"
-  if (nameLower.includes("labor day") || nameLower.includes("labour day")) return "labor"
+  if (nameLower.includes("labor day") || nameLower.includes("labour day") || nameLower.includes("workers' day")) return "labor"
   if (nameLower.includes("mother")) return "mothers"
   if (nameLower.includes("father")) return "fathers"
   if (nameLower.includes("flag day")) return "flag"
@@ -502,36 +502,36 @@ export function MobileHolidayPuzzle() {
 
   return (
     <SoundProvider>
-      <div className="min-h-screen flex flex-col gap-4 overflow-auto pb-20">
-        <div className="relative overflow-visible rounded-xl bg-[#f7f2ea] shadow-lg">
+      <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div className="relative overflow-visible rounded-xl bg-[#f7f2ea] shadow-lg max-w-[95vw] w-full">
           <div className="absolute inset-0 z-0 opacity-10">
             <BackgroundIllustration />
           </div>
 
-          <div className="relative z-10 w-full p-3 sm:p-4">
+          <div className="relative z-10 w-full p-3 sm:p-5">
             <div className="flex flex-col items-center justify-center mb-3">
               {/* Year Navigation with integrated country selector - mobile optimized */}
-              <div className="flex items-center justify-between mb-4 bg-white/90 rounded-lg px-3 sm:px-4 py-2 shadow-sm border border-[#c5b7a7] w-full max-w-sm">
+              <div className="flex items-center justify-between mb-4 bg-white/90 rounded-lg px-4 sm:px-5 py-3 shadow-sm border border-[#c5b7a7] w-full max-w-lg">
                 <button 
                   onClick={goToPreviousYear}
-                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
+                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-lg sm:text-xl"
                   aria-label="Previous Year"
                 >
                   ←
                 </button>
                 
                 <div className="mx-1 sm:mx-2 text-center flex-1">
-                  <h1 className="text-sm sm:text-base font-semibold text-[#776b5f] flex items-center justify-center">
-                    <PuzzleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-1.5" />
+                  <h1 className="text-base sm:text-lg font-semibold text-[#776b5f] flex items-center justify-center">
+                    <PuzzleIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-1.5 sm:mr-2" />
                     <span className="truncate">{selectedYear} Holiday Puzzle</span>
                   </h1>
-                  <div className="flex flex-wrap items-center justify-center mt-1 sm:mt-1.5 gap-1">
+                  <div className="flex flex-wrap items-center justify-center mt-1.5 sm:mt-2 gap-1.5">
                     <div className="relative group">
                       <select 
                         id="country-select"
                         value={selectedCountry}
                         onChange={handleCountryChange}
-                        className="appearance-none bg-transparent border-0 text-[#776b5f] text-[10px] sm:text-xs font-medium focus:outline-none pr-4 cursor-pointer truncate max-w-[100px] sm:max-w-none"
+                        className="appearance-none bg-transparent border-0 text-[#776b5f] text-xs sm:text-sm font-medium focus:outline-none pr-5 cursor-pointer truncate max-w-[120px] sm:max-w-none"
                       >
                         {COUNTRIES.map(country => (
                           <option key={country.id} value={country.id}>
@@ -540,13 +540,13 @@ export function MobileHolidayPuzzle() {
                         ))}
                       </select>
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-[#776b5f]">
-                        <svg className="h-3 w-3 sm:h-4 sm:w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <svg className="h-4 w-4 sm:h-5 sm:w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
                       </div>
                     </div>
-                    <span className="text-[#776b5f]/70 text-[10px] sm:text-xs">•</span>
-                    <span className="text-[10px] sm:text-xs text-[#776b5f]/70 whitespace-nowrap">
+                    <span className="text-[#776b5f]/70 text-xs sm:text-sm">•</span>
+                    <span className="text-xs sm:text-sm text-[#776b5f]/70 whitespace-nowrap">
                       {holidays.filter(h => h.passed).length}/{holidays.length} collected
                     </span>
                   </div>
@@ -554,7 +554,7 @@ export function MobileHolidayPuzzle() {
                 
                 <button 
                   onClick={goToNextYear}
-                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-base sm:text-lg"
+                  className="text-[#776b5f] hover:text-[#6f5848] transition-colors p-1 text-lg sm:text-xl"
                   aria-label="Next Year"
                 >
                   →
@@ -564,7 +564,7 @@ export function MobileHolidayPuzzle() {
 
             {/* Puzzle board with a refined wooden texture appearance and enhanced shadows */}
             <div 
-              className="relative mx-auto max-w-xl rounded-xl bg-[#e6dfd3] p-2 sm:p-3 md:p-5 shadow-md overflow-hidden border-2 border-[#c5b7a7]"
+              className="relative mx-auto max-w-2xl rounded-xl bg-[#e6dfd3] p-3 sm:p-4 md:p-5 shadow-md overflow-hidden border-2 border-[#c5b7a7]"
               style={{ 
                 boxShadow: '0 5px 15px rgba(0,0,0,0.05), inset 0 0 20px rgba(0,0,0,0.02)',
                 backgroundImage: 'radial-gradient(circle at 70% 30%, #eae3d7 5%, transparent 5%), radial-gradient(circle at 30% 70%, #e0d8cc 3%, transparent 3%)',
@@ -592,8 +592,8 @@ export function MobileHolidayPuzzle() {
                 />
               </div>
               
-              {/* Caption */}
-              <div className="mt-4 text-center">
+              {/* Caption - inline with footer */}
+              <div className="text-center my-2.5">
                 <p className="text-xs text-[#8d7d6e]/80 font-medium">Click pieces to discover holidays</p>
               </div>
             </div>
@@ -602,12 +602,12 @@ export function MobileHolidayPuzzle() {
             {/* Holiday info tooltip - minimalist and responsive */}
             {hoveredTile !== null && tooltipPosition && (
               <div
-                className="fixed z-50 bg-white/95 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg shadow-sm border border-[#c5b7a7]/60 left-1/2 transform -translate-x-1/2"
+                className="fixed z-50 bg-white/95 px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm border border-[#c5b7a7]/60 left-1/2 transform -translate-x-1/2"
                 style={{
                   top: `${tooltipPosition.y - 45}px`,
                   width: "auto",
-                  minWidth: "140px",
-                  maxWidth: "200px",
+                  minWidth: "180px",
+                  maxWidth: "280px",
                   transform: "translate(-50%, -8px)",
                   transition: "transform 0.2s ease, opacity 0.2s ease",
                   backdropFilter: "blur(2px)",
@@ -615,15 +615,15 @@ export function MobileHolidayPuzzle() {
               >
                 <div className="relative">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-medium text-sm text-[#776b5f]">
+                    <h3 className="font-medium text-sm sm:text-base text-[#776b5f]">
                       {holidays.find(h => h.id === hoveredTile)?.name}
                     </h3>
-                    <span className="text-[8px] px-1 py-0.5 rounded bg-[#e2d8c8]/50 text-[#776b5f] whitespace-nowrap">
+                    <span className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-[#e2d8c8]/50 text-[#776b5f] whitespace-nowrap">
                       {holidays.find(h => h.id === hoveredTile)?.passed ? "passed" : "upcoming"}
                     </span>
                   </div>
                   
-                  <div className="flex items-center justify-between mt-1 text-[11px] text-[#a89888]">
+                  <div className="flex items-center justify-between mt-1.5 sm:mt-2 text-xs sm:text-sm text-[#a89888]">
                     <span>{holidays.find(h => h.id === hoveredTile)?.date}</span>
                     
                     {/* Show days passed or days until - essential information */}
@@ -633,12 +633,12 @@ export function MobileHolidayPuzzle() {
                     
                     return holiday.passed ? (
                         <span className="flex items-center text-[#776b5f]/80">
-                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#938578] mr-1"></span>
+                          <span className="inline-block w-2 h-2 rounded-full bg-[#938578] mr-1.5"></span>
                           {(holiday as PastHoliday).daysPassed}d ago
                         </span>
                       ) : (
                         <span className="flex items-center text-[#a89888]">
-                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#c4b19f] mr-1"></span>
+                          <span className="inline-block w-2 h-2 rounded-full bg-[#c4b19f] mr-1.5"></span>
                           in {(holiday as UpcomingHoliday).daysUntil}d
                         </span>
                     )
@@ -646,7 +646,7 @@ export function MobileHolidayPuzzle() {
                   </div>
 
                   {/* Simple arrow indicator */}
-                  <div className="absolute -bottom-[6px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-white/95"></div>
+                  <div className="absolute -bottom-[8px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-white/95"></div>
                 </div>
               </div>
             )}
@@ -788,12 +788,13 @@ function JigsawPuzzleGrid({
         gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
         gridTemplateRows: `repeat(${gridRows}, 1fr)`,
         gap: '0px',
-        minHeight: `${gridRows * 100}px`, // Add minimum height based on rows
+        minHeight: `${gridRows * 100}px`, // 행 높이 증가 (85px -> 100px)
+        aspectRatio: gridCols / gridRows > 1 ? `${gridCols} / ${gridRows}` : undefined,
         backgroundColor: colorPalette.boardBg,
         borderRadius: '12px',
         boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
-        padding: '5px',
-        overflow: 'visible' // Changed from 'hidden' to show all content
+        padding: '4px', // 패딩 증가 (3px -> 4px)
+        overflow: 'visible'
       }}
     >
       {sortedHolidays.map((holiday, index) => {
@@ -849,12 +850,12 @@ function JigsawPuzzleGrid({
               onTouchEnd={onPieceMouseLeave}
               onClick={() => onPieceClick(holiday.id)}
               style={{
-                transform: isHovered ? 'scale(1.02) translateY(-1px)' : 
-                           isCompleted ? 'scale(1.04) translateY(-2px)' : 'scale(1)',
+                transform: isHovered ? 'scale(1.03) translateY(-2px)' : 
+                           isCompleted ? 'scale(1.05) translateY(-3px)' : 'scale(1)',
                 transition: 'all 0.2s ease-out',
                 filter: isHovered ? 'brightness(1.05)' : 'none',
-                boxShadow: isHovered ? '0 2px 4px rgba(0,0,0,0.15)' : 
-                           isCompleted ? '0 3px 6px rgba(0,0,0,0.2)' : 'none',
+                boxShadow: isHovered ? '0 3px 5px rgba(0,0,0,0.15)' : 
+                           isCompleted ? '0 4px 8px rgba(0,0,0,0.2)' : 'none',
               }}
             >
               {/* Piece SVG with natural jigsaw connectors */}
@@ -911,9 +912,9 @@ function JigsawPuzzleGrid({
               </svg>
               
               {/* Content inside the puzzle piece */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-1 sm:p-1.5">
+              <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-1.5 sm:p-2">
                 {/* Holiday icon */}
-                <div className="w-3 h-3 sm:w-4 sm:h-4 mb-0.5 sm:mb-1">
+                <div className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5">
                   <HolidayIcon 
                     iconName={getHolidayIconName(holiday.name)} 
                     fill={isPassed ? colorPalette.completedPiece.text : colorPalette.upcomingPiece.text} 
@@ -925,7 +926,7 @@ function JigsawPuzzleGrid({
                   {formattedDisplay.map((line, i) => (
                     <span
                       key={i}
-                      className={`text-[8px] sm:text-[10px] leading-tight font-medium text-center ${
+                      className={`text-[10px] sm:text-xs leading-tight font-medium text-center ${
                         isPassed ? "text-[#f5efe7]" : "text-[#7d6e5f]"
                       }`}
                       style={{ 
@@ -939,7 +940,7 @@ function JigsawPuzzleGrid({
                   
                   {/* Holiday date */}
                   <span 
-                    className={`text-[6px] sm:text-[8px] mt-0.5 sm:mt-1 font-medium ${
+                    className={`text-[8px] sm:text-[10px] mt-1 sm:mt-1.5 font-medium ${
                       isPassed ? "text-[#f5efe7]/90" : "text-[#7d6e5f]/80"
                     }`}
                   >
