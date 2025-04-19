@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, createContext, useContext } from "react"
 import { BackgroundIllustration } from "./background-illustration"
 import { getHolidaysForYear, getHolidaysByCountry, type Holiday, type UpcomingHoliday, type PastHoliday } from "../lib/date-utils"
-import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react"
+import { Gift, Sparkles, PartyPopper, Cake, ArrowLeft, ArrowRight } from "lucide-react"
 import { HolidayPuzzleBoard } from "./holiday-puzzle-board"
 import { useTheme } from "@/hooks/use-theme"
 import { CountrySelector } from "./country-selector"
@@ -370,13 +370,6 @@ function getHolidayIconName(name: string): string {
   return "celebration"
 }
 
-// Create the RefreshIcon component
-function RefreshIcon({ className = "" }: { className?: string }) {
-  return (
-    <RefreshCw className={className} />
-  );
-}
-
 // Add a getFlagEmoji function
 function getFlagEmoji(countryCode: string): string {
   switch(countryCode.toLowerCase()) {
@@ -423,8 +416,6 @@ export function MobileHolidayPuzzle() {
   const [tooltipContent, setTooltipContent] = useState<Holiday | null>(null);
   const [completedAnimation, setCompletedAnimation] = useState<number | null>(null);
   const [animatingPiece, setAnimatingPiece] = useState<number | null>(null);
-  const [revealedPieces, setRevealedPieces] = useState<number[]>([]);
-  const [resetKey, setResetKey] = useState<number>(0);
   
   useEffect(() => {
     setHolidays(getHolidaysByCountry(selectedCountry, selectedYear));
@@ -433,10 +424,16 @@ export function MobileHolidayPuzzle() {
   const handleTileMouseEnter = (id: number, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect()
     setTooltipPosition({
-      x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, // Handle SSR safely
-      y: rect.top - 10,
+      x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, // Position in center horizontally
+      y: rect.top - 35, // Position above the puzzle piece with more space
     })
     setHoveredTile(id)
+    
+    // Set tooltip content with the hovered holiday data
+    const hoveredHoliday = holidays.find(h => h.id === id);
+    if (hoveredHoliday) {
+      setTooltipContent(hoveredHoliday);
+    }
     
     // Add a gentle hover animation
     if (animatingPiece === null) {
@@ -448,6 +445,7 @@ export function MobileHolidayPuzzle() {
     setHoveredTile(null)
     setTooltipPosition(null)
     setAnimatingPiece(null)
+    setTooltipContent(null)
   }
   
   const handleTileClick = (id: number) => {
@@ -495,11 +493,6 @@ export function MobileHolidayPuzzle() {
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
   }
-
-  const handleReset = () => {
-    setRevealedPieces([]);
-    setResetKey(prev => prev + 1);
-  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -622,26 +615,8 @@ export function MobileHolidayPuzzle() {
             </div>
           </div>
           
-          <div className="flex items-center justify-between pt-3 pb-1 px-3">
-            <div></div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleReset}
-                className="text-sm flex items-center gap-1 px-2 py-1 rounded-md transition-colors"
-                style={{
-                  backgroundColor: `${theme.colors.backgroundTertiary}80`,
-                  color: theme.colors.foregroundSecondary
-                }}
-                title="Reset puzzle progress"
-              >
-                <RefreshIcon className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Reset</span>
-              </button>
-            </div>
-          </div>
-
           {/* Holiday info tooltip */}
-          {hoveredTile !== null && tooltipPosition && (
+          {hoveredTile !== null && tooltipPosition && tooltipContent && (
             <div
               className="absolute z-50 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 text-xs w-48 max-w-xs whitespace-nowrap overflow-hidden"
               style={{
@@ -654,7 +629,37 @@ export function MobileHolidayPuzzle() {
                 border: `1px solid ${theme.colors.border}`,
               }}
             >
-              {/* Tooltip content */}
+              {/* Add tooltip arrow */}
+              <div 
+                className="absolute w-3 h-3 rotate-45"
+                style={{
+                  background: theme.colors.backgroundSecondary,
+                  bottom: "-6px",
+                  left: "calc(50% - 6px)",
+                  border: "0px solid transparent",
+                  borderRightColor: theme.colors.border,
+                  borderBottomColor: theme.colors.border,
+                  boxShadow: theme.styles.boxShadow,
+                  zIndex: -1,
+                }}
+              ></div>
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">{tooltipContent.name}</span>
+                  <span className="text-[10px] opacity-75">{tooltipContent.date}</span>
+                </div>
+                <div className="flex justify-between items-center mt-0.5">
+                  <span className="text-[10px] opacity-75">
+                    {tooltipContent.passed 
+                      ? `Collected (${tooltipContent.daysPassed} days ago)`
+                      : `Upcoming (in ${tooltipContent.daysUntil} days)`
+                    }
+                  </span>
+                  <span className="flex items-center gap-1 text-[10px]">
+                    <span>{getFlagEmoji(selectedCountry)}</span>
+                  </span>
+                </div>
+              </div>
             </div>
           )}
         </div>
