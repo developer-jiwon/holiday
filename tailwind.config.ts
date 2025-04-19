@@ -22,6 +22,7 @@ const config = {
       fontFamily: {
         serif: ["var(--font-merriweather)", "serif"],
         'light-serif': ["var(--font-cormorant)", "serif"],
+        'mono': ["var(--font-space-mono)", "monospace"],
       },
       colors: {
         beige: {

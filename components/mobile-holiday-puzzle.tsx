@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, createContext, useContext } from "react"
 import { BackgroundIllustration } from "./background-illustration"
 import { getHolidaysForYear, getHolidaysByCountry, type Holiday, type UpcomingHoliday, type PastHoliday } from "../lib/date-utils"
-import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, Volume2, VolumeX } from "lucide-react"
+import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, Volume2, VolumeX, ArrowLeft, ArrowRight } from "lucide-react"
 import { HolidayPuzzleBoard } from "./holiday-puzzle-board"
 import { useTheme } from "@/hooks/use-theme"
 
@@ -419,6 +419,19 @@ function RefreshIcon({ className = "" }: { className?: string }) {
   return <RefreshCw className={className} size={18} />;
 }
 
+// Add a getFlagEmoji function
+function getFlagEmoji(countryCode: string): string {
+  const flagEmojis: {[key: string]: string} = {
+    'global': '🌎',
+    'us': '🇺🇸',
+    'uk': '🇬🇧',
+    'ca': '🇨🇦',
+    'au': '🇦🇺'
+  };
+  
+  return flagEmojis[countryCode] || '🌎';
+}
+
 export function MobileHolidayPuzzle() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedCountry, setSelectedCountry] = useState<string>("us");
@@ -536,51 +549,61 @@ export function MobileHolidayPuzzle() {
                   borderColor: theme.colors.border,
                 }}
               >
-                <button 
+                {/* Update the navigation buttons */}
+                <button
                   onClick={goToPreviousYear}
-                  className="transition-colors p-1 text-lg sm:text-xl hover:opacity-80"
-                  style={{
-                    color: theme.colors.foreground,
+                  className={`h-8 w-8 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro 
+                    ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
+                  style={{ 
+                    backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
+                    color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
+                    boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none",
+                    transform: "translateZ(0)"
                   }}
-                  aria-label="Previous Year"
                 >
-                  ←
+                  <ArrowLeft size={theme.id === "theme-retro" ? 16 : 18} />
                 </button>
                 
                 <div className="mx-1 sm:mx-2 text-center flex-1">
                   <h1 
-                    className="text-base sm:text-lg font-semibold flex items-center justify-center"
-                    style={{ color: theme.colors.foreground }}
+                    className={`text-xl font-bold flex items-center justify-center gap-2 text-important ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
+                    style={{ 
+                      color: theme.colors.foreground,
+                      fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
+                      textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
+                    }}
                   >
-                    <PuzzleIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-1.5 sm:mr-2" />
-                    <span className="truncate">{selectedYear} Holiday Puzzle</span>
+                    <PuzzleIcon className="w-6 h-6" />
+                    <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
                   </h1>
                   <div className="flex flex-wrap items-center justify-center mt-1.5 sm:mt-2 gap-1.5">
-                    <div className="relative group">
-                      <select 
-                        id="country-select"
+                    {/* Update the country selector */}
+                    <span className={`text-sm mr-1 flex items-center gap-1 rounded-md py-0.5 px-2 
+                      ${theme.id === "theme-retro" ? "rounded-none" : "rounded-md"}`}
+                      style={{ 
+                        backgroundColor: theme.id === "theme-retro" ? theme.colors.secondary : `${theme.colors.primary}20`,
+                        color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
+                        boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none"
+                      }}
+                    >
+                      <span className="mr-1">{getFlagEmoji(selectedCountry)}</span>
+                      <select
                         value={selectedCountry}
                         onChange={handleCountryChange}
-                        className="appearance-none bg-transparent border-0 text-xs sm:text-sm font-medium focus:outline-none pr-5 cursor-pointer truncate max-w-[120px] sm:max-w-none"
-                        style={{ color: theme.colors.foreground }}
+                        className={`bg-transparent text-sm font-medium focus:outline-none cursor-pointer
+                          ${theme.id === "theme-retro" ? "pixel-text uppercase" : ""}`}
+                        style={{ 
+                          color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
+                          fontSize: theme.id === "theme-retro" ? "0.7rem" : "0.875rem"
+                        }}
                       >
-                        {COUNTRIES.map(country => (
-                          <option key={country.id} value={country.id}>
-                            {country.flag} {country.name}
-                          </option>
-                        ))}
+                        <option value="global">Global</option>
+                        <option value="us">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="ca">Canada</option>
+                        <option value="au">Australia</option>
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                        <svg 
-                          className="h-4 w-4 sm:h-5 sm:w-5 fill-current" 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          viewBox="0 0 20 20"
-                          style={{ color: theme.colors.foreground }}
-                        >
-                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
+                    </span>
                     <span 
                       className="text-xs sm:text-sm"
                       style={{ color: `${theme.colors.foregroundSecondary}70` }}
@@ -594,15 +617,19 @@ export function MobileHolidayPuzzle() {
                   </div>
                 </div>
                 
-                <button 
+                {/* Forward arrow */}
+                <button
                   onClick={goToNextYear}
-                  className="transition-colors p-1 text-lg sm:text-xl hover:opacity-80"
-                  style={{
-                    color: theme.colors.foreground,
+                  className={`h-8 w-8 rounded-full flex items-center justify-center transition-all hover-glow-violet hover-retro
+                    ${theme.id === "theme-retro" ? "rounded-none" : "rounded-full"}`}
+                  style={{ 
+                    backgroundColor: theme.id === "theme-retro" ? theme.colors.primary : `${theme.colors.background}80`, 
+                    color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
+                    boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none",
+                    transform: "translateZ(0)"
                   }}
-                  aria-label="Next Year"
                 >
-                  →
+                  <ArrowRight size={theme.id === "theme-retro" ? 16 : 18} />
                 </button>
               </div>
             </div>
@@ -615,9 +642,22 @@ export function MobileHolidayPuzzle() {
                 borderColor: theme.colors.border,
                 boxShadow: theme.styles.boxShadow,
                 backgroundImage: theme.styles.backgroundTexture,
-                backgroundSize: '60px 60px'
+                backgroundSize: theme.id === "theme-retro" ? '8px 8px' : '60px 60px',
+                borderRadius: theme.id === "theme-retro" ? '0' : theme.styles.borderRadius,
+                border: theme.id === "theme-retro" ? `2px solid ${theme.colors.border}` : `2px solid ${theme.colors.border}`,
+                imageRendering: theme.id === "theme-retro" ? 'pixelated' : 'auto'
               }}
             >
+              {/* Puzzle board caption text */}
+              <div className="text-center my-2.5">
+                <p 
+                  className={`text-xs font-medium text-important ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
+                  style={{ color: theme.colors.foreground }}
+                >
+                  {theme.id === "theme-retro" ? "SELECT HOLIDAY" : "Click pieces to discover holidays"}
+                </p>
+              </div>
+              
               {/* Subtle wood grain texture */}
               <div className="absolute inset-0 opacity-15" 
                 style={{
@@ -637,16 +677,6 @@ export function MobileHolidayPuzzle() {
                   animatingPiece={animatingPiece}
                   completedAnimation={completedAnimation}
                 />
-              </div>
-              
-              {/* Caption - inline with footer */}
-              <div className="text-center my-2.5">
-                <p 
-                  className="text-xs font-medium text-important"
-                  style={{ color: theme.colors.foreground }}
-                >
-                  Click pieces to discover holidays
-                </p>
               </div>
             </div>
 
@@ -1012,12 +1042,15 @@ function JigsawPuzzleGrid({
                       key={i}
                       className={`text-[10px] sm:text-xs leading-tight font-medium text-center ${
                         isPassed ? "text-important" : "text-important"
-                      } ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}`}
+                      } ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
+                      ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
                       style={{ 
                         color: isPassed ? 
                           theme.colors.foregroundHighlight || "#ffffff" : 
-                          (theme.id === "theme-galaxy" ? "#ffffff" : theme.styles.upcomingPiece.text),
-                        textShadow: (theme.id === "theme-galaxy" ? "0 1px 2px rgba(0,0,0,0.4)" : isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none"),
+                          (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? "#ffffff" : theme.styles.upcomingPiece.text,
+                        textShadow: (theme.id === "theme-galaxy") ? "0 1px 2px rgba(0,0,0,0.4)" : 
+                                   (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" :
+                                   isPassed ? "0 1px 1px rgba(0,0,0,0.1)" : "none",
                         marginBottom: i < formattedDisplay.length - 1 ? "1px" : "0"
                       }}
                     >
@@ -1027,13 +1060,16 @@ function JigsawPuzzleGrid({
                   
                   {/* Holiday date */}
                   <span 
-                    className={`text-[8px] sm:text-[10px] mt-1 sm:mt-1.5 font-medium ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}`}
+                    className={`text-[8px] sm:text-[10px] mt-1 sm:mt-1.5 font-medium 
+                      ${theme.id === "theme-galaxy" ? "puzzle-piece-text" : ""}
+                      ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
                     style={{ 
                       color: isPassed ? 
-                        (theme.id === "theme-galaxy" ? theme.colors.foregroundHighlight || "#ffffff" : theme.styles.completedPiece.text) : 
-                        (theme.id === "theme-galaxy" ? "#ffffff" : theme.styles.upcomingPiece.text),
-                      opacity: theme.id === "theme-galaxy" ? 1 : 0.9,
-                      textShadow: theme.id === "theme-galaxy" ? "0 1px 2px rgba(0,0,0,0.4)" : "none"
+                        (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? theme.colors.foregroundHighlight || "#ffffff" : theme.styles.completedPiece.text : 
+                        (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? "#ffffff" : theme.styles.upcomingPiece.text,
+                      opacity: (theme.id === "theme-galaxy" || theme.id === "theme-retro") ? 1 : 0.9,
+                      textShadow: (theme.id === "theme-galaxy") ? "0 1px 2px rgba(0,0,0,0.4)" : 
+                                 (theme.id === "theme-retro") ? "1px 1px 0 rgba(10, 26, 47, 0.6)" : "none"
                     }}
                   >
                     {holiday.date}

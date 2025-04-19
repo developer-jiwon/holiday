@@ -152,10 +152,61 @@ export const galaxyTheme: Theme = {
   },
 };
 
+// Retro theme with pink, mint, and navy
+export const retroTheme: Theme = {
+  id: "theme-retro",
+  name: "Retro Lofi",
+  description: "Nostalgic pink, mint and navy tones with vintage pixel aesthetic",
+  colors: {
+    background: "#0c1f36",
+    backgroundSecondary: "#142c45",
+    backgroundTertiary: "#1d3553",
+    backgroundHighlight: "#f0edd8",
+    foreground: "#f8f5dc",
+    foregroundSecondary: "#e0dbbc",
+    foregroundTertiary: "#c5c1a6",
+    foregroundHighlight: "#ffffff",
+    primary: "#ff5a87",
+    primaryHover: "#ff7da1",
+    primaryActive: "#ff9dba",
+    secondary: "#4dd8c0",
+    secondaryHover: "#62e6d0",
+    accent: "#26c6f7",
+    border: "#ff5a87",
+    borderHover: "#4dd8c0",
+    shadow: "rgba(12, 31, 54, 0.25)",
+    shadowStrong: "rgba(12, 31, 54, 0.4)",
+  },
+  styles: {
+    borderRadius: "0rem",
+    boxShadow: "0 4px 0 rgba(12, 31, 54, 0.25)",
+    innerShadow: "inset 0 0 0 2px rgba(255, 90, 135, 0.15)",
+    backgroundTexture: "linear-gradient(to right, rgba(38, 61, 93, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(38, 61, 93, 0.15) 1px, transparent 1px)",
+    backgroundImage: "repeating-linear-gradient(0deg, rgba(38, 61, 93, 0.1) 0px, rgba(38, 61, 93, 0.1) 1px, transparent 1px, transparent 4px)",
+    cardGradient: "linear-gradient(180deg, rgba(29, 53, 83, 0.6) 0%, rgba(20, 44, 69, 0.6) 100%)",
+    fontFamily: "mono",
+    completedPiece: {
+      primary: "#ff5a87",
+      secondary: "#e0476e",
+      highlight: "#ff7da1",
+      shadow: "#c33a5c",
+      text: "#f8f5dc",
+    },
+    upcomingPiece: {
+      primary: "#142c45",
+      secondary: "#0c1f36",
+      highlight: "#1d3553",
+      shadow: "#091729",
+      text: "#f8f5dc",
+    },
+  },
+};
+
 // Array to store all available themes
 export const availableThemes: Theme[] = [
   defaultTheme,
   galaxyTheme,
+  retroTheme,
   // Additional themes will be added here
 ];
 

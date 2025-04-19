@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Merriweather, Cormorant } from 'next/font/google'
+import { Merriweather, Cormorant, Space_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/hooks/use-theme'
 
 const merriweather = Merriweather({ 
@@ -17,6 +17,13 @@ const cormorant = Cormorant({
   variable: '--font-cormorant',
 })
 
+const spaceMono = Space_Mono({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-space-mono',
+})
+
 export const metadata: Metadata = {
   title: 'Holiday Tracker 2025',
   description: 'Track holidays for 2025',
@@ -30,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${merriweather.variable} ${cormorant.variable} font-serif`}>
+      <body className={`${merriweather.variable} ${cormorant.variable} ${spaceMono.variable} font-serif`}>
         <ThemeProvider>
           {children}
         </ThemeProvider>
