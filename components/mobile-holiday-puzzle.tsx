@@ -6,6 +6,8 @@ import { getHolidaysForYear, getHolidaysByCountry, type Holiday, type UpcomingHo
 import { Gift, Sparkles, PartyPopper, Cake, RefreshCw, Volume2, VolumeX, ArrowLeft, ArrowRight } from "lucide-react"
 import { HolidayPuzzleBoard } from "./holiday-puzzle-board"
 import { useTheme } from "@/hooks/use-theme"
+import { CountrySelector } from "./country-selector"
+import useSound from "use-sound"
 
 type TooltipPosition = { x: number; y: number } | null
 
@@ -421,36 +423,62 @@ function RefreshIcon({ className = "" }: { className?: string }) {
 
 // Add a getFlagEmoji function
 function getFlagEmoji(countryCode: string): string {
-  const flagEmojis: {[key: string]: string} = {
-    'global': '🌎',
-    'us': '🇺🇸',
-    'uk': '🇬🇧',
-    'ca': '🇨🇦',
-    'au': '🇦🇺'
-  };
-  
-  return flagEmojis[countryCode] || '🌎';
+  switch(countryCode.toLowerCase()) {
+    case 'us':
+    case 'usa':
+    case 'united states':
+      return '🇺🇸';
+    case 'uk':
+    case 'united kingdom':
+      return '🇬🇧';
+    case 'canada':
+      return '🇨🇦';
+    case 'australia':
+      return '🇦🇺';
+    case 'germany':
+      return '🇩🇪';
+    case 'france':
+      return '🇫🇷';
+    case 'spain':
+      return '🇪🇸';
+    case 'italy':
+      return '🇮🇹';
+    case 'japan':
+      return '🇯🇵';
+    case 'china':
+      return '🇨🇳';
+    case 'taiwan':
+      return '🇹🇼';
+    case 'korea':
+    case 'south korea':
+      return '🇰🇷';
+    default:
+      return '🌎'; // Global/default
+  }
 }
 
 export function MobileHolidayPuzzle() {
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const { theme } = useTheme();
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [selectedCountry, setSelectedCountry] = useState<string>("us");
-  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
-  const [resetKey, setResetKey] = useState(0); // Add reset key for puzzle reset
-  
-  // Add missing state variables
+  const [holidays, setHolidays] = useState<Holiday[]>(() => getHolidaysByCountry(selectedCountry, selectedYear));
   const [hoveredTile, setHoveredTile] = useState<number | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>(null);
-  const [animatingPiece, setAnimatingPiece] = useState<number | null>(null);
+  const [tooltipContent, setTooltipContent] = useState<Holiday | null>(null);
   const [completedAnimation, setCompletedAnimation] = useState<number | null>(null);
+  const [animatingPiece, setAnimatingPiece] = useState<number | null>(null);
+  const [revealedPieces, setRevealedPieces] = useState<number[]>([]);
+  const [resetKey, setResetKey] = useState<number>(0);
+  const { soundEnabled } = useContext(SoundContext);
   
-  // Get theme from context
-  const { theme } = useTheme();
+  // Sound effects
+  const [playHover] = useSound("/sounds/hover.mp3", { volume: 0.5 });
+  const [playClick] = useSound("/sounds/click.mp3", { volume: 0.5 });
+  const [playSuccess] = useSound("/sounds/success.mp3", { volume: 0.5 });
   
-  // Get holidays for the current year and selected country
-  const holidays = selectedCountry === 'global' 
-    ? getHolidaysForYear(selectedYear)
-    : getHolidaysByCountry(selectedCountry, selectedYear)
+  useEffect(() => {
+    setHolidays(getHolidaysByCountry(selectedCountry, selectedYear));
+  }, [selectedYear, selectedCountry]);
 
   const handleTileMouseEnter = (id: number, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -514,13 +542,13 @@ export function MobileHolidayPuzzle() {
     setSelectedYear(prev => prev + 1)
   }
   
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCountry(e.target.value)
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
   }
 
-  // Add a reset function
   const handleReset = () => {
-    setResetKey(prevKey => prevKey + 1);
+    setRevealedPieces([]);
+    setResetKey(prev => prev + 1);
   };
 
   return (
@@ -565,51 +593,25 @@ export function MobileHolidayPuzzle() {
                 </button>
                 
                 <div className="mx-1 sm:mx-2 text-center flex-1">
-                  <h1 
-                    className={`text-xl font-bold flex items-center justify-center gap-2 text-important ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
-                    style={{ 
-                      color: theme.colors.foreground,
-                      fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
-                      textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
-                    }}
-                  >
-                    <PuzzleIcon className="w-6 h-6" />
-                    <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
-                  </h1>
-                  <div className="flex flex-wrap items-center justify-center mt-1.5 sm:mt-2 gap-1.5">
-                    {/* Update the country selector */}
-                    <span className={`text-sm mr-1 flex items-center gap-1 rounded-md py-0.5 px-2 
-                      ${theme.id === "theme-retro" ? "rounded-none" : "rounded-md"}`}
+                  <div className="flex items-center justify-center">
+                    <h1 
+                      className={`text-xl font-bold flex items-center justify-center gap-2 text-important ${theme.id === "theme-retro" ? "pixel-text" : ""}`}
                       style={{ 
-                        backgroundColor: theme.id === "theme-retro" ? theme.colors.secondary : `${theme.colors.primary}20`,
-                        color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
-                        boxShadow: theme.id === "theme-retro" ? "2px 2px 0 rgba(12, 31, 54, 0.4)" : "none"
+                        color: theme.colors.foreground,
+                        fontFamily: theme.styles.fontFamily ? theme.styles.fontFamily : 'inherit',
+                        textTransform: theme.id === "theme-retro" ? "uppercase" : "none"
                       }}
                     >
-                      <span className="mr-1">{getFlagEmoji(selectedCountry)}</span>
-                      <select
-                        value={selectedCountry}
-                        onChange={handleCountryChange}
-                        className={`bg-transparent text-sm font-medium focus:outline-none cursor-pointer
-                          ${theme.id === "theme-retro" ? "pixel-text uppercase" : ""}`}
-                        style={{ 
-                          color: theme.id === "theme-retro" ? theme.colors.backgroundSecondary : theme.colors.foreground,
-                          fontSize: theme.id === "theme-retro" ? "0.7rem" : "0.875rem"
-                        }}
-                      >
-                        <option value="global">Global</option>
-                        <option value="us">United States</option>
-                        <option value="uk">United Kingdom</option>
-                        <option value="ca">Canada</option>
-                        <option value="au">Australia</option>
-                      </select>
-                    </span>
+                      <PuzzleIcon className="w-6 h-6" />
+                      <span>{theme.id === "theme-retro" ? "HOLI-DAYS " + selectedYear : selectedYear + " Holiday Puzzle"}</span>
+                    </h1>
+                    <div className="ml-2">
+                      <CountrySelector onChange={handleCountryChange} />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center mt-1.5 sm:mt-2 gap-1.5">
                     <span 
                       className="text-xs sm:text-sm"
-                      style={{ color: `${theme.colors.foregroundSecondary}70` }}
-                    >•</span>
-                    <span 
-                      className="text-xs sm:text-sm whitespace-nowrap"
                       style={{ color: `${theme.colors.foregroundSecondary}70` }}
                     >
                       {holidays.filter(h => h.passed).length}/{holidays.length} collected

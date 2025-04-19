@@ -4,6 +4,7 @@ import * as React from "react"
 import { Check, ChevronDown } from "lucide-react"
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useTheme } from "@/hooks/use-theme"
 
 type Country = {
   name: string
@@ -12,37 +13,69 @@ type Country = {
 }
 
 const countries: Country[] = [
-  { name: "Canada", flag: "🇨🇦", code: "CA" },
-  { name: "Japan", flag: "🇯🇵", code: "JP" },
-  { name: "South Korea", flag: "🇰🇷", code: "KR" },
-  { name: "United States", flag: "🇺🇸", code: "US" },
-  { name: "China", flag: "🇨🇳", code: "CN" },
+  { name: "United States", flag: "🇺🇸", code: "us" },
+  { name: "Canada", flag: "🇨🇦", code: "canada" },
+  { name: "United Kingdom", flag: "🇬🇧", code: "uk" },
+  { name: "Australia", flag: "🇦🇺", code: "australia" },
+  { name: "Japan", flag: "🇯🇵", code: "japan" },
+  { name: "China", flag: "🇨🇳", code: "china" },
+  { name: "Taiwan", flag: "🇹🇼", code: "taiwan" },
+  { name: "South Korea", flag: "🇰🇷", code: "korea" },
 ]
 
-export function CountrySelector() {
+interface CountrySelectorProps {
+  onChange: (country: string) => void;
+}
+
+export function CountrySelector({ onChange }: CountrySelectorProps) {
   const [selectedCountry, setSelectedCountry] = React.useState<Country>(countries[0])
+  const { theme } = useTheme();
+
+  const handleCountryChange = (country: Country) => {
+    setSelectedCountry(country);
+    onChange(country.code);
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex w-full items-center justify-between rounded-xl border border-[#e6d7c3] bg-white p-3 text-[#8b6e5a] shadow-sm">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">{selectedCountry.flag}</span>
-            <span>{selectedCountry.name}</span>
+        <button 
+          className="flex items-center justify-between p-2 text-sm rounded-md"
+          style={{ 
+            backgroundColor: `${theme.colors.backgroundHighlight}80`,
+            color: theme.colors.foreground,
+            border: `1px solid ${theme.colors.border}80`
+          }}
+        >
+          <div className="flex items-center gap-1.5">
+            <span>{selectedCountry.flag}</span>
+            <span className="text-xs">{selectedCountry.code.toUpperCase()}</span>
           </div>
-          <ChevronDown className="h-4 w-4 opacity-50" />
+          <ChevronDown className="h-3 w-3 ml-1 opacity-70" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className="w-[200px]">
+      <DropdownMenuContent 
+        align="center" 
+        className="min-w-[120px] p-1" 
+        style={{ 
+          backgroundColor: theme.colors.backgroundHighlight,
+          border: `1px solid ${theme.colors.border}80`
+        }}
+      >
         {countries.map((country) => (
           <DropdownMenuItem
             key={country.code}
-            className="flex cursor-pointer items-center gap-2 py-2"
-            onClick={() => setSelectedCountry(country)}
+            className="flex cursor-pointer items-center gap-1.5 px-2 py-1.5 text-xs rounded-sm"
+            onClick={() => handleCountryChange(country)}
+            style={{ 
+              color: theme.colors.foreground
+            }}
           >
-            <span className="text-xl">{country.flag}</span>
+            <span>{country.flag}</span>
             <span>{country.name}</span>
-            {selectedCountry.code === country.code && <Check className="ml-auto h-4 w-4" />}
+            {selectedCountry.code === country.code && 
+              <Check className="ml-auto h-3 w-3" style={{ color: theme.colors.primary }} />
+            }
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

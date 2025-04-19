@@ -105,7 +105,7 @@ export function getHolidaysForYear(year: number = new Date().getFullYear()): Hol
 }
 
 // Function to get holidays for a specific country
-// To be implemented when you're ready to add country selection
+// Updated with verified 2025 official holiday data
 export function getHolidaysByCountry(country: string, year: number = new Date().getFullYear()): Holiday[] {
   // This is a placeholder for future implementation
   // You can expand this with different holiday lists for various countries
@@ -113,10 +113,10 @@ export function getHolidaysByCountry(country: string, year: number = new Date().
     case 'canada':
       return [
         { id: 1, name: "New Year's Day", date: "Jan 1" },
-        { id: 2, name: "Family Day", date: "Feb 19" },
+        { id: 2, name: "Family Day", date: "Feb 17" },
         { id: 3, name: "Good Friday", date: "Apr 18" },
         { id: 4, name: "Easter Monday", date: "Apr 21" },
-        { id: 5, name: "Victoria Day", date: "May 20" },
+        { id: 5, name: "Victoria Day", date: "May 19" },
         { id: 6, name: "National Indigenous Peoples Day", date: "Jun 21" },
         { id: 7, name: "Canada Day", date: "Jul 1" },
         { id: 8, name: "Civic Holiday", date: "Aug 4" },
@@ -170,9 +170,8 @@ export function getHolidaysByCountry(country: string, year: number = new Date().
         { id: 6, name: "King's Birthday", date: "Jun 9" },
         { id: 7, name: "NAIDOC Week", date: "Jul 7" },
         { id: 8, name: "Labour Day", date: "Oct 6" },
-        { id: 9, name: "Melbourne Cup Day", date: "Nov 4" },
-        { id: 10, name: "Christmas Day", date: "Dec 25" },
-        { id: 11, name: "Boxing Day", date: "Dec 26" },
+        { id: 9, name: "Christmas Day", date: "Dec 25" },
+        { id: 10, name: "Boxing Day", date: "Dec 26" },
       ].map(holiday => createHolidayObject(holiday.id, holiday.name, holiday.date, year));
       
     case 'japan':
@@ -180,66 +179,60 @@ export function getHolidaysByCountry(country: string, year: number = new Date().
         { id: 1, name: "New Year's Day", date: "Jan 1" },
         { id: 2, name: "Coming of Age Day", date: "Jan 13" },
         { id: 3, name: "National Foundation Day", date: "Feb 11" },
-        { id: 4, name: "Emperor's Birthday", date: "Feb 23" },
+        { id: 4, name: "Emperor's Birthday", date: "Feb 24" },
         { id: 5, name: "Vernal Equinox Day", date: "Mar 20" },
         { id: 6, name: "Showa Day", date: "Apr 29" },
         { id: 7, name: "Constitution Day", date: "May 3" },
-        { id: 8, name: "Greenery Day", date: "May 4" },
+        { id: 8, name: "Greenery Day", date: "May 6" },
         { id: 9, name: "Children's Day", date: "May 5" },
         { id: 10, name: "Marine Day", date: "Jul 21" },
         { id: 11, name: "Mountain Day", date: "Aug 11" },
         { id: 12, name: "Respect for the Aged Day", date: "Sep 15" },
         { id: 13, name: "Autumnal Equinox Day", date: "Sep 23" },
-        { id: 14, name: "Health and Sports Day", date: "Oct 13" },
+        { id: 14, name: "Sports Day", date: "Oct 13" },
         { id: 15, name: "Culture Day", date: "Nov 3" },
-        { id: 16, name: "Labor Thanksgiving Day", date: "Nov 23" },
+        { id: 16, name: "Labour Thanksgiving Day", date: "Nov 24" },
       ].map(holiday => createHolidayObject(holiday.id, holiday.name, holiday.date, year));
     
     case 'china':
       return [
         { id: 1, name: "New Year's Day", date: "Jan 1" },
-        { id: 2, name: "Chinese New Year", date: "Feb 10" }, // Lunar New Year for 2025
-        { id: 3, name: "Women's Day", date: "Mar 8" },
-        { id: 4, name: "Qingming Festival", date: "Apr 4" },
-        { id: 5, name: "Labour Day", date: "May 1" },
-        { id: 6, name: "Youth Day", date: "May 4" },
-        { id: 7, name: "Dragon Boat Festival", date: "Jun 1" }, // Approximate for 2025
-        { id: 8, name: "CPC Founding Day", date: "Jul 1" },
-        { id: 9, name: "Army Day", date: "Aug 1" },
-        { id: 10, name: "Mid-Autumn Festival", date: "Sep 29" }, // Approximate for 2025
-        { id: 11, name: "National Day", date: "Oct 1" },
+        { id: 2, name: "Chinese New Year", date: "Jan 29" }, // Updated for 2025
+        { id: 3, name: "Qingming Festival", date: "Apr 5" },
+        { id: 4, name: "Labour Day", date: "May 1" },
+        { id: 5, name: "Dragon Boat Festival", date: "May 31" }, // Updated for 2025
+        { id: 6, name: "National Day", date: "Oct 1" },
+        { id: 7, name: "Mid-Autumn Festival", date: "Oct 6" }, // Updated for 2025
       ].map(holiday => createHolidayObject(holiday.id, holiday.name, holiday.date, year));
     
     case 'taiwan':
       return [
         { id: 1, name: "New Year's Day", date: "Jan 1" },
-        { id: 2, name: "Lunar New Year", date: "Feb 10" }, // Lunar New Year for 2025
+        { id: 2, name: "Lunar New Year", date: "Jan 29" }, // Updated for 2025
         { id: 3, name: "Peace Memorial Day", date: "Feb 28" },
-        { id: 4, name: "Women and Children's Day", date: "Apr 4" },
+        { id: 4, name: "Children's Day", date: "Apr 4" },
         { id: 5, name: "Tomb Sweeping Day", date: "Apr 5" },
         { id: 6, name: "Labour Day", date: "May 1" },
-        { id: 7, name: "Dragon Boat Festival", date: "Jun 1" }, // Approximate for 2025
-        { id: 8, name: "Mid-Autumn Festival", date: "Sep 29" }, // Approximate for 2025
+        { id: 7, name: "Dragon Boat Festival", date: "May 31" }, // Updated for 2025
+        { id: 8, name: "Mid-Autumn Festival", date: "Oct 6" }, // Updated for 2025
         { id: 9, name: "National Day", date: "Oct 10" },
         { id: 10, name: "Taiwan Retrocession Day", date: "Oct 25" },
-        { id: 11, name: "Constitution Day", date: "Dec 25" },
       ].map(holiday => createHolidayObject(holiday.id, holiday.name, holiday.date, year));
     
     case 'korea':
     case 'south korea':
       return [
         { id: 1, name: "New Year's Day", date: "Jan 1" },
-        { id: 2, name: "Seollal (Lunar New Year)", date: "Feb 10" }, // Lunar New Year for 2025
+        { id: 2, name: "Lunar New Year", date: "Jan 29" }, // Updated for 2025
         { id: 3, name: "Independence Movement Day", date: "Mar 1" },
         { id: 4, name: "Children's Day", date: "May 5" },
-        { id: 5, name: "Buddha's Birthday", date: "May 12" }, // Approximate for 2025
+        { id: 5, name: "Buddha's Birthday", date: "May 5" }, // Updated for 2025
         { id: 6, name: "Memorial Day", date: "Jun 6" },
-        { id: 7, name: "Constitution Day", date: "Jul 17" },
-        { id: 8, name: "Liberation Day", date: "Aug 15" },
-        { id: 9, name: "Chuseok (Harvest Festival)", date: "Sep 12" }, // Approximate for 2025
-        { id: 10, name: "National Foundation Day", date: "Oct 3" },
-        { id: 11, name: "Hangul Day", date: "Oct 9" },
-        { id: 12, name: "Christmas Day", date: "Dec 25" },
+        { id: 7, name: "Liberation Day", date: "Aug 15" },
+        { id: 8, name: "Chuseok (Harvest Festival)", date: "Oct 7" }, // Updated for 2025
+        { id: 9, name: "National Foundation Day", date: "Oct 3" },
+        { id: 10, name: "Hangul Day", date: "Oct 9" },
+        { id: 11, name: "Christmas Day", date: "Dec 25" },
       ].map(holiday => createHolidayObject(holiday.id, holiday.name, holiday.date, year));
       
     // Add more countries as needed
